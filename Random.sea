@@ -1,0 +1,5 @@
+static Random {
+	u64 generateU64() {
+		return (u64)rand();
+	}
+}

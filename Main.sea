@@ -1,0 +1,28 @@
+import Person.sea;
+
+int main() {
+	srand(time(null));
+
+	Person me = Person.init("Bob");
+	Person* you = Person.new("Claude", 24);
+
+	char* meStr = me.toString();
+	println(meStr);
+	free(meStr);
+
+	char* youStr = you.toString();
+	println(youStr);
+	free(youStr);
+
+	if (me.equals(you)) {
+		println("They are equal!");
+	} else {
+		println("They are not equal!");
+	}
+
+	println("My ID is: ${me.getId()}");
+	println("Your ID is: ${you.getId()}");
+
+	free(you);
+	return 0;
+}
