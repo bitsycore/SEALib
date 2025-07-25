@@ -1,10 +1,10 @@
-import Random.sea;
+#import Random.sea
 
-class Person {
+struct Person {
 
 	char* name;
 	int age;
-	private u64 id;
+    private u64 id;
 
 	init(char* name, int age = 18) {
 		this.name = name;
@@ -27,4 +27,5 @@ class Person {
     static u64 generateU64() {
         return Random.generateU64();
     }
+
 }
