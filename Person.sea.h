@@ -12,16 +12,16 @@
 typedef struct Person {
     char* name;
     int age;
-    /*PRIVATE*/ uint64_t id;
-} PersonOBJ;
+    /*PRIVATE*/ uint64_t p_id;
+} Person_OBJ;
 
-extern const struct PersonCLS {
-    /*PRIMARY*/ void (*init)(PersonOBJ* self, char* name, int age);
-    void (*initWithName)(PersonOBJ* self, char* name);
-    char* (*toString) (PersonOBJ* self);
-    bool (*equals) (PersonOBJ* self, PersonOBJ* other);
-    size_t (*getId) (PersonOBJ* self);
-    /*STATIC*/ size_t (*generateU64)();
+extern const struct Person_CLS {
+    /*PRIMARY*/ void (*constructor)(Person_OBJ* self, char* name, int age);
+    void (*constructor_withName)(Person_OBJ* self, char* name);
+    char* (*fn_toString) (Person_OBJ* self);
+    bool (*fn_equals) (Person_OBJ* self, Person_OBJ* other);
+    size_t (*fn_getId) (Person_OBJ* self);
+    /*STATIC*/ size_t (*sfn_generateU64)();
 } Person;
 
 #endif //PERSON_SEA_3c01bdbb_H

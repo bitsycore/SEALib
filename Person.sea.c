@@ -10,44 +10,42 @@
 #include <string.h>
 #include <malloc.h>
 
-typedef char* hchar_ptr;
-
-void Person_init(PersonOBJ *self, char *name, int age) {
+void Person_constructor(Person_OBJ *self, char *name, int age) {
     self->name = name;
     self->age = age;
-    self->id = Person.generateU64();
+    self->p_id = Person.sfn_generateU64();
 }
 
-void Person_initWithName(PersonOBJ *self, char *name) {
+void Person_constructorWithName(Person_OBJ *self, char *name) {
     self->name = name;
     self->age = 18;
-    self->id = Person.generateU64();
+    self->p_id = Person.sfn_generateU64();
 }
 
-hchar_ptr Person_toString(PersonOBJ *self) {
-    size_t size = snprintf(NULL, 0, "Person(name: %s, age: %d, id: %llu)", self->name, self->age, self->id) + 1;
+char* fn_Person_toString(Person_OBJ *self) {
+    size_t size = snprintf(NULL, 0, "Person(name: %s, age: %d, p_id: %llu)", self->name, self->age, self->p_id) + 1;
     char *buffer = malloc(size * sizeof(char));
-    snprintf(buffer, size, "Person(name: %s, age: %d, id: %llu)", self->name, self->age, self->id);
+    snprintf(buffer, size, "Person(name: %s, age: %d, p_id: %llu)", self->name, self->age, self->p_id);
     return buffer;
 }
 
-bool Person_equals(PersonOBJ *self, PersonOBJ *other) {
-    return self->id == other->id;
+bool fn_Person_equals(Person_OBJ *self, Person_OBJ *other) {
+    return self->p_id == other->p_id;
 }
 
-size_t Person_getId(PersonOBJ *self) {
-    return self->id;
+size_t fn_Person_getId(Person_OBJ *self) {
+    return self->p_id;
 }
 
-size_t Person_generateU64() {
-    return Random.generateU64();
+size_t sfn_Person_generateU64() {
+    return Random.sfn_generateU64();
 }
 
-const struct PersonCLS Person = {
-    .init = Person_init,
-    .initWithName = Person_initWithName,
-    .toString = Person_toString,
-    .equals = Person_equals,
-    .getId = Person_getId,
-    .generateU64 = Person_generateU64
+const struct Person_CLS Person = {
+    .constructor = Person_constructor,
+    .constructor_withName = Person_constructorWithName,
+    .fn_toString = fn_Person_toString,
+    .fn_equals = fn_Person_equals,
+    .fn_getId = fn_Person_getId,
+    .sfn_generateU64 = sfn_Person_generateU64
 };

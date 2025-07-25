@@ -9,7 +9,7 @@
 #include <stdint.h>
 
 extern const struct Random_CLS {
-    uint64_t (*generateU64)();
+    uint64_t (*sfn_generateU64)();
 } Random;
 
 #endif //RANDOM_SEA_cfb07073_H
