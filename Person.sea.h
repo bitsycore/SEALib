@@ -9,19 +9,19 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-typedef struct com_a_b_Person_OBJ{
+typedef struct Person {
     char* name;
     int age;
     /*PRIVATE*/ uint64_t id;
-} Person_OBJ;
+} PersonOBJ;
 
-extern const struct Person_CLS {
-    /*PRIMARY*/ void (*INIT)(Person_OBJ* self, char* name, int age);
-    void (*INIT_char_ptr)(Person_OBJ* self, char* name);
-    char* (*FN_toString) (Person_OBJ* self);
-    bool (*FN_equals) (Person_OBJ* self, Person_OBJ* other);
-    size_t (*FN_getId) (Person_OBJ* self);
-    /*STATIC*/ size_t (*STATICFN_generateU64)();
-} Person_CLS;
+extern const struct PersonCLS {
+    /*PRIMARY*/ void (*init)(PersonOBJ* self, char* name, int age);
+    void (*initWithName)(PersonOBJ* self, char* name);
+    char* (*toString) (PersonOBJ* self);
+    bool (*equals) (PersonOBJ* self, PersonOBJ* other);
+    size_t (*getId) (PersonOBJ* self);
+    /*STATIC*/ size_t (*generateU64)();
+} Person;
 
 #endif //PERSON_SEA_3c01bdbb_H

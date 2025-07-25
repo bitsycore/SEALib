@@ -7,10 +7,10 @@
 
 #include <stdlib.h>
 
-uint64_t Random_STATICFN_generateU64() {
+uint64_t Random_generateU64() {
     return (uint64_t)rand();
 }
 
-const struct Random_CLS Random_CLS = {
-    .STATICFN_generateU64 = Random_STATICFN_generateU64
+const struct Random_CLS Random = {
+    .generateU64 = Random_generateU64
 };

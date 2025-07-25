@@ -13,27 +13,27 @@
 int main() {
     srand(time(NULL));
 
-    Person_OBJ me = {0};
-    Person_CLS.INIT_char_ptr(&me, "Bob");
-    Person_OBJ *you = calloc(1, sizeof(Person_OBJ));
-    Person_CLS.INIT(you, "Claude", 24);
+    PersonOBJ me = {0};
+    Person.initWithName(&me, "Bob");
+    PersonOBJ *you = calloc(1, sizeof(PersonOBJ));
+    Person.init(you, "Claude", 24);
 
-    char* meStr = Person_CLS.FN_toString(&me);
+    char* meStr = Person.toString(&me);
     puts(meStr);
     free(meStr);
 
-    char* youStr = Person_CLS.FN_toString(you);
+    char* youStr = Person.toString(you);
     puts(youStr);
     free(youStr);
 
-    if (Person_CLS.FN_equals(&me, you)) {
+    if (Person.equals(&me, you)) {
         puts("They are equal!");
     } else {
         puts("They are not equal!");
     }
 
-    printf("My ID is: %zu\n", Person_CLS.FN_getId(&me));
-    printf("Your ID is: %zu\n", Person_CLS.FN_getId(you));
+    printf("My ID is: %zu\n", Person.getId(&me));
+    printf("Your ID is: %zu\n", Person.getId(you));
 
     free(you);
     return 0;
