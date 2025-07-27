@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 
-static void* allocator_malloc_alloc(void*, size_t size, size_t) {
+static void* allocator_malloc_alloc(void* ctx, size_t size, size_t alignment) {
 	return malloc(size);
 }
 

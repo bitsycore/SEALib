@@ -1,7 +1,7 @@
-#include "Person.h"
-#include "Arena.h"
-#include "Random.h"
-#include "Allocator.h"
+#include <Sea/Person.h>
+#include <Sea/Arena.h>
+#include <Sea/Random.h>
+#include <Sea/Allocator.h>
 
 #include <stdio.h>
 

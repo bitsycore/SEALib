@@ -1,20 +1,27 @@
 cmake_minimum_required(VERSION 3.22)
 project(SeaLib C)
 
-set(CMAKE_C_STANDARD 23)
+set(CMAKE_C_STANDARD 11)
+
+add_library(
+        Sea
+        # Sources
+        Sea/Person.c
+        Sea/Person.h
+        Sea/Random.c
+        Sea/Random.h
+        Sea/Uuid.c
+        Sea/Uuid.h
+        Sea/Arena.c
+        Sea/Arena.h
+        Sea/Allocator.c
+        Sea/Allocator.h
+)
 
 add_executable(
-        SeaLib
-        # Sources
-        Main.c
-        Person.c
-        Person.h
-        Random.c
-        Random.h
-        Uuid.c
-        Uuid.h
-        Arena.c
-        Arena.h
-        Allocator.c
-        Allocator.h
+        Test
+        Test/Main.c
 )
+
+target_include_directories(Sea PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(Test Sea)

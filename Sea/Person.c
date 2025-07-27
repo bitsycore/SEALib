@@ -20,7 +20,7 @@ static void initWithName(struct Person* self, const char* name) {
 }
 
 static size_t toStringSize(struct Person* self) {
-	char uuid[] = "43743841-0b6e-4b89-ae9f-699391fe7a76";
+	char uuid[37] = {0};
 	return snprintf(NULL, 0, TO_STRING_FORMAT, self->name, self->age, uuid) + 1;
 }
 
