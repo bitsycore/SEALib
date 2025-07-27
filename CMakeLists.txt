@@ -18,6 +18,8 @@ add_library(
         Sea/Error.c
         Sea/Error.h
         Sea/Memory.h
+        Sea/Time.c
+        Sea/Time.h
 )
 
 add_executable(

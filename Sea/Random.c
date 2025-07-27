@@ -52,7 +52,7 @@ static void seed256(uint64_t seed[4]) {
 		exit(1);
 	}
 #elif defined(__unix__) || defined(__APPLE__)
-	int fd = open("/dev/urandom", O_RDONLY);
+	const int fd = open("/dev/urandom", O_RDONLY);
 	if (fd < 0) {
 		perror("Failed to open /dev/urandom");
 		exit(1);

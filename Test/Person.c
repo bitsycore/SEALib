@@ -10,27 +10,27 @@
 
 static const char TO_STRING_FORMAT[] = "Person(name: %s, age: %d, uuid: %s)";
 
-static void init(struct Person* self, const char* name, int age) {
+static void init(struct Person* self, const char* name, const int age) {
 	self->name = name;
 	self->age = age;
-	SeaUUID.generateV4(&PRIV(self)->uuid);
+	SeaUUID.generateV7(&PRIV(self)->uuid);
 }
 
 static void initWithName(struct Person* self, const char* name) {
 	init(self, name, (int) (SeaRandom.randUint64() % 100));
 }
 
-static size_t toStringSize(struct Person* self) {
+static size_t toStringSize(const struct Person* self) {
 	return snprintf(NULL, 0, TO_STRING_FORMAT, self->name, self->age, "F") + 1 /*NULL Terminated*/ + 35 /*UUID (36) - F (1) from (%s)*/;
 }
 
-static char* toString(struct Person* self, struct SeaAllocator* allocator) {
+static char* toString(struct Person* self, const struct SeaAllocator* allocator) {
 	char uuid[37];
 	SeaUUID.toString(&PRIV(self)->uuid, uuid);
-	size_t size = toStringSize(self);
+	const size_t size = toStringSize(self);
 	void* buffer = allocator->alloc(allocator->context, sizeof(char) * toStringSize(self), alignof(char));
 	snprintf((char*) buffer, size, TO_STRING_FORMAT, self->name, self->age, uuid);
-	return (char*) buffer;
+	return buffer;
 }
 
 static bool equals(struct Person* self, struct Person* other) {

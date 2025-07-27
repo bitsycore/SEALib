@@ -1,38 +1,10 @@
 #include "UUID.h"
 
 #include "Random.h"
+#include "Time.h"
 
 #include <stdio.h>
-
-#if defined(_WIN32) || defined(_WIN64)
-
-#include <windows.h>
-
-static uint64_t getUnixMillis() {
-	FILETIME ft;
-	GetSystemTimeAsFileTime(&ft);
-	uint64_t time = ((uint64_t) ft.dwHighDateTime << 32) | ft.dwLowDateTime;
-	return (time - 116444736000000000ULL) / 10000;
-}
-
-#else
-
-#include <time.h>
-#include <memory.h>
-
-static uint64_t getUnixMillis() {
-#if defined(_POSIX_VERSION)
-	struct timespec ts;
-	clock_gettime(CLOCK_REALTIME, &ts);
-	return (uint64_t)ts.tv_sec * 1000 + ts.tv_nsec / 1000000;
-#else
-	// Fallback for non-POSIX systems
-	time_t seconds = time(NULL);
-	return (uint64_t)seconds * 1000;
-#endif
-}
-
-#endif
+#include <string.h>
 
 static void generateV4(struct SeaUUID* self) {
 	SeaRandom.fillRandomBytes(self->bytes, 16);
@@ -42,7 +14,7 @@ static void generateV4(struct SeaUUID* self) {
 }
 
 static void generateV7(struct SeaUUID* self) {
-	uint64_t now = getUnixMillis();
+	const uint64_t now = SeaTime.getMillis();
 
 	// Set timestamp (48 bits, big endian)
 	for (int i = 0; i < 6; ++i) {
@@ -54,7 +26,7 @@ static void generateV7(struct SeaUUID* self) {
 
 	// Fill the Sea_remaining 10 bytes with random
 	for (int i = 6; i < 16; i += 8) {
-		uint64_t r = SeaRandom.randUint64();
+		const uint64_t r = SeaRandom.randUint64();
 		for (int j = 0; j < 8 && (i + j) < 16; j++) {
 			self->bytes[i + j] = (i + j == 6) ? self->bytes[6] : ((r >> (j * 8)) & 0xFF);
 		}
@@ -69,7 +41,7 @@ static bool equals(const void* a, const void* b) {
 	return memcmp(a, b, sizeof(struct SeaUUID)) == 0;
 }
 
-static void toString(struct SeaUUID* self, char out[37]) {
+static void toString(const struct SeaUUID* self, char out[37]) {
 	snprintf(
 		out,
 		37,

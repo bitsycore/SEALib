@@ -11,7 +11,7 @@ struct SeaUUID {
 extern const struct SeaUUID_CLS {
 	void (* generateV4)(struct SeaUUID* self);
 	void (* generateV7)(struct SeaUUID* self);
-	void (* toString)(struct SeaUUID* self, char out[37]);
+	void (* toString)(const struct SeaUUID* self, char out[37]);
 	bool (* equals)(const void* a, const void* b);
 } SeaUUID;
 

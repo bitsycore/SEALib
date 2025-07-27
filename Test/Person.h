@@ -20,8 +20,8 @@ struct Person {
 extern const struct Person_CLS {
 	void (* init)(struct Person* self, const char* name, int age);
 	void (* initWithName)(struct Person* self, const char* name);
-	size_t (* toStringSize)(struct Person* self);
-	char* (* toString)(struct Person* self, struct SeaAllocator* allocator);
+	size_t (* toStringSize)(const struct Person* self);
+	char* (* toString)(struct Person* self, const struct SeaAllocator* allocator);
 	bool (* equals)(struct Person* self, struct Person* other);
 	struct SeaUUID (* getUUID)(struct Person* self);
 } Person;
