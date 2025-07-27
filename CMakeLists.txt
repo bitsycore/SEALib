@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 3.31)
-project(SeaDemo C)
+cmake_minimum_required(VERSION 3.22)
+project(SeaLib C)
 
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD 23)
 
 add_executable(
-        SeaDemo
+        SeaLib
         # Sources
         Main.c
         Person.c
@@ -15,4 +15,6 @@ add_executable(
         Uuid.h
         Arena.c
         Arena.h
+        Allocator.c
+        Allocator.h
 )
