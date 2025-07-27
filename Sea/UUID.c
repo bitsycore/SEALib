@@ -1,4 +1,4 @@
-#include "Uuid.h"
+#include "UUID.h"
 #include "Random.h"
 
 #include <stdio.h>
@@ -33,14 +33,14 @@ static uint64_t getUnixMillis() {
 
 #endif
 
-static void generateV4(struct Uuid* self) {
-	Random.fillRandomBytes(self->bytes, 16);
+static void generateV4(struct SeaUUID* self) {
+	SeaRandom.fillRandomBytes(self->bytes, 16);
 	// Set version (4) and variant (RFC4122)
 	self->bytes[6] = (self->bytes[6] & 0x0F) | 0x40; // Version 4
 	self->bytes[8] = (self->bytes[8] & 0x3F) | 0x80; // Variant 10xx
 }
 
-static void generateV7(struct Uuid* self) {
+static void generateV7(struct SeaUUID* self) {
 	uint64_t now = getUnixMillis();
 
 	// Set timestamp (48 bits, big endian)
@@ -51,9 +51,9 @@ static void generateV7(struct Uuid* self) {
 	// Set version (7)
 	self->bytes[6] = (self->bytes[6] & 0x0F) | 0x70;
 
-	// Fill the remaining 10 bytes with random
+	// Fill the Sea_remaining 10 bytes with random
 	for (int i = 6; i < 16; i += 8) {
-		uint64_t r = Random.randUint64();
+		uint64_t r = SeaRandom.randUint64();
 		for (int j = 0; j < 8 && (i + j) < 16; j++) {
 			self->bytes[i + j] = (i + j == 6) ? self->bytes[6] : ((r >> (j * 8)) & 0xFF);
 		}
@@ -64,10 +64,11 @@ static void generateV7(struct Uuid* self) {
 }
 
 static bool equals(const void* a, const void* b) {
-	return memcmp(a, b, sizeof(struct Uuid)) == 0;
+	if (a == b) return true;
+	return memcmp(a, b, sizeof(struct SeaUUID)) == 0;
 }
 
-static void toString(struct Uuid* self, char out[37]) {
+static void toString(struct SeaUUID* self, char out[37]) {
 	snprintf(
 		out,
 		37,
@@ -79,7 +80,7 @@ static void toString(struct Uuid* self, char out[37]) {
 	);
 }
 
-const struct Uuid_CLS Uuid = {
+const struct Sea_UUID_CLS SeaUUID = {
 	.toString = toString,
 	.generateV4 = generateV4,
 	.generateV7 = generateV7,

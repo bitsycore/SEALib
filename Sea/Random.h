@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-extern const struct Random_CLS {
+extern const struct SeaRandom_CLS {
 	uint64_t (* randUint64)();
 	uint32_t (* randUint32)();
 	int64_t (* randInt64)();
@@ -18,6 +18,6 @@ extern const struct Random_CLS {
 	double (* randDouble)();
 	bool (* randBool)();
 	void (* fillRandomBytes)(uint8_t* buffer, size_t size);
-} Random;
+} SeaRandom;
 
 #endif //RANDOM_SEALIB_cfb07073_H

@@ -3,15 +3,15 @@
 #include <stdlib.h>
 #include <stddef.h>
 
-static void* allocator_malloc_alloc(void* ctx, size_t size, size_t alignment) {
+static void* malloc_allocator_func(void* ctx, size_t size, size_t alignment) {
 	return malloc(size);
 }
 
-static struct Allocator allocator_malloc = {
+static struct SeaAllocator MALLOC_ALLOCATOR = {
 	.context = NULL,
-	.alloc = allocator_malloc_alloc,
+	.alloc = malloc_allocator_func,
 };
 
-const struct Allocator_CLS Allocator = {
-	.malloc = &allocator_malloc,
+const struct SeaAllocator_CLS SeaAllocator = {
+	.malloc = &MALLOC_ALLOCATOR,
 };

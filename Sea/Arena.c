@@ -1,10 +1,10 @@
 #include "Arena.h"
 
+#include "Allocator.h"
+#include "Error.h"
+
 #include <stdint.h>
 #include <stdalign.h>
-#include "Allocator.h"
-
-_Thread_local int ArenaErrno = 0;
 
 typedef union {
 	char c;
@@ -16,23 +16,23 @@ typedef union {
 	double d;
 	long double ld;
 	void* p;
-} max_align_custom_t;
+} SEA_Max_Align;
 
-static void init(struct Arena* self, void* buffer, size_t capacity) {
+static void init(struct SeaArena* self, void* buffer, size_t capacity) {
 	self->buffer = (uint8_t*) buffer;
 	self->capacity = capacity;
 	self->offset = 0;
 }
 
-static void* allocEx(struct Arena* self, size_t size, size_t alignment) {
+static void* allocEx(struct SeaArena* self, size_t size, size_t alignment) {
 	if (self == NULL) {
-		ArenaErrno = ARENA_ERROR_INVALID_CONTEXT;
+		SeaError.setError(ARENA_ERROR_INVALID_CONTEXT);
 		return NULL;
 	}
 
 	// Alignment must be a power of 2
 	if (alignment & (alignment - 1)) {
-		ArenaErrno = ARENA_ERROR_INVALID_ALIGNMENT;
+		SeaError.setError(ARENA_ERROR_INVALID_ALIGNMENT);
 		return NULL;
 	}
 
@@ -41,7 +41,7 @@ static void* allocEx(struct Arena* self, size_t size, size_t alignment) {
 	size_t next_offset = aligned - (size_t) self->buffer + size;
 
 	if (next_offset > self->capacity) {
-		ArenaErrno = ARENA_ERROR_OUT_OF_MEMORY;
+		SeaError.setError(ARENA_ERROR_OUT_OF_MEMORY);
 		return NULL;
 	}
 
@@ -50,31 +50,26 @@ static void* allocEx(struct Arena* self, size_t size, size_t alignment) {
 	return ptr;
 }
 
-static void* alloc(struct Arena* self, size_t size) {
-	return allocEx(self, size, alignof(max_align_custom_t));
+static void* alloc(struct SeaArena* self, size_t size) {
+	return allocEx(self, size, alignof(SEA_Max_Align));
 }
 
-static void reset(struct Arena* self) {
+static void reset(struct SeaArena* self) {
 	self->offset = 0;
 }
 
-static size_t remaining(struct Arena* self) {
+static size_t remaining(struct SeaArena* self) {
 	return self->capacity - self->offset;
 }
 
-static struct Allocator getAllocator(struct Arena* self) {
-	return (struct Allocator) {
+static struct SeaAllocator getAllocator(struct SeaArena* self) {
+	return (struct SeaAllocator) {
 		.alloc = (void* (*)(void*, size_t, size_t)) allocEx,
 		.context = self
 	};
 }
 
-static int* getErrno(void) {
-	return &ArenaErrno;
-}
-
-const struct Arena_CLS Arena = {
-	.getErrno = getErrno,
+const struct SeaArena_CLS SeaArena = {
 	.init = init,
 	.alloc = alloc,
 	.allocEx = allocEx,

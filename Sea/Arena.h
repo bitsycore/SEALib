@@ -5,26 +5,25 @@
 #include <stdint.h>
 #include "Allocator.h"
 
-enum ArenaErrors {
+enum SeaArenaErrors {
 	ARENA_ERROR_OUT_OF_MEMORY = 1,
 	ARENA_ERROR_INVALID_ALIGNMENT = 2,
 	ARENA_ERROR_INVALID_CONTEXT = 3,
 };
 
-struct Arena {
+struct SeaArena {
 	size_t capacity;
 	size_t offset;
 	uint8_t* buffer;
 };
 
-extern const struct Arena_CLS {
-	int* (* getErrno)(void);
-	void (* init)(struct Arena* self, void* buffer, size_t capacity);
-	void* (* alloc)(struct Arena* self, size_t size);
-	void* (* allocEx)(struct Arena* self, size_t size, size_t alignment);
-	void (* reset)(struct Arena* self);
-	size_t (* remaining)(struct Arena* self);
-	struct Allocator (* getAllocator)(struct Arena* self);
-} Arena;
+extern const struct SeaArena_CLS {
+	void (* init)(struct SeaArena* self, void* buffer, size_t capacity);
+	void* (* alloc)(struct SeaArena* self, size_t size);
+	void* (* allocEx)(struct SeaArena* self, size_t size, size_t alignment);
+	void (* reset)(struct SeaArena* self);
+	size_t (* remaining)(struct SeaArena* self);
+	struct SeaAllocator (* getAllocator)(struct SeaArena* self);
+} SeaArena;
 
 #endif //ARENA_SEALIB_3c01bdbb_H
