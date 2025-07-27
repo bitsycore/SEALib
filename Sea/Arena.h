@@ -26,4 +26,7 @@ extern const struct SeaArena_CLS {
 	struct SeaAllocator (* getAllocator)(struct SeaArena* self);
 } SeaArena;
 
+#define SEA_ARENA_SCOPE(arena) \
+    for (bool _done = false; _done == false; _done = true, SeaArena.reset(arena))
+
 #endif //ARENA_SEALIB_3c01bdbb_H

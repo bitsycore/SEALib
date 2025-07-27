@@ -8,7 +8,7 @@ struct SeaUUID {
 	uint8_t bytes[16];
 };
 
-extern const struct Sea_UUID_CLS {
+extern const struct SeaUUID_CLS {
 	void (* generateV4)(struct SeaUUID* self);
 	void (* generateV7)(struct SeaUUID* self);
 	void (* toString)(struct SeaUUID* self, char out[37]);

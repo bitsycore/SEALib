@@ -2,16 +2,11 @@
 
 #include <Sea/Allocator.h>
 #include <Sea/Arena.h>
+#include <Sea/Memory.h>
 #include <Sea/Random.h>
 
 #include <stdio.h>
-
-#if !defined(_WIN32) && !defined(_WIN64)
-#include <alloca.h>
-#include <malloc.h>
-#else
-#include <malloc.h>
-#endif
+#include <stdlib.h>
 
 const char* randomName() {
 	switch (SeaRandom.randUint64() % 16) {
@@ -35,7 +30,6 @@ const char* randomName() {
 }
 
 void arena_test(struct SeaArena* arena) {
-
 	struct SeaAllocator arena_allocator = SeaArena.getAllocator(arena);
 
 	struct Person* me = SeaArena.alloc(arena, sizeof(struct Person));
@@ -72,17 +66,17 @@ void arena_test(struct SeaArena* arena) {
 }
 
 int main() {
-	size_t arenaSize = 128;
-	uint8_t* arenaAndBuffer = malloc(arenaSize + sizeof(SeaArena));
-	struct SeaArena* arena = (struct SeaArena*) arenaAndBuffer;
-	SeaArena.init(arena, arenaAndBuffer + sizeof(struct SeaArena), arenaSize);
-
-	for (int i = 0; i < 100; i++) {
-		arena_test(arena);
-		SeaArena.reset(arena);
-		puts("-----------------------------");
+	const size_t arenaSize = 128;
+	SEA_MALLOC_SCOPE(arenaSize + sizeof(struct SeaArena)) {
+		struct SeaArena* arena = (struct SeaArena*) SCOPE_PTR;
+		SeaArena.init(arena, SCOPE_PTR + sizeof(struct SeaArena), arenaSize);
+		for (int i = 0; i < 100; i++) {
+			SEA_ARENA_SCOPE(arena) {
+				arena_test(arena);
+				SeaArena.reset(arena);
+				puts("-----------------------------");
+			}
+		}
 	}
-
-	free(arenaAndBuffer);
 	return 0;
 }

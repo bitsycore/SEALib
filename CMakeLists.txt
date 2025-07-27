@@ -17,6 +17,7 @@ add_library(
         Sea/ThreadLocal.h
         Sea/Error.c
         Sea/Error.h
+        Sea/Memory.h
 )
 
 add_executable(

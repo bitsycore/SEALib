@@ -1,4 +1,5 @@
 #include "Person.h"
+
 #include "Sea/Random.h"
 #include "Sea/Arena.h"
 
@@ -33,10 +34,11 @@ static char* toString(struct Person* self, struct SeaAllocator* allocator) {
 }
 
 static bool equals(struct Person* self, struct Person* other) {
+	if (self == other) return true;
 	return SeaUUID.equals(&PRIV(self)->uuid, &PRIV(other)->uuid);
 }
 
-static struct SeaUUID getId(struct Person* self) {
+static struct SeaUUID getUUID(struct Person* self) {
 	return PRIV(self)->uuid;
 }
 
@@ -46,5 +48,5 @@ const struct Person_CLS Person = {
 	.toString = toString,
 	.toStringSize = toStringSize,
 	.equals = equals,
-	.getId = getId,
+	.getUUID = getUUID,
 };

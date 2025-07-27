@@ -1,4 +1,5 @@
 #include "UUID.h"
+
 #include "Random.h"
 
 #include <stdio.h>
@@ -80,7 +81,7 @@ static void toString(struct SeaUUID* self, char out[37]) {
 	);
 }
 
-const struct Sea_UUID_CLS SeaUUID = {
+const struct SeaUUID_CLS SeaUUID = {
 	.toString = toString,
 	.generateV4 = generateV4,
 	.generateV7 = generateV7,
