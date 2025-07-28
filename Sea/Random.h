@@ -1,9 +1,9 @@
 #ifndef RANDOM_SEALIB_cfb07073_H
 #define RANDOM_SEALIB_cfb07073_H
 
-#include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 
 extern const struct SeaRandom_CLS {
 	uint64_t (* randUint64)();

@@ -22,7 +22,7 @@ extern const struct SeaArena_CLS {
 	void* (* alloc)(struct SeaArena* self, size_t size);
 	void* (* allocEx)(struct SeaArena* self, size_t size, size_t alignment);
 	void (* reset)(struct SeaArena* self);
-	size_t (* remaining)(struct SeaArena* self);
+	size_t (* remaining)(const struct SeaArena* self);
 	struct SeaAllocator (* getAllocator)(struct SeaArena* self);
 } SeaArena;
 

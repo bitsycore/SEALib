@@ -30,7 +30,7 @@ const char* randomName() {
 }
 
 void arena_test(struct SeaArena* arena) {
-	struct SeaAllocator arena_allocator = SeaArena.getAllocator(arena);
+	const struct SeaAllocator arena_allocator = SeaArena.getAllocator(arena);
 
 	struct Person* me = SeaArena.alloc(arena, sizeof(struct Person));
 	Person.initWithName(me, randomName());
@@ -45,7 +45,7 @@ void arena_test(struct SeaArena* arena) {
 	puts(meStr);
 	free(meStr);
 
-	char* youStr = Person.toString(you, &arena_allocator);
+	const char* youStr = Person.toString(you, &arena_allocator);
 	puts(youStr);
 
 	if (Person.equals(me, you)) {

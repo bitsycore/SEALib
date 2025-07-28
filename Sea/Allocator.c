@@ -1,9 +1,10 @@
 #include "Allocator.h"
 
-#include <stdlib.h>
 #include <stddef.h>
+#include <stdlib.h>
 
-static void* malloc_allocator_func(void* ctx, size_t size, size_t alignment) {
+static void* malloc_allocator_func(void* _, const size_t size, const size_t alignment) {
+	(void)alignment;
 	return malloc(size);
 }
 

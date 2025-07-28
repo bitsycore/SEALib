@@ -1,11 +1,11 @@
 #ifndef PERSON_3c01bdbb_H
 #define PERSON_3c01bdbb_H
 
-#include "Sea/UUID.h"
 #include "Sea/Arena.h"
+#include "Sea/UUID.h"
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 struct PersonPrivate {
 	struct SeaUUID uuid;

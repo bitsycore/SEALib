@@ -8,9 +8,9 @@
 	#include <stdio.h>
 #elif defined(__unix__) || defined(__APPLE__)
 	#include <fcntl.h>
-	#include <unistd.h>
-	#include <stdlib.h>
 	#include <stdio.h>
+	#include <stdlib.h>
+	#include <unistd.h>
 #else
 	#include <stdio.h>
 	#include <time.h>

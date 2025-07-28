@@ -1,10 +1,10 @@
 #include "Person.h"
 
-#include "Sea/Random.h"
 #include "Sea/Arena.h"
+#include "Sea/Random.h"
 
-#include <stdio.h>
 #include <stdalign.h>
+#include <stdio.h>
 
 #define PRIV(self) ((struct PersonPrivate*) &self->private)
 

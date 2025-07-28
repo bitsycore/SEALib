@@ -1,8 +1,8 @@
 #ifndef RANDOM_SEALIB_d7a966a2_H
 #define RANDOM_SEALIB_d7a966a2_H
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 struct SeaUUID {
 	uint8_t bytes[16];

@@ -45,12 +45,12 @@ static void* allocEx(struct SeaArena* self, size_t size, size_t alignment) {
 		return NULL;
 	}
 
-	void* ptr = (void*) (self->buffer + (aligned - (size_t) self->buffer));
+	void* ptr = self->buffer + (aligned - (size_t) self->buffer);
 	self->offset = next_offset;
 	return ptr;
 }
 
-static void* alloc(struct SeaArena* self, size_t size) {
+static void* alloc(struct SeaArena* self, const size_t size) {
 	return allocEx(self, size, alignof(SEA_Max_Align));
 }
 
@@ -58,7 +58,7 @@ static void reset(struct SeaArena* self) {
 	self->offset = 0;
 }
 
-static size_t remaining(struct SeaArena* self) {
+static size_t remaining(const struct SeaArena* self) {
 	return self->capacity - self->offset;
 }
 

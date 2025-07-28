@@ -4,7 +4,7 @@
 
 SEA_THREAD_LOCAL int LOCAL_ERRNO = 0;
 
-void setErrno(int errno) {
+void setErrno(const int errno) {
 	LOCAL_ERRNO = errno;
 }
 
