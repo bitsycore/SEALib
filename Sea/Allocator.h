@@ -6,13 +6,13 @@
 
 struct SeaAllocator {
 	void* (*alloc)(void* ctx, size_t size, size_t alignment);
-	void* (*free)(void *ctx, void *ptr, size_t size);
+	void (*free)(void* ctx, void* ptr, size_t size);
 	void* context;
 };
 
 extern const struct SeaAllocator_CLS {
 	char* (*strdup)(struct SeaAllocator* self, const char* str);
-	char* (*free)(struct SeaAllocator* self, const char* str);
+	void (*free)(struct SeaAllocator* self, void* str);
 	struct SeaAllocator* malloc_allocator;
 } SeaAllocator;
 

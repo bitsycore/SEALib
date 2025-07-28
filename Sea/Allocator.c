@@ -28,7 +28,7 @@ static struct SeaAllocator MALLOC_ALLOCATOR = {
 // MARK: Custom Allocator Utility
 // =========================================
 
-void alloc_free(struct SeaAllocator* self, char* str) {
+void alloc_free(struct SeaAllocator* self, void* str) {
 	if (!str || !self || !self->free) return;
 	self->free(self->context, str, strlen(str) + 1);
 }

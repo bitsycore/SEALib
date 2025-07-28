@@ -1,7 +1,9 @@
 #include "JSON.h"
 
 #include <ctype.h>
+#include <stdalign.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "Allocator.h"

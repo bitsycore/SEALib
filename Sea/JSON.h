@@ -1,8 +1,9 @@
 #ifndef SEALIB_JSON_H
 #define SEALIB_JSON_H
 
+#include "Allocator.h"
+
 #include <stdbool.h>
-#include <stdlib.h>
 
 typedef enum {
 	SEAJSON_NULL,
@@ -39,8 +40,8 @@ struct SeaJsonValue {
 };
 
 extern const struct SeaJsonValue_CLS {
-	struct SeaJsonValue* (*parse)(const char* json, struct SeaAllocator* allocator);
-	char* (*toString)(struct SeaJsonValue* self, struct SeaAllocator* allocator);
+	struct SeaJsonValue* (*parse)(const char* string, struct SeaAllocator* allocator);
+	char* (*toString)(const struct SeaJsonValue* self, struct SeaAllocator* alloc);
 	void (*free)(struct SeaJsonValue* self, struct SeaAllocator* alloc);
 } SeaJsonValue;
 
