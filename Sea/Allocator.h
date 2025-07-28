@@ -13,7 +13,7 @@ struct SeaAllocator {
 extern const struct SeaAllocator_CLS {
 	char* (*strdup)(struct SeaAllocator* self, const char* str);
 	void (*free)(struct SeaAllocator* self, void* str);
-	struct SeaAllocator* malloc_allocator;
+	struct SeaAllocator* malloc;
 } SeaAllocator;
 
 #endif // ALLOCATOR_SEALIB_3c01bdbb_H
