@@ -2,14 +2,18 @@
 #define ALLOCATOR_SEALIB_3c01bdbb_H
 
 #include <stddef.h>
+#include <string.h>
 
 struct SeaAllocator {
-	void* (* alloc)(void* ctx, size_t size, size_t alignment);
+	void* (*alloc)(void* ctx, size_t size, size_t alignment);
+	void* (*free)(void *ctx, void *ptr, size_t size);
 	void* context;
 };
 
 extern const struct SeaAllocator_CLS {
-	struct SeaAllocator* malloc;
+	char* (*strdup)(struct SeaAllocator* self, const char* str);
+	char* (*free)(struct SeaAllocator* self, const char* str);
+	struct SeaAllocator* malloc_allocator;
 } SeaAllocator;
 
 #endif // ALLOCATOR_SEALIB_3c01bdbb_H

@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "Sea/JSON.h"
+
 const char* randomName() {
 	switch (SeaRandom.randUint64() % 16) {
 		case 0: return "Bob";
@@ -41,7 +43,7 @@ void arena_test(struct SeaArena* arena) {
 	struct Person* maybeMe = malloc(sizeof(struct Person));
 	*maybeMe = *me;
 
-	char* meStr = Person.toString(me, SeaAllocator.malloc);
+	char* meStr = Person.toString(me, SeaAllocator.malloc_allocator);
 	puts(meStr);
 	free(meStr);
 
@@ -66,6 +68,13 @@ void arena_test(struct SeaArena* arena) {
 }
 
 int main() {
+	const char * str = "{\"menu\": {\n  \"header\": \"SVG Viewer\",\n  \"items\": [\n    {\"id\": \"Open\"},\n    {\"id\": \"OpenNew\", \"label\": \"Open New\"},\n    null,\n    {\"id\": \"ZoomIn\", \"label\": \"Zoom In\"},\n    {\"id\": \"ZoomOut\", \"label\": \"Zoom Out\"},\n    {\"id\": \"OriginalView\", \"label\": \"Original View\"},\n    null,\n    {\"id\": \"Quality\"},\n    {\"id\": \"Pause\"},\n    {\"id\": \"Mute\"},\n    null,\n    {\"id\": \"Find\", \"label\": \"Find...\"},\n    {\"id\": \"FindAgain\", \"label\": \"Find Again\"},\n    {\"id\": \"Copy\"},\n    {\"id\": \"CopyAgain\", \"label\": \"Copy Again\"},\n    {\"id\": \"CopySVG\", \"label\": \"Copy SVG\"},\n    {\"id\": \"ViewSVG\", \"label\": \"View SVG\"},\n    {\"id\": \"ViewSource\", \"label\": \"View Source\"},\n    {\"id\": \"SaveAs\", \"label\": \"Save As\"},\n    null,\n    {\"id\": \"Help\"},\n    {\"id\": \"About\", \"label\": \"About Adobe CVG Viewer...\"}\n  ]\n}}";
+	struct SeaJsonValue* abc = SeaJsonValue.parse(str, SeaAllocator.malloc_allocator);
+	if (abc->type != SEAJSON_OBJECT) { exit(1); }
+	const char* abc_str = SeaJsonValue.toString(abc, SeaAllocator.malloc_allocator);
+	printf("%s\n", abc_str);
+	SeaAllocator.free(SeaAllocator.malloc_allocator, abc_str);
+	SeaJsonValue.free(abc, SeaAllocator.malloc_allocator);
 	const size_t arenaSize = 128;
 	SEA_MALLOC_SCOPE(arenaSize + sizeof(struct SeaArena)) {
 		struct SeaArena* arena = (struct SeaArena*) SCOPE_PTR;

@@ -20,6 +20,10 @@ add_library(
         Sea/Memory.h
         Sea/Time.c
         Sea/Time.h
+        Sea/JSON.c
+        Sea/JSON.h
+        Sea/String.c
+        Sea/String.h
 )
 
 add_executable(

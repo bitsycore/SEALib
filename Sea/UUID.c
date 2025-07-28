@@ -36,9 +36,10 @@ static void generateV7(struct SeaUUID* self) {
 	self->bytes[8] = (self->bytes[8] & 0x3F) | 0x80;
 }
 
-static bool equals(const void* a, const void* b) {
+static bool equals(const struct SeaUUID* a, const struct SeaUUID* b) {
 	if (a == b) return true;
-	return memcmp(a, b, sizeof(struct SeaUUID)) == 0;
+	if (a == NULL || b == NULL) return false;
+	return memcmp(a->bytes, b->bytes, sizeof(a->bytes)) == 0;
 }
 
 static void toString(const struct SeaUUID* self, char out[37]) {

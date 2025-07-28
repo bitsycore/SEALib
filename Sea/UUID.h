@@ -12,7 +12,7 @@ extern const struct SeaUUID_CLS {
 	void (* generateV4)(struct SeaUUID* self);
 	void (* generateV7)(struct SeaUUID* self);
 	void (* toString)(const struct SeaUUID* self, char out[37]);
-	bool (* equals)(const void* a, const void* b);
+	bool (* equals)(const struct SeaUUID* a, const struct SeaUUID* b);
 } SeaUUID;
 
 #endif// RANDOM_SEALIB_d7a966a2_H
