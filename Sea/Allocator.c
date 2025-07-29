@@ -28,10 +28,6 @@ static struct SeaAllocator MALLOC_ALLOCATOR = {
 // MARK: Custom Allocator Utility
 // =========================================
 
-void alloc_free(struct SeaAllocator* self, void* str) {
-	if (!str || !self || !self->free) return;
-	self->free(self->context, str, strlen(str) + 1);
-}
 
 static char* alloc_strdup(struct SeaAllocator* self, const char* str) {
 	if (!str || !self || !self->alloc) return NULL;
@@ -46,6 +42,5 @@ static char* alloc_strdup(struct SeaAllocator* self, const char* str) {
 
 const struct SeaAllocator_CLS SeaAllocator = {
 	.strdup = alloc_strdup,
-	.free = alloc_free,
 	.malloc = &MALLOC_ALLOCATOR,
 };

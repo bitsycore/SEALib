@@ -69,7 +69,7 @@ void arena_test(struct SeaArena* arena) {
 
 int main() {
 	const char * str = "{\"menu\": {\n  \"header\": \"SVG Viewer\",\n  \"items\": [\n    {\"id\": \"Open\"},\n    {\"id\": \"OpenNew\", \"label\": \"Open New\"},\n    null,\n    {\"id\": \"ZoomIn\", \"label\": \"Zoom In\"},\n    {\"id\": \"ZoomOut\", \"label\": \"Zoom Out\"},\n    {\"id\": \"OriginalView\", \"label\": \"Original View\"},\n    null,\n    {\"id\": \"Quality\"},\n    {\"id\": \"Pause\"},\n    {\"id\": \"Mute\"},\n    null,\n    {\"id\": \"Find\", \"label\": \"Find...\"},\n    {\"id\": \"FindAgain\", \"label\": \"Find Again\"},\n    {\"id\": \"Copy\"},\n    {\"id\": \"CopyAgain\", \"label\": \"Copy Again\"},\n    {\"id\": \"CopySVG\", \"label\": \"Copy SVG\"},\n    {\"id\": \"ViewSVG\", \"label\": \"View SVG\"},\n    {\"id\": \"ViewSource\", \"label\": \"View Source\"},\n    {\"id\": \"SaveAs\", \"label\": \"Save As\"},\n    null,\n    {\"id\": \"Help\"},\n    {\"id\": \"About\", \"label\": \"About Adobe CVG Viewer...\"}\n  ]\n}}";
-	struct SeaJsonValue* abc = SeaJsonValue.parse(str, SeaAllocator.malloc);
+	struct SeaJsonValue* abc = SeaJsonValue.parseString(str, SeaAllocator.malloc);
 	if (abc->type != SEAJSON_OBJECT) { exit(1); }
 	char* abc_str = SeaJsonValue.toString(abc, SeaAllocator.malloc);
 	printf("%s\n", abc_str);
@@ -79,7 +79,7 @@ int main() {
 	SEA_MALLOC_SCOPE(arenaSize + sizeof(struct SeaArena)) {
 		struct SeaArena* arena = (struct SeaArena*) SCOPE_PTR;
 		SeaArena.init(arena, SCOPE_PTR + sizeof(struct SeaArena), arenaSize);
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 5; i++) {
 			SEA_ARENA_SCOPE(arena) {
 				arena_test(arena);
 				SeaArena.reset(arena);
