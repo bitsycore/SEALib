@@ -1,6 +1,6 @@
 #include "Random.h"
 
-#include "ThreadLocal.h"
+#include "Compat.h"
 
 #if defined(_WIN32) || defined(_WIN64)
 	#include <Windows.h>
@@ -16,8 +16,8 @@
 	#include <time.h>
 #endif
 
-SEA_THREAD_LOCAL static bool SEED_INITIALIZED = false;
-SEA_THREAD_LOCAL static uint64_t SEED[4];
+static SEA_THREAD_LOCAL bool SEED_INITIALIZED = false;
+static SEA_THREAD_LOCAL uint64_t SEED[4];
 
 static uint64_t rotate_left(const uint64_t x, int k) {
 	return (x << k) | (x >> (64 - k));

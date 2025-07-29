@@ -1,15 +1,15 @@
 #include "Error.h"
 
-#include "ThreadLocal.h"
+#include "Compat.h"
 
-SEA_THREAD_LOCAL int LOCAL_ERRNO = 0;
+static SEA_THREAD_LOCAL int THREAD_ERRNO = 0;
 
-void setErrno(const int errno) {
-	LOCAL_ERRNO = errno;
+void setErrno(const int error) {
+	THREAD_ERRNO = error;
 }
 
 int getErrno() {
-	return LOCAL_ERRNO;
+	return THREAD_ERRNO;
 }
 
 const struct SeaError_CLS SeaError = {
