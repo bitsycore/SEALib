@@ -2,9 +2,9 @@
 
 #include "Compat.h"
 
-static SEA_THREAD_LOCAL int THREAD_ERRNO = 0;
+static SEA_THREAD_LOCAL enum SeaErrorType THREAD_ERRNO = 0;
 
-void setErrno(const int error) {
+void setErrno(const enum SeaErrorType error) {
 	THREAD_ERRNO = error;
 }
 

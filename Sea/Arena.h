@@ -5,12 +5,6 @@
 #include <stdint.h>
 #include "Allocator.h"
 
-enum SeaArenaErrors {
-	ARENA_ERROR_OUT_OF_MEMORY = 1,
-	ARENA_ERROR_INVALID_ALIGNMENT = 2,
-	ARENA_ERROR_INVALID_CONTEXT = 3,
-};
-
 struct SeaArena {
 	size_t capacity;
 	size_t offset;

@@ -2,11 +2,9 @@
 
 #include "Allocator.h"
 #include "Error.h"
+#include "Compat.h"
 
 #include <stdint.h>
-#include <stdalign.h>
-
-#include "Compat.h"
 
 typedef union {
 	char c;
@@ -20,21 +18,21 @@ typedef union {
 	void* p;
 } SEA_Max_Align;
 
-static void init(struct SeaArena* self, void* buffer, size_t capacity) {
+static void init(struct SeaArena* self, void* buffer, const size_t capacity) {
 	self->buffer = (uint8_t*) buffer;
 	self->capacity = capacity;
 	self->offset = 0;
 }
 
-static void* allocEx(struct SeaArena* self, size_t size, size_t alignment) {
+static void* allocEx(struct SeaArena* self, const size_t size, const size_t alignment) {
 	if (self == NULL) {
-		SeaError.setError(ARENA_ERROR_INVALID_CONTEXT);
+		SeaError.setError(SEA_ERROR_ARENA_INVALID_CONTEXT);
 		return NULL;
 	}
 
 	// Alignment must be a power of 2
 	if (alignment & (alignment - 1)) {
-		SeaError.setError(ARENA_ERROR_INVALID_ALIGNMENT);
+		SeaError.setError(SEA_ERROR_ARENA_INVALID_ALIGNMENT);
 		return NULL;
 	}
 
@@ -43,7 +41,7 @@ static void* allocEx(struct SeaArena* self, size_t size, size_t alignment) {
 	size_t next_offset = aligned - (size_t) self->buffer + size;
 
 	if (next_offset > self->capacity) {
-		SeaError.setError(ARENA_ERROR_OUT_OF_MEMORY);
+		SeaError.setError(SEA_ERROR_ARENA_OUT_OF_MEMORY);
 		return NULL;
 	}
 
