@@ -3,8 +3,9 @@
 #include "Sea/Arena.h"
 #include "Sea/Random.h"
 
-#include <stdalign.h>
 #include <stdio.h>
+
+#include "Sea/Compat.h"
 
 #define PRIV(self) ((struct PersonPrivate*) &self->private)
 
@@ -28,7 +29,7 @@ static char* toString(struct Person* self, const struct SeaAllocator* allocator)
 	char uuid[37];
 	SeaUUID.toString(&PRIV(self)->uuid, uuid);
 	const size_t size = toStringSize(self);
-	void* buffer = allocator->alloc(allocator->context, sizeof(char) * toStringSize(self), alignof(char));
+	void* buffer = allocator->alloc(allocator->context, sizeof(char) * toStringSize(self), SEA_ALIGNOF(char));
 	snprintf((char*) buffer, size, TO_STRING_FORMAT, self->name, self->age, uuid);
 	return buffer;
 }

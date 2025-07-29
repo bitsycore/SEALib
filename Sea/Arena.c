@@ -6,6 +6,8 @@
 #include <stdint.h>
 #include <stdalign.h>
 
+#include "Compat.h"
+
 typedef union {
 	char c;
 	short s;
@@ -51,7 +53,7 @@ static void* allocEx(struct SeaArena* self, size_t size, size_t alignment) {
 }
 
 static void* alloc(struct SeaArena* self, const size_t size) {
-	return allocEx(self, size, alignof(SEA_Max_Align));
+	return allocEx(self, size, SEA_ALIGNOF(SEA_Max_Align));
 }
 
 static void reset(struct SeaArena* self) {

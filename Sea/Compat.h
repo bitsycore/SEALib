@@ -33,4 +33,6 @@
   #define SEA_ALIGNOF(type) offsetof(struct { char c; type x; }, x)
 #endif
 
+#define SEA_MAX(a, b) ((a) > (b) ? (a) : (b))
+
 #endif// COMPAT_SEALIB_3676198b_H
