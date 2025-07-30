@@ -13,6 +13,6 @@ int GetErrno() {
 }
 
 const struct SeaError_CLS SeaError = {
-	.setError = SetErrno,
-	.getError = GetErrno,
+	.SetError = SetErrno,
+	.GetError = GetErrno,
 };

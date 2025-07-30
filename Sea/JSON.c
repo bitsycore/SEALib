@@ -561,17 +561,17 @@ const struct SeaJsonValue_CLS SeaJsonValue = {
 
 enum SeaErrorType JsonObject_put(struct SeaJsonObject* self, const char* key, struct SeaJsonValue* value, struct SeaAllocator* alloc) {
 	if (!self ) {
-		SeaError.setError(SEA_ERROR_GENERIC_SELF_NULL);
+		SeaError.SetError(SEA_ERROR_GENERIC_SELF_NULL);
 		return SEA_ERROR_GENERIC_SELF_NULL;
 	}
 
 	if (!key || !value || !alloc || !alloc->alloc) {
-		SeaError.setError(SEA_ERROR_GENERIC_ARGUMENT_NULL);
+		SeaError.SetError(SEA_ERROR_GENERIC_ARGUMENT_NULL);
 		return SEA_ERROR_GENERIC_ARGUMENT_NULL;
 	}
 
 	if (!alloc->alloc) {
-		SeaError.setError(SEA_ERROR_ALLOCATOR_ALLOC_FUNC_NULL);
+		SeaError.SetError(SEA_ERROR_ALLOCATOR_ALLOC_FUNC_NULL);
 		return SEA_ERROR_ALLOCATOR_ALLOC_FUNC_NULL;
 	}
 

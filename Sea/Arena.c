@@ -26,7 +26,7 @@ static void init(struct SeaArena* self, void* buffer, const size_t capacity) {
 
 static void* allocEx(struct SeaArena* self, const size_t size, const size_t alignment) {
 	if (self == NULL) {
-		SeaError.setError(SEA_ERROR_ARENA_INVALID_CONTEXT);
+		SeaError.SetError(SEA_ERROR_ARENA_INVALID_CONTEXT);
 		return NULL;
 	}
 
@@ -39,7 +39,7 @@ static void* allocEx(struct SeaArena* self, const size_t size, const size_t alig
 
 	// Alignment must be a power of 2
 	if (vAlignment & (vAlignment - 1)) {
-		SeaError.setError(SEA_ERROR_ARENA_INVALID_ALIGNMENT);
+		SeaError.SetError(SEA_ERROR_ARENA_INVALID_ALIGNMENT);
 		return NULL;
 	}
 
@@ -48,7 +48,7 @@ static void* allocEx(struct SeaArena* self, const size_t size, const size_t alig
 	size_t next_offset = aligned - (size_t) self->buffer + size;
 
 	if (next_offset > self->capacity) {
-		SeaError.setError(SEA_ERROR_ARENA_OUT_OF_MEMORY);
+		SeaError.SetError(SEA_ERROR_ARENA_OUT_OF_MEMORY);
 		return NULL;
 	}
 

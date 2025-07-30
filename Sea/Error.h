@@ -19,8 +19,8 @@ enum SeaErrorType {
 };
 
 extern const struct SeaError_CLS {
-	void (*setError)(enum SeaErrorType error);
-	int (*getError)();
+	void (*SetError)(enum SeaErrorType error);
+	int (*GetError)();
 } SeaError;
 
 #endif //SEALIB_ERROR_H
