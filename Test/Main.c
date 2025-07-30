@@ -72,15 +72,35 @@ int main() {
 	// ---- JSON -------------------------------------------------
 
 	// language=JSON
-	const char * str = "{\n  \"menu\": {\n    \"header\": \"SVG Viewer\",\n    \"items\": [\n      {\n        \"id\": \"Open\"\n      },\n      {\n        \"id\": \"OpenNew\",\n        \"label\": \"Open New\"\n      },\n      null,\n      {\n        \"id\": \"ZoomIn\",\n        \"label\": \"Zoom In\"\n      },\n      {\n        \"id\": \"ZoomOut\",\n        \"label\": \"Zoom Out\"\n      },\n      {\n        \"id\": \"OriginalView\",\n        \"label\": \"Original View\"\n      },\n      null,\n      {\n        \"id\": \"Quality\"\n      },\n      {\n        \"id\": \"Pause\"\n      },\n      {\n        \"id\": \"Mute\"\n      },\n      null,\n      {\n        \"id\": \"Find\",\n        \"label\": \"Find...\"\n      },\n      {\n        \"id\": \"FindAgain\",\n        \"label\": \"Find Again\"\n      },\n      {\n        \"id\": \"Copy\"\n      },\n      {\n        \"id\": \"CopyAgain\",\n        \"label\": \"Copy Again\"\n      },\n      {\n        \"id\": \"CopySVG\",\n        \"label\": \"Copy SVG\"\n      },\n      {\n        \"id\": \"ViewSVG\",\n        \"label\": \"View SVG\"\n      },\n      {\n        \"id\": \"ViewSource\",\n        \"label\": \"View Source\"\n      },\n      {\n        \"id\": \"SaveAs\",\n        \"label\": \"Save As\"\n      },\n      null,\n      {\n        \"id\": \"Help\"\n      },\n      {\n        \"id\": \"About\",\n        \"label\": \"About Adobe CVG Viewer...\"\n      }\n    ]\n  }\n}";
-	struct SeaJsonValue* abc = SeaJsonValue.parseString(str, SeaAllocator.malloc);
-	if (abc->type != SEAJSON_OBJECT) { exit(1); }
-	const struct SeaJsonValue* menu = SeaJsonObject.get(abc->object, "menu");
-	if (menu->type != SEAJSON_OBJECT) { exit(1); }
-	char* abc_str = SeaJsonValue.toString(abc, SeaAllocator.malloc);
-	printf("%s\n", abc_str);
-	free(abc_str);
-	SeaJsonValue.free(abc, SeaAllocator.malloc);
+	const char str[] = "{\n  \"menu\": {\n    \"header\": \"SVG Viewer\",\n    \"items\": [\n      {\n        \"id\": \"Open\"\n      },\n      {\n        \"id\": \"OpenNew\",\n        \"label\": \"Open New\"\n      },\n      null,\n      {\n        \"id\": \"ZoomIn\",\n        \"label\": \"Zoom In\"\n      },\n      {\n        \"id\": \"ZoomOut\",\n        \"label\": \"Zoom Out\"\n      },\n      {\n        \"id\": \"OriginalView\",\n        \"label\": \"Original View\"\n      },\n      null,\n      {\n        \"id\": \"Quality\"\n      },\n      {\n        \"id\": \"Pause\"\n      },\n      {\n        \"id\": \"Mute\"\n      },\n      null,\n      {\n        \"id\": \"Find\",\n        \"label\": \"Find...\"\n      },\n      {\n        \"id\": \"FindAgain\",\n        \"label\": \"Find Again\"\n      },\n      {\n        \"id\": \"Copy\"\n      },\n      {\n        \"id\": \"CopyAgain\",\n        \"label\": \"Copy Again\"\n      },\n      {\n        \"id\": \"CopySVG\",\n        \"label\": \"Copy SVG\"\n      },\n      {\n        \"id\": \"ViewSVG\",\n        \"label\": \"View SVG\"\n      },\n      {\n        \"id\": \"ViewSource\",\n        \"label\": \"View Source\"\n      },\n      {\n        \"id\": \"SaveAs\",\n        \"label\": \"Save As\"\n      },\n      null,\n      {\n        \"id\": \"Help\"\n      },\n      {\n        \"id\": \"About\",\n        \"label\": \"About Adobe CVG Viewer...\"\n      }\n    ]\n  }\n}";
+	const size_t str_len = sizeof(str) - 1;
+	const size_t bufferSize = (32 * 1024);
+	const size_t finalBufferSize = bufferSize + sizeof(struct SeaArena);
+
+	SEA_MALLOC_SCOPE(finalBufferSize) {
+
+		struct SeaArena* arena = (struct SeaArena*) SCOPE_PTR;
+		SeaArena.init(arena, SCOPE_PTR + sizeof(struct SeaArena), bufferSize);
+
+		SEA_ARENA_SCOPE(arena) {
+
+			struct SeaAllocator allocator = SeaArena.getAllocator(arena);
+			printf("Remaining: %llu\n", SeaArena.remaining(arena));
+			const struct SeaJsonValue* json = SeaJsonValue.ParseJson(str, str_len, &allocator);
+			printf("Remaining: %llu\n", SeaArena.remaining(arena));
+
+			if (json->type != SEA_JSON_OBJECT) { exit(12345678); }
+			const struct SeaJsonValue* menu = SeaJsonObject.get(json->object, "menu");
+
+			if (menu->type != SEA_JSON_OBJECT) { exit(12349999); }
+			char* abc_str = SeaJsonValue.toString(json, &allocator);
+
+			printf("%s\n", abc_str);
+
+		}
+
+		(void)arena;
+	}
 
 	puts("-----------------------------");
 
@@ -93,7 +113,6 @@ int main() {
 		for (int i = 0; i < 5; i++) {
 			SEA_ARENA_SCOPE(arena) {
 				arena_test(arena);
-				SeaArena.reset(arena);
 				puts("-----------------------------");
 			}
 		}
