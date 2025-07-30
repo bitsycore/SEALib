@@ -14,6 +14,9 @@ typedef enum {
 	SEAJSON_OBJECT
 } SeaJsonType;
 
+#define SEA_JSON_ARRAY_INITIAL_CAPACITY 8
+#define SEA_JSON_OBJECT_BUCKETS_NUMBERS 31
+
 struct SeaJsonArray {
 	struct SeaJsonValue** items;
 	size_t count;
@@ -50,7 +53,7 @@ struct SeaJsonValue {
 extern const struct SeaJsonValue_CLS {
 	struct SeaJsonValue* (*parseString)(const char* string, struct SeaAllocator* allocator);
 
-	struct SeaJsonValue* (*getNull)();
+	struct SeaJsonValue* (*createNull)();
 	struct SeaJsonValue* (*createBool)(bool value, struct SeaAllocator* allocator);
 	struct SeaJsonValue* (*createNumber)(double value, struct SeaAllocator* allocator);
 	struct SeaJsonValue* (*createString)(const char* value, struct SeaAllocator* allocator);
@@ -62,7 +65,7 @@ extern const struct SeaJsonValue_CLS {
 } SeaJsonValue;
 
 extern const struct SeaJsonObject_CLS {
-	void (*put)(struct SeaJsonObject* self, const char* key, struct SeaJsonValue* value, struct SeaAllocator* alloc);
+	enum SeaErrorType (*put)(struct SeaJsonObject* self, const char* key, struct SeaJsonValue* value, struct SeaAllocator* alloc);
 	bool (*has)(const struct SeaJsonObject* self, const char* key);
 	size_t (*size)(const struct SeaJsonObject* self);
 
