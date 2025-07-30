@@ -456,7 +456,7 @@ static void Stringify(const struct SeaJsonValue* value, struct SeaStringBuffer* 
 static struct SeaJsonValue* ParseJson(const char* string, const size_t len, struct SeaAllocator* allocator) {
 	if (!string) return NULL;
 
-	if (!allocator || !allocator->alloc) allocator = SeaAllocator.malloc;
+	if (!allocator || !allocator->alloc) allocator = SeaAllocator.Malloc;
 
 	InternalJsonParser parser = {
 		.json = string,

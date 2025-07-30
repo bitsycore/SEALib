@@ -42,5 +42,5 @@ static char* alloc_strdup(struct SeaAllocator* self, const char* str) {
 
 const struct SeaAllocator_CLS SeaAllocator = {
 	.strdup = alloc_strdup,
-	.malloc = &MALLOC_ALLOCATOR,
+	.Malloc = &MALLOC_ALLOCATOR,
 };

@@ -11,7 +11,7 @@
 #include "Sea/JSON.h"
 
 const char* randomName() {
-	switch (SeaRandom.randUint64() % 16) {
+	switch (SeaRandom.RandUint64() % 16) {
 		case 0: return "Bob";
 		case 1: return "Claude";
 		case 2: return "Alice";
@@ -38,12 +38,12 @@ void arena_test(struct SeaArena* arena) {
 	Person.initWithName(me, randomName());
 
 	struct Person* you = &(struct Person){};
-	Person.init(you, randomName(), (int) (SeaRandom.randUint64() % 100));
+	Person.init(you, randomName(), (int) (SeaRandom.RandUint64() % 100));
 
 	struct Person* maybeMe = malloc(sizeof(struct Person));
 	*maybeMe = *me;
 
-	char* meStr = Person.toString(me, SeaAllocator.malloc);
+	char* meStr = Person.toString(me, SeaAllocator.Malloc);
 	puts(meStr);
 	free(meStr);
 
@@ -127,5 +127,7 @@ int main() {
 			}
 		}
 	}
+
+
 	return 0;
 }

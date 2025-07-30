@@ -18,7 +18,7 @@ static void init(struct Person* self, const char* name, const int age) {
 }
 
 static void initWithName(struct Person* self, const char* name) {
-	init(self, name, (int) (SeaRandom.randUint64() % 100));
+	init(self, name, (int) (SeaRandom.RandUint64() % 100));
 }
 
 static size_t toStringSize(const struct Person* self) {

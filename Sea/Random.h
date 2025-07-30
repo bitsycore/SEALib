@@ -6,18 +6,18 @@
 #include <stdint.h>
 
 extern const struct SeaRandom_CLS {
-	uint64_t (* randUint64)();
-	uint32_t (* randUint32)();
-	int64_t (* randInt64)();
-	int32_t (* randInt32)();
-	uint16_t (* randUint16)();
-	int16_t (* randInt16)();
-	uint8_t (* randUint8)();
-	int8_t (* randInt8)();
-	float (* randFloat)();
-	double (* randDouble)();
-	bool (* randBool)();
-	void (* fillRandomBytes)(uint8_t* buffer, size_t size);
+	uint64_t (* RandUint64)();
+	uint32_t (* RandUint32)();
+	int64_t (* RandInt64)();
+	int32_t (* RandInt32)();
+	uint16_t (* RandUint16)();
+	int16_t (* RandInt16)();
+	uint8_t (* RandUint8)();
+	int8_t (* RandInt8)();
+	float (* RandFloat)();
+	double (* RandDouble)();
+	bool (* RandBool)();
+	void (* FillRandomBytes)(uint8_t* buffer, size_t size);
 } SeaRandom;
 
 #endif //RANDOM_SEALIB_cfb07073_H
