@@ -21,11 +21,18 @@ struct SeaJsonArray {
 	size_t ref_count;
 };
 
+typedef struct SeaJsonObjectEntry {
+	char*                       key;
+	size_t                      key_len;
+	size_t                      key_hash;
+	struct SeaJsonValue*        value;
+	struct SeaJsonObjectEntry*  next;
+} SeaJsonObjectEntry;
+
 struct SeaJsonObject {
-	char** keys;
-	struct SeaJsonValue** values;
-	size_t count;
-	size_t capacity;
+	SeaJsonObjectEntry** buckets;
+	size_t size;
+	size_t bucketCount;
 	size_t ref_count;
 };
 
