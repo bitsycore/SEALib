@@ -4,6 +4,9 @@
 #include "Allocator.h"
 
 #include <stdbool.h>
+#include <stdint.h>
+
+#include "Memory.h"
 
 typedef enum {
 	SEA_JSON_NULL,
@@ -40,6 +43,7 @@ struct SeaJsonValue {
 		struct SeaJsonObject* object;
 	};
 	SeaJsonType type;
+	uint64_t timestamp;
 };
 
 extern const struct SeaJsonValue_CLS {
@@ -57,15 +61,19 @@ extern const struct SeaJsonValue_CLS {
 } SeaJsonValue;
 
 extern const struct SeaJsonObject_CLS {
-	/** Increase refcount if it's Object or Array */
-	struct SeaJsonValue* (*get)(const struct SeaJsonObject* self, const char* key);
+	SEA_REFCOUNT(ret+) struct SeaJsonValue* (*get)(const struct SeaJsonObject* self, const char* key);
 	enum SeaErrorType (*put)(struct SeaJsonObject* self, const char* key, struct SeaJsonValue* value, struct SeaAllocator* alloc);
+	SEA_REFCOUNT(ret+) struct SeaJsonValue* (*getOrPut)(struct SeaJsonObject* self, const char* key, struct SeaJsonValue* value, struct SeaAllocator* alloc);
+
+	SEA_REFCOUNT(self+) struct SeaJsonValue* (*newRef)(const struct SeaJsonObject* self);
+	SEA_REFCOUNT(ret+) struct SeaJsonValue* (*clone)(const struct SeaJsonObject* self, struct SeaAllocator* allocator);
+
 	bool (*has)(const struct SeaJsonObject* self, const char* key);
+	const char** (*keys)(const struct SeaJsonObject *self, const struct SeaAllocator *alloc);
 	size_t (*size)(const struct SeaJsonObject* self);
-	/** Decrease refcount of value if it's Object or Array */
-	bool (*remove)(struct SeaJsonObject* self, const char* key, struct SeaAllocator* allocator);
-	/** Decrease refcount of self */
-	void (*free)(struct SeaJsonObject* self, struct SeaAllocator* allocator);
+
+	SEA_REFCOUNT(ret-) bool (*remove)(struct SeaJsonObject* self, const char* key, struct SeaAllocator* allocator);
+	SEA_REFCOUNT(self-) void (*free)(struct SeaJsonObject* self, struct SeaAllocator* allocator);
 } SeaJsonObject;
 
 extern const struct SeaJsonArray_CLS {

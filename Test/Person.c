@@ -30,7 +30,7 @@ static char* toString(struct Person* self, const struct SeaAllocator* allocator)
 	char uuid[37];
 	SeaUUID.toString(&PRIV(self)->uuid, uuid);
 	const size_t size = toStringSize(self);
-	void* buffer = allocator->alloc(allocator->context, sizeof(char) * toStringSize(self), SEA_ALIGNOF(char));
+	void* buffer = allocator->alloc(allocator->context, sizeof(char) * toStringSize(self));
 	snprintf((char*) buffer, size, TO_STRING_FORMAT, self->name, self->age, uuid);
 	return buffer;
 }

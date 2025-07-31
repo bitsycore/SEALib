@@ -7,7 +7,7 @@ static void StringBuffer_append(struct SeaStringBuffer* buffer, const char* str)
 	const size_t str_len = strlen(str);
 	while (buffer->pos + str_len >= buffer->size) {
 		const size_t new_size = buffer->size * 2;
-		char* new_data = buffer->allocator->alloc(buffer->allocator->context, new_size, sizeof(char));
+		char* new_data = buffer->allocator->alloc(buffer->allocator->context, new_size);
 		if (!new_data) return;
 		memcpy(new_data, buffer->data, buffer->pos);
 		if (buffer->allocator->free) {

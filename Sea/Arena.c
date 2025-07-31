@@ -30,7 +30,7 @@ static void* allocEx(struct SeaArena* self, const size_t size, const size_t alig
 		return NULL;
 	}
 
-	int vAlignment = 0;
+	size_t vAlignment = 0;
 	if (alignment == 0) {
 		vAlignment = SEA_ALIGNOF(SEA_Max_Align);
 	} else {
@@ -43,9 +43,9 @@ static void* allocEx(struct SeaArena* self, const size_t size, const size_t alig
 		return NULL;
 	}
 
-	size_t current = (size_t) (self->buffer + self->offset);
-	size_t aligned = (current + vAlignment - 1) & ~(vAlignment - 1);
-	size_t next_offset = aligned - (size_t) self->buffer + size;
+	const size_t current = (size_t) (self->buffer + self->offset);
+	const size_t aligned = (current + vAlignment - 1) & ~(vAlignment - 1);
+	const size_t next_offset = aligned - (size_t) self->buffer + size;
 
 	if (next_offset > self->capacity) {
 		SeaError.SetError(SEA_ERROR_ARENA_OUT_OF_MEMORY);
@@ -71,7 +71,9 @@ static size_t remaining(const struct SeaArena* self) {
 
 static struct SeaAllocator getAllocator(struct SeaArena* self) {
 	return (struct SeaAllocator) {
-		.alloc = (void* (*)(void*, size_t, size_t)) allocEx,
+		.alloc = (void* (*)(void*, size_t)) alloc,
+		.allocEx = (void* (*)(void*, size_t, size_t)) allocEx,
+		.free = NULL,
 		.context = self
 	};
 }
