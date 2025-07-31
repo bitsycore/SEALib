@@ -91,9 +91,9 @@ int main() {
 		SEA_ARENA_SCOPE(arena) {
 
 			struct SeaAllocator allocator = SeaArena.getAllocator(arena);
-			printf("Remaining: %llu\n", SeaArena.remaining(arena));
+			printf("Remaining: %zu\n", SeaArena.remaining(arena));
 			const struct SeaJsonValue* json = SeaJsonValue.ParseJson(str, str_len, &allocator);
-			printf("Remaining: %llu\n", SeaArena.remaining(arena));
+			printf("Remaining: %zu\n", SeaArena.remaining(arena));
 
 			if (json->type != SEA_JSON_OBJECT) { exit(12345678); }
 			const struct SeaJsonValue* menu = SeaJsonObject.get(json->object, "menu");

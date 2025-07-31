@@ -14,6 +14,7 @@ static const char TO_STRING_FORMAT[] = "Person(name: %s, age: %d, uuid: %s)";
 static void init(struct Person* self, const char* name, const int age) {
 	self->name = name;
 	self->age = age;
+	memset(self->private, 0, sizeof(self->private));
 	SeaUUID.generateV7(&PRIV(self)->uuid);
 }
 
