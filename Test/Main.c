@@ -80,7 +80,7 @@ int main() {
 	// language=JSON
 	const char str[] = "{\n  \"menu\": {\n    \"header\": \"SVG Viewer\",\n    \"items\": [\n      {\n        \"id\": \"Open\"\n      },\n      {\n        \"id\": \"OpenNew\",\n        \"label\": \"Open New\"\n      },\n      null,\n      {\n        \"id\": \"ZoomIn\",\n        \"label\": \"Zoom In\"\n      },\n      {\n        \"id\": \"ZoomOut\",\n        \"label\": \"Zoom Out\"\n      },\n      {\n        \"id\": \"OriginalView\",\n        \"label\": \"Original View\"\n      },\n      null,\n      {\n        \"id\": \"Quality\"\n      },\n      {\n        \"id\": \"Pause\"\n      },\n      {\n        \"id\": \"Mute\"\n      },\n      null,\n      {\n        \"id\": \"Find\",\n        \"label\": \"Find...\"\n      },\n      {\n        \"id\": \"FindAgain\",\n        \"label\": \"Find Again\"\n      },\n      {\n        \"id\": \"Copy\"\n      },\n      {\n        \"id\": \"CopyAgain\",\n        \"label\": \"Copy Again\"\n      },\n      {\n        \"id\": \"CopySVG\",\n        \"label\": \"Copy SVG\"\n      },\n      {\n        \"id\": \"ViewSVG\",\n        \"label\": \"View SVG\"\n      },\n      {\n        \"id\": \"ViewSource\",\n        \"label\": \"View Source\"\n      },\n      {\n        \"id\": \"SaveAs\",\n        \"label\": \"Save As\"\n      },\n      null,\n      {\n        \"id\": \"Help\"\n      },\n      {\n        \"id\": \"About\",\n        \"label\": \"About Adobe CVG Viewer...\"\n      }\n    ]\n  }\n}";
 	const size_t str_len = sizeof(str) - 1;
-	const size_t bufferSize = (32 * 1024);
+	const size_t bufferSize = (64 * 1024);
 	const size_t finalBufferSize = bufferSize + sizeof(struct SeaArena);
 
 	SEA_MALLOC_SCOPE(finalBufferSize) {
@@ -97,11 +97,11 @@ int main() {
 
 			if (json->type != SEA_JSON_OBJECT) { exit(12345678); }
 			const struct SeaJsonValue* menu = SeaJsonObject.get(json->object, "menu");
-
+			printf("Remaining: %zu\n", SeaArena.remaining(arena));
 			if (menu->type != SEA_JSON_OBJECT) { exit(12349999); }
 			char* abc_str = SeaJsonValue.toString(json, &allocator);
-
 			printf("\n%s\n", abc_str);
+			printf("Remaining: %zu\n", SeaArena.remaining(arena));
 
 		}
 
