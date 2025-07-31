@@ -100,7 +100,7 @@ struct SeaJsonValue* CreateString(const char* val, struct SeaAllocator* alloc) {
 	if (!alloc || !alloc->alloc || !val) return NULL;
 
 	const size_t bufferLen = sizeof(struct SeaJsonValue) + strlen(val) + 1;
-	uint8_t* buffer =  SeaAllocator.alloc(alloc, , bufferLen);
+	uint8_t* buffer =  SeaAllocator.alloc(alloc, bufferLen);
 	if (!buffer) return NULL;
 	struct SeaJsonValue* value = (struct SeaJsonValue*) buffer;
 	value->string = (char*) (buffer + sizeof(struct SeaJsonValue));
@@ -232,15 +232,13 @@ static struct SeaJsonValue* ParseNumber(InternalJsonParser* parser) {
 	}
 
 	const size_t len = parser->pos - start;
-	char* num_str = parser->allocator->alloc(parser->allocator->context, len + 1);
+	char* num_str = SeaAllocator.alloc(parser->allocator, len + 1);
 	if (!num_str) return NULL;
 	strncpy(num_str, parser->json + start, len);
 	num_str[len] = '\0';
 
 	const double num = atof(num_str);
-	if (parser->allocator->free) {
-		parser->allocator->free(parser->allocator->context, num_str);
-	}
+	SeaAllocator.free(parser->allocator, num_str);
 
 	return CreateNumber(num, parser->allocator);
 }
@@ -470,14 +468,14 @@ static struct SeaJsonValue* ParseJson(const char* string, const size_t len, stru
 	return ParseValue(&parser);
 }
 
-static char* JsonValue_toString(const struct SeaJsonValue* self, struct SeaAllocator* alloc) {
-	if (!self || !alloc || !alloc->alloc) return NULL;
+static char* JsonValue_toString(const struct SeaJsonValue* self, struct SeaAllocator* allocator) {
+	if (!self || !allocator || !allocator->alloc) return NULL;
 
 	struct SeaStringBuffer buffer = {
-		.data = (char*)alloc->alloc(alloc->context, 256),
+		.data = (char*)SeaAllocator.alloc(allocator, 256),
 		.size = 256,
 		.pos = 0,
-		.allocator = alloc
+		.allocator = allocator
 	};
 
 	if (!buffer.data) return NULL;
@@ -496,39 +494,27 @@ void FreeArray(struct SeaJsonValue * self, struct SeaAllocator * alloc) {
 	for (size_t i = 0; i < self->array->count; i++) {
 		JsonValue_free(self->array->items[i], alloc);
 	}
-	if (alloc->free && self->array->items) {
-		alloc->free(alloc->context, self->array->items);
-	}
-	if (alloc->free) {
-		alloc->free(alloc->context, self);
-	}
+	SeaAllocator.free(alloc, self->array);
+	SeaAllocator.free(alloc, self);
 }
 
-void FreeObject(struct SeaJsonValue * self, struct SeaAllocator * alloc) {
+void FreeObject(const struct SeaJsonValue * self, struct SeaAllocator * alloc) {
 	if (self->object->ref_count > 1) {
 		self->object->ref_count--;
 		return;
 	}
-
 	for (size_t i = 0; i < self->object->bucketCount; i++) {
 		const InternalJsonObjectEntry* next = self->object->buckets[i];
 		for (const InternalJsonObjectEntry* e = next; e != NULL; e = next) {
 			next = e->next;
-			// Free value
 			JsonValue_free(e->value, alloc);
-			if (alloc->free) {
-				// Key
-				alloc->free(alloc->context, e->key);
-			}
+			SeaAllocator.free(alloc, e->key);
 		}
 	}
-
-	if (alloc->free) {
-		alloc->free(alloc->context, self);
-	}
+	SeaAllocator.free(alloc, self->object);
 }
 
-static void JsonValue_free(struct SeaJsonValue *self, struct SeaAllocator *alloc) {
+static void JsonValue_free(struct SeaJsonValue* self, struct SeaAllocator* alloc) {
 	if (!self) return;
 	switch (self->type) {
 		case SEA_JSON_ARRAY: FreeArray(self, alloc);
@@ -536,8 +522,8 @@ static void JsonValue_free(struct SeaJsonValue *self, struct SeaAllocator *alloc
 		case SEA_JSON_OBJECT: FreeObject(self, alloc);
 			return;
 		default:
-			if (self->type != SEA_JSON_NULL && alloc->free) {
-				alloc->free(alloc->context, self);
+			if (self->type != SEA_JSON_NULL) {
+				SeaAllocator.free(alloc, self);
 			}
 	}
 }
@@ -618,14 +604,13 @@ bool JsonObject_has(const struct SeaJsonObject* self, const char* key) {
 	for (const InternalJsonObjectEntry* e = self->buckets[idx]; e; e = e->next) {
 		if (strcmp(e->key, key) == 0) return true;
 	}
-
 	return false;
 }
 
 const char** JsonObject_keys(const struct SeaJsonObject *self, const struct SeaAllocator *alloc) {
-	if (!self) return NULL;
+	if (!self || !alloc) return NULL;
 	const size_t count = self->size;
-	char **keys = SeaAllocator.allocEx(alloc, count * sizeof(char *), SEA_ALIGNOF(char *));
+	const char **keys = SeaAllocator.allocEx(alloc, count * sizeof(char *), SEA_ALIGNOF(char *));
 	if (!keys) return NULL;
 	size_t idx = 0;
 	for (size_t i = 0; i < self->bucketCount; i++) {
@@ -679,7 +664,7 @@ void JsonArray_add(struct SeaJsonArray* self, struct SeaJsonValue* value, struct
 		const size_t new_capacity = self->capacity == 0 ? SEA_JSON_ARRAY_INITIAL_CAPACITY : self->capacity * 2;
 		const size_t new_size = new_capacity * sizeof(struct SeaJsonValue*);
 
-		struct SeaJsonValue** new_items = allocator->alloc(allocator->context, new_size);
+		struct SeaJsonValue** new_items = SeaAllocator.alloc(allocator, new_size);
 		if (!new_items) return;
 
 		// Copy old items
@@ -687,9 +672,7 @@ void JsonArray_add(struct SeaJsonArray* self, struct SeaJsonValue* value, struct
 			for (size_t i = 0; i < self->count; i++) {
 				new_items[i] = self->items[i];
 			}
-			if (allocator->free) {
-				allocator->free(allocator->context, self->items);
-			}
+			SeaAllocator.free(allocator, self->items);
 		}
 
 		self->items = new_items;
