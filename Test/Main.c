@@ -85,8 +85,8 @@ int main() {
 
 	SEA_MALLOC_SCOPE(finalBufferSize) {
 
-		struct SeaArena* arena = (struct SeaArena*) SCOPE_PTR;
-		SeaArena.init(arena, SCOPE_PTR + sizeof(struct SeaArena), bufferSize);
+		struct SeaArena* arena = (struct SeaArena*) SEA_SCOPE_BUFFER;
+		SeaArena.init(arena, SEA_SCOPE_BUFFER + sizeof(struct SeaArena), bufferSize);
 
 		SEA_ARENA_SCOPE(arena) {
 
@@ -105,7 +105,6 @@ int main() {
 
 		}
 
-		(void)arena;
 	}
 
 	puts("");
@@ -118,8 +117,8 @@ int main() {
 
 	const size_t arenaSize = 128;
 	SEA_MALLOC_SCOPE(arenaSize + sizeof(struct SeaArena)) {
-		struct SeaArena* arena = (struct SeaArena*) SCOPE_PTR;
-		SeaArena.init(arena, SCOPE_PTR + sizeof(struct SeaArena), arenaSize);
+		struct SeaArena* arena = (struct SeaArena*) SEA_SCOPE_BUFFER;
+		SeaArena.init(arena, SEA_SCOPE_BUFFER + sizeof(struct SeaArena), arenaSize);
 		for (int i = 0; i < 5; i++) {
 			SEA_ARENA_SCOPE(arena) {
 				arena_test(arena);
@@ -127,7 +126,6 @@ int main() {
 			}
 		}
 	}
-
 
 	return 0;
 }

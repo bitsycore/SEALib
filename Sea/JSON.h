@@ -61,23 +61,26 @@ extern const struct SeaJsonValue_CLS {
 } SeaJsonValue;
 
 extern const struct SeaJsonObject_CLS {
-	SEA_REFCOUNT(ret+) struct SeaJsonValue* (*get)(const struct SeaJsonObject* self, const char* key);
-	enum SeaErrorType (*put)(struct SeaJsonObject* self, const char* key, struct SeaJsonValue* value, struct SeaAllocator* alloc);
-	SEA_REFCOUNT(ret+) struct SeaJsonValue* (*getOrPut)(struct SeaJsonObject* self, const char* key, struct SeaJsonValue* value, struct SeaAllocator* alloc);
-
-	SEA_REFCOUNT(self+) struct SeaJsonValue* (*newRef)(const struct SeaJsonObject* self);
-	SEA_REFCOUNT(ret+) struct SeaJsonValue* (*clone)(const struct SeaJsonObject* self, struct SeaAllocator* allocator);
-
+	/**Refcount(ret +)*/
+	struct SeaJsonValue* (*get)(const struct SeaJsonObject* self, const char* key);
+	enum SeaErrorType (*put)(struct SeaJsonObject* self, const char* key, struct SeaJsonValue* value, struct SeaAllocator* allocator);
+	/**Refcount(ret?+)*/
+	struct SeaJsonValue* (*getOrPut)(struct SeaJsonObject* self, const char* key, struct SeaJsonValue* value, struct SeaAllocator* allocator);
+	/**Refcount(self+)*/
+	struct SeaJsonValue* (*newRef)(const struct SeaJsonObject* self);
+	/**Refcount(ret +)*/
+	struct SeaJsonValue* (*clone)(const struct SeaJsonObject* self, struct SeaAllocator* allocator);
 	bool (*has)(const struct SeaJsonObject* self, const char* key);
-	const char** (*keys)(const struct SeaJsonObject *self, const struct SeaAllocator *alloc);
+	const char** (*keys)(const struct SeaJsonObject* self, const struct SeaAllocator* allocator);
 	size_t (*size)(const struct SeaJsonObject* self);
-
-	SEA_REFCOUNT(ret-) bool (*remove)(struct SeaJsonObject* self, const char* key, struct SeaAllocator* allocator);
-	SEA_REFCOUNT(self-) void (*free)(struct SeaJsonObject* self, struct SeaAllocator* allocator);
+	/**Refcount(ret -)*/
+	bool (*remove)(struct SeaJsonObject* self, const char* key, struct SeaAllocator* allocator);
+	/**Refcount(self-)*/
+	void (*free)(struct SeaJsonObject* self, struct SeaAllocator* allocator);
 } SeaJsonObject;
 
 extern const struct SeaJsonArray_CLS {
-	/** Increase refcount if it's Object or Array */
+	/**Refcount(ret +)*/
 	struct SeaJsonValue* (*get)(const struct SeaJsonArray* self, size_t index);
 	void (*add)(struct SeaJsonArray* self, struct SeaJsonValue* value, struct SeaAllocator* allocator);
 } SeaJsonArray;
