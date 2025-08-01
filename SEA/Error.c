@@ -2,9 +2,9 @@
 
 #include "Compat.h"
 
-static SEA_THREAD_LOCAL enum SeaErrorType THREAD_ERRNO = 0;
+static SEA_THREAD_LOCAL enum SEA_ErrorType THREAD_ERRNO = 0;
 
-void SetErrno(const enum SeaErrorType error) {
+void SetErrno(const enum SEA_ErrorType error) {
 	THREAD_ERRNO = error;
 }
 
@@ -12,7 +12,7 @@ int GetErrno() {
 	return THREAD_ERRNO;
 }
 
-const struct SeaError_CLS SeaError = {
+const struct SEA_Error_CLS SEA_Error = {
 	.SetError = SetErrno,
 	.GetError = GetErrno,
 };

@@ -1,17 +1,19 @@
 #include "Person.h"
 
-#include <Sea/Allocator.h>
-#include <Sea/Arena.h>
-#include <Sea/Memory.h>
-#include <Sea/Random.h>
+#include <SEA/Allocator.h>
+#include <SEA/Arena.h>
+#include <SEA/Memory.h>
+#include <SEA/Random.h>
+#include <SEA/JSON/JSONValue.h>
+#include <SEA/JSON/JSONObject.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "Sea/JSON.h"
+
 
 const char* randomName() {
-	switch (SeaRandom.RandUint64() % 16) {
+	switch (SEA_Random.Uint64() % 16) {
 		case 0: return "Bob";
 		case 1: return "Claude";
 		case 2: return "Alice";
@@ -31,19 +33,19 @@ const char* randomName() {
 	}
 }
 
-void arena_test(struct SeaArena* arena) {
-	const struct SeaAllocator arena_allocator = SeaArena.getAllocator(arena);
+void arena_test(struct SEA_Arena* arena) {
+	const struct SEA_Allocator arena_allocator = SEA_Arena.getAllocator(arena);
 
-	struct Person* me = SeaArena.alloc(arena, sizeof(struct Person));
+	struct Person* me = SEA_Arena.alloc(arena, sizeof(struct Person));
 	Person.initWithName(me, randomName());
 
 	struct Person* you = &(struct Person){};
-	Person.init(you, randomName(), (int) (SeaRandom.RandUint64() % 100));
+	Person.init(you, randomName(), (int) (SEA_Random.Uint64() % 100));
 
 	struct Person* maybeMe = malloc(sizeof(struct Person));
 	*maybeMe = *me;
 
-	char* meStr = Person.toString(me, SeaAllocator.Malloc);
+	char* meStr = Person.toString(me, SEA_Allocator.Malloc);
 	puts(meStr);
 	free(meStr);
 
@@ -62,7 +64,7 @@ void arena_test(struct SeaArena* arena) {
 		puts("They are not equal!");
 	}
 
-	printf("Remaining: %zu\n", SeaArena.remaining(arena));
+	printf("Remaining: %zu\n", SEA_Arena.remaining(arena));
 
 	free(maybeMe);
 }
@@ -81,27 +83,27 @@ int main() {
 	const char str[] = "{\n  \"menu\": {\n    \"header\": \"SVG Viewer\",\n    \"items\": [\n      {\n        \"id\": \"Open\"\n      },\n      {\n        \"id\": \"OpenNew\",\n        \"label\": \"Open New\"\n      },\n      null,\n      {\n        \"id\": \"ZoomIn\",\n        \"label\": \"Zoom In\"\n      },\n      {\n        \"id\": \"ZoomOut\",\n        \"label\": \"Zoom Out\"\n      },\n      {\n        \"id\": \"OriginalView\",\n        \"label\": \"Original View\"\n      },\n      null,\n      {\n        \"id\": \"Quality\"\n      },\n      {\n        \"id\": \"Pause\"\n      },\n      {\n        \"id\": \"Mute\"\n      },\n      null,\n      {\n        \"id\": \"Find\",\n        \"label\": \"Find...\"\n      },\n      {\n        \"id\": \"FindAgain\",\n        \"label\": \"Find Again\"\n      },\n      {\n        \"id\": \"Copy\"\n      },\n      {\n        \"id\": \"CopyAgain\",\n        \"label\": \"Copy Again\"\n      },\n      {\n        \"id\": \"CopySVG\",\n        \"label\": \"Copy SVG\"\n      },\n      {\n        \"id\": \"ViewSVG\",\n        \"label\": \"View SVG\"\n      },\n      {\n        \"id\": \"ViewSource\",\n        \"label\": \"View Source\"\n      },\n      {\n        \"id\": \"SaveAs\",\n        \"label\": \"Save As\"\n      },\n      null,\n      {\n        \"id\": \"Help\"\n      },\n      {\n        \"id\": \"About\",\n        \"label\": \"About Adobe CVG Viewer...\"\n      }\n    ]\n  }\n}";
 	const size_t str_len = sizeof(str) - 1;
 	const size_t bufferSize = (16 * 1024);
-	const size_t finalBufferSize = bufferSize + sizeof(struct SeaArena);
+	const size_t finalBufferSize = bufferSize + sizeof(struct SEA_Arena);
 
 	SEA_MALLOC_SCOPE(finalBufferSize) {
 
-		struct SeaArena* arena = (struct SeaArena*) SEA_SCOPE_BUFFER;
-		SeaArena.init(arena, SEA_SCOPE_BUFFER + sizeof(struct SeaArena), bufferSize);
+		struct SEA_Arena* arena = (struct SEA_Arena*) SEA_SCOPE_BUFFER;
+		SEA_Arena.init(arena, SEA_SCOPE_BUFFER + sizeof(struct SEA_Arena), bufferSize);
 
 		SEA_ARENA_SCOPE(arena) {
 
-			struct SeaAllocator allocator = SeaArena.getAllocator(arena);
-			printf("Remaining: %zu\n", SeaArena.remaining(arena));
-			const struct SeaJsonValue* json = SeaJsonValue.ParseJson(str, str_len, &allocator);
-			printf("Remaining: %zu\n", SeaArena.remaining(arena));
+			struct SEA_Allocator allocator = SEA_Arena.getAllocator(arena);
+			printf("Remaining: %zu\n", SEA_Arena.remaining(arena));
+			const struct SEA_JSONValue* json = SEA_JSONValue.FromString(str, str_len, &allocator);
+			printf("Remaining: %zu\n", SEA_Arena.remaining(arena));
 
 			if (json->type != SEA_JSON_OBJECT) { exit(12345678); }
-			const struct SeaJsonValue* menu = SeaJsonObject.get(json->object, "menu");
-			printf("Remaining: %zu\n", SeaArena.remaining(arena));
+			const struct SEA_JSONValue* menu = SEA_JSONObject.get(json->object, "menu");
+			printf("Remaining: %zu\n", SEA_Arena.remaining(arena));
 			if (menu->type != SEA_JSON_OBJECT) { exit(12349999); }
-			char* abc_str = SeaJsonValue.toString(json, &allocator);
+			char* abc_str = SEA_JSONValue.toString(json, &allocator);
 			printf("\n%s\n", abc_str);
-			printf("Remaining: %zu\n", SeaArena.remaining(arena));
+			printf("Remaining: %zu\n", SEA_Arena.remaining(arena));
 
 		}
 
@@ -116,9 +118,9 @@ int main() {
 	// ---- Arena -------------------------------------------------
 
 	const size_t arenaSize = 128;
-	SEA_MALLOC_SCOPE(arenaSize + sizeof(struct SeaArena)) {
-		struct SeaArena* arena = (struct SeaArena*) SEA_SCOPE_BUFFER;
-		SeaArena.init(arena, SEA_SCOPE_BUFFER + sizeof(struct SeaArena), arenaSize);
+	SEA_MALLOC_SCOPE(arenaSize + sizeof(struct SEA_Arena)) {
+		struct SEA_Arena* arena = (struct SEA_Arena*) SEA_SCOPE_BUFFER;
+		SEA_Arena.init(arena, SEA_SCOPE_BUFFER + sizeof(struct SEA_Arena), arenaSize);
 		for (int i = 0; i < 5; i++) {
 			SEA_ARENA_SCOPE(arena) {
 				arena_test(arena);

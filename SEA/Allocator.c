@@ -22,7 +22,7 @@ static void Func_HeapFree(void* _, void* ptr) {
 	free(ptr);
 }
 
-static struct SeaAllocator HEAP_ALLOCATOR = {
+static struct SEA_Allocator HEAP_ALLOCATOR = {
 	.context = NULL,
 	.alloc = Func_HeapAlloc,
 	.allocEx = Func_HeapAllocEx,
@@ -33,7 +33,7 @@ static struct SeaAllocator HEAP_ALLOCATOR = {
 // MARK: Custom Allocator Utility
 // =========================================
 
-static char* Strdup(struct SeaAllocator* self, const char* str, const size_t len) {
+static char* Strdup(struct SEA_Allocator* self, const char* str, const size_t len) {
 	if (!str || !self || !self->alloc) return NULL;
 
 	const size_t vLen = len == 0 ? strlen(str) + 1 :  len;
@@ -47,22 +47,22 @@ static char* Strdup(struct SeaAllocator* self, const char* str, const size_t len
 	return result;
 }
 
-static void* Alloc(const struct SeaAllocator* self, const size_t size) {
+static void* Alloc(const struct SEA_Allocator* self, const size_t size) {
 	if (!self || !self->alloc || size == 0) return NULL;
 	return self->alloc(self->context, size);
 }
 
-static void* AllocEx(const struct SeaAllocator* self, const size_t size, const size_t alignment) {
+static void* AllocEx(const struct SEA_Allocator* self, const size_t size, const size_t alignment) {
 	if (!self || !self->allocEx || size == 0) return NULL;
 	return self->allocEx(self->context, size, alignment);
 }
 
-static void Free(const struct SeaAllocator* self, void* ptr) {
+static void Free(const struct SEA_Allocator* self, void* ptr) {
 	if (!self || !self->free || !ptr) return;
 	self->free(self->context, ptr);
 }
 
-const struct SeaAllocator_CLS SeaAllocator = {
+const struct SEA_Allocator_CLS SEA_Allocator = {
 	.strdup = Strdup,
 	.alloc = Alloc,
 	.allocEx = AllocEx,

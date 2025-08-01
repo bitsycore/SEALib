@@ -72,7 +72,7 @@ static void seed256(uint64_t seed[4]) {
 #endif
 }
 
-static uint64_t RandUint64() {
+static uint64_t Random_Uint64() {
 	if (SEED_INITIALIZED == false) {
 		SEED_INITIALIZED = true;
 		seed256(SEED);
@@ -94,49 +94,49 @@ static uint64_t RandUint64() {
 	return result;
 }
 
-static uint32_t RandUint32() {
-	return (uint32_t) (RandUint64() >> 32);
+static uint32_t Random_Uint32() {
+	return (uint32_t) (Random_Uint64() >> 32);
 }
 
-static int64_t RandInt64() {
-	return (int64_t) RandUint64();
+static int64_t Random_Int64() {
+	return (int64_t) Random_Uint64();
 }
 
-static int32_t RandInt32() {
-	return (int32_t) RandUint32();
+static int32_t Random_Int32() {
+	return (int32_t) Random_Uint32();
 }
 
-static uint16_t RandUint16() {
-	return (uint16_t) (RandUint64() & 0xFFFF);
+static uint16_t Random_Uint16() {
+	return (uint16_t) (Random_Uint64() & 0xFFFF);
 }
 
-static int16_t RandInt16() {
-	return (int16_t) (RandUint64() & 0xFFFF);
+static int16_t Random_Int16() {
+	return (int16_t) (Random_Uint64() & 0xFFFF);
 }
 
-static uint8_t RandUint8() {
-	return (uint8_t) (RandUint64() & 0xFF);
+static uint8_t Random_Uint8() {
+	return (uint8_t) (Random_Uint64() & 0xFF);
 }
 
-static int8_t RandInt8() {
-	return (int8_t) (RandUint64() & 0xFF);
+static int8_t Random_Int8() {
+	return (int8_t) (Random_Uint64() & 0xFF);
 }
 
-static float RandFloat() {
-	return ((float) (RandUint64() >> 40)) / 16777216.0f; // 2^24
+static float Random_Float() {
+	return ((float) (Random_Uint64() >> 40)) / 16777216.0f; // 2^24
 }
 
-static double RandDouble() {
-	return ((double) (RandUint64() >> 11)) / 9007199254740992.0; // 2^53
+static double Random_Double() {
+	return ((double) (Random_Uint64() >> 11)) / 9007199254740992.0; // 2^53
 }
 
-static bool RandBool() {
-	return (RandUint64() >> 63) != 0;
+static bool Random_Bool() {
+	return (Random_Uint64() >> 63) != 0;
 }
 
-static void FillRandomBytes(uint8_t* buffer, size_t length) {
+static void Random_Bytes(uint8_t* buffer, size_t length) {
 	while (length >= 8) {
-		uint64_t r = RandUint64();
+		uint64_t r = Random_Uint64();
 		for (int i = 0; i < 8; ++i) {
 			buffer[i] = (uint8_t) (r & 0xFF);
 			r >>= 8;
@@ -146,7 +146,7 @@ static void FillRandomBytes(uint8_t* buffer, size_t length) {
 	}
 
 	if (length > 0) {
-		uint64_t r = RandUint64();
+		uint64_t r = Random_Uint64();
 		for (size_t i = 0; i < length; ++i) {
 			buffer[i] = (uint8_t) (r & 0xFF);
 			r >>= 8;
@@ -154,17 +154,17 @@ static void FillRandomBytes(uint8_t* buffer, size_t length) {
 	}
 }
 
-const struct SeaRandom_CLS SeaRandom = {
-	.RandUint64 = RandUint64,
-	.RandUint32 = RandUint32,
-	.RandInt64 = RandInt64,
-	.RandInt32 = RandInt32,
-	.RandUint16 = RandUint16,
-	.RandInt16 = RandInt16,
-	.RandUint8 = RandUint8,
-	.RandInt8 = RandInt8,
-	.RandFloat = RandFloat,
-	.RandDouble = RandDouble,
-	.RandBool = RandBool,
-	.FillRandomBytes = FillRandomBytes,
+const struct SEA_Random_CLS SEA_Random = {
+	.Uint64 = Random_Uint64,
+	.Uint32 = Random_Uint32,
+	.Int64 = Random_Int64,
+	.Int32 = Random_Int32,
+	.Uint16 = Random_Uint16,
+	.Int16 = Random_Int16,
+	.Uint8 = Random_Uint8,
+	.Int8 = Random_Int8,
+	.Float = Random_Float,
+	.Double = Random_Double,
+	.Bool = Random_Bool,
+	.Bytes = Random_Bytes,
 };

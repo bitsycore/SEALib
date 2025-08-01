@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-extern const struct SeaTime_CLS {
+extern const struct SEA_Time_CLS {
 	uint64_t (*getMillis)();
-} SeaTime;
+} SEA_Time;
 
 #endif// TIME_SEA_H

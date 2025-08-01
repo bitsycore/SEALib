@@ -1,7 +1,7 @@
 #ifndef SEALIB_ERROR_H
 #define SEALIB_ERROR_H
 
-enum SeaErrorType {
+enum SEA_ErrorType {
 	SEA_ERROR_NONE = 0,
 
 	SEA_ERROR_GENERIC_SELF_NULL = -1001,
@@ -18,9 +18,9 @@ enum SeaErrorType {
 
 };
 
-extern const struct SeaError_CLS {
-	void (*SetError)(enum SeaErrorType error);
+extern const struct SEA_Error_CLS {
+	void (*SetError)(enum SEA_ErrorType error);
 	int (*GetError)();
-} SeaError;
+} SEA_Error;
 
 #endif //SEALIB_ERROR_H

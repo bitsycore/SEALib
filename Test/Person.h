@@ -1,14 +1,14 @@
 #ifndef PERSON_3c01bdbb_H
 #define PERSON_3c01bdbb_H
 
-#include "Sea/Arena.h"
-#include "Sea/UUID.h"
+#include "SEA/Arena.h"
+#include "SEA/UUID.h"
 
 #include <stdbool.h>
 #include <stdint.h>
 
 struct PersonPrivate {
-	struct SeaUUID uuid;
+	struct SEA_UUID uuid;
 };
 
 struct Person {
@@ -21,9 +21,9 @@ extern const struct Person_CLS {
 	void (* init)(struct Person* self, const char* name, int age);
 	void (* initWithName)(struct Person* self, const char* name);
 	size_t (* toStringSize)(const struct Person* self);
-	char* (* toString)(struct Person* self, const struct SeaAllocator* allocator);
+	char* (* toString)(struct Person* self, const struct SEA_Allocator* allocator);
 	bool (* equals)(struct Person* self, struct Person* other);
-	struct SeaUUID (* getUUID)(struct Person* self);
+	struct SEA_UUID (* getUUID)(struct Person* self);
 } Person;
 
 #endif//PERSON_3c01bdbb_H
