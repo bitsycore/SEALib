@@ -2,7 +2,6 @@
 
 #include <ctype.h>
 #include <stdint.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -12,6 +11,7 @@
 
 #include "../Allocator.h"
 #include "../Error.h"
+#include "SEA/String.h"
 
 // ===================================
 // MARK: Utility
@@ -53,12 +53,12 @@ static struct SEA_JSONValue* ParseString(SEA_JSONParser* parser) {
 
 	if (parser->pos >= parser->len) return NULL; // Unterminated string
 
-	const size_t len = parser->pos - start;
-	char* str = SEA_Allocator.alloc(parser->allocator, len + 1);
-
+	const size_t str_len = parser->pos - start;
+	const size_t alloc_len = str_len + 1;
+	char* str = SEA_Allocator.alloc(parser->allocator, alloc_len);
 	if (!str) return NULL;
-	strncpy(str, parser->json + start, len);
-	str[len] = '\0';
+	SEA_strncpy_s(str, alloc_len, parser->json + start, str_len);
+
 	parser->pos++; // Skip closing quote
 
 	struct SEA_JSONValue* value = SEA_JSONValue.CreateString(str, parser->allocator);
@@ -96,10 +96,10 @@ static struct SEA_JSONValue* ParseNumber(SEA_JSONParser* parser) {
 	}
 
 	const size_t len = parser->pos - start;
-	char* num_str = SEA_Allocator.alloc(parser->allocator, len + 1);
+	const size_t alloc_len = len + 1;
+	char* num_str = SEA_Allocator.alloc(parser->allocator, alloc_len);
 	if (!num_str) return NULL;
-	strncpy(num_str, parser->json + start, len);
-	num_str[len] = '\0';
+	SEA_strncpy_s(num_str, alloc_len, parser->json + start, len);
 
 	const double num = atof(num_str);
 	SEA_Allocator.free(parser->allocator, num_str);

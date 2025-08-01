@@ -48,7 +48,7 @@ extern const struct SEA_JSONObject_CLS {
 	/**Refcount(ret -)*/
 	bool (*remove)(struct SEA_JSONObject* self, const char* key, struct SEA_Allocator* allocator);
 	/**Refcount(self-)*/
-	void (*free)(const struct SEA_JSONValue * self, struct SEA_Allocator * alloc);
+	void (*free)(struct SEA_JSONValue * self, struct SEA_Allocator * alloc);
 } SEA_JSONObject;
 
 #endif //SEA_JSON_OBJECT_H

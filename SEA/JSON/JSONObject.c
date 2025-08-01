@@ -3,12 +3,10 @@
 #include <string.h>
 
 #include "JSONValue.h"
+#include "../Align.h"
 #include "../Allocator.h"
-#include "../Compat.h"
 #include "../Error.h"
 #include "../Time.h"
-#include "SEA/Align.h"
-#include "SEA/Memory.h"
 
 
 // ===================================
@@ -148,7 +146,7 @@ static bool JSONObject_remove(struct SEA_JSONObject* self, const char* key, stru
 	return false;
 }
 
-static void JSONObject_free(const struct SEA_JSONValue* self, struct SEA_Allocator* alloc) {
+static void JSONObject_free(struct SEA_JSONValue* self, struct SEA_Allocator* alloc) {
 	if (self->object->ref_count > 1) {
 		self->object->ref_count--;
 		return;
@@ -161,7 +159,8 @@ static void JSONObject_free(const struct SEA_JSONValue* self, struct SEA_Allocat
 			SEA_Allocator.free(alloc, e->key);
 		}
 	}
-	SEA_Allocator.free(alloc, self->object);
+
+	SEA_Allocator.free(alloc, self);
 }
 
 const struct SEA_JSONObject_CLS SEA_JSONObject = {

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
 project(SEALib C)
 
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD 17)
 
 add_library(
         SEA
@@ -33,6 +33,8 @@ add_library(
         SEA/JSON/JSONParser.h
         SEA/JSON/JSONValue.c
         SEA/JSON/JSONValue.h
+        SEA/String.h
+        SEA/String.c
 )
 
 add_executable(

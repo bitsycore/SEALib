@@ -90,9 +90,9 @@ int main() {
 
 		SEA_ARENA_SCOPE(arena) {
 
-			struct SEA_Allocator allocator = SEA_Arena.getAllocator(arena);
+			struct SEA_Allocator allocator = *SEA_Allocator.Malloc;
 			printf("Remaining: %zu\n", SEA_Arena.remaining(arena));
-			const struct SEA_JSONValue* json = SEA_JSONValue.FromString(str, str_len, &allocator);
+			struct SEA_JSONValue* json = SEA_JSONValue.FromString(str, str_len, &allocator);
 			printf("Remaining: %zu\n", SEA_Arena.remaining(arena));
 
 			if (json->type != SEA_JSON_OBJECT) { exit(12345678); }
@@ -102,7 +102,8 @@ int main() {
 			char* abc_str = SEA_JSONValue.toString(json, &allocator);
 			printf("\n%s\n", abc_str);
 			printf("Remaining: %zu\n", SEA_Arena.remaining(arena));
-
+			free(abc_str);
+			SEA_JSONValue.free(json, &allocator);
 		}
 
 	}
