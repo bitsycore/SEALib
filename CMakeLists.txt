@@ -6,38 +6,38 @@ set(CMAKE_C_STANDARD 11)
 add_library(
         SEA
 
-        SEA/Random.c
-        SEA/Random.h
-        SEA/UUID.c
-        SEA/UUID.h
-        SEA/Arena.c
-        SEA/Arena.h
+        SEA/Align.h
         SEA/Allocator.c
         SEA/Allocator.h
+        SEA/Arena.c
+        SEA/Arena.h
         SEA/Compat.h
         SEA/Error.c
         SEA/Error.h
+        SEA/Macro.h
         SEA/Memory.h
-        SEA/Time.c
-        SEA/Time.h
+        SEA/Random.c
+        SEA/Random.h
         SEA/StringBuffer.c
         SEA/StringBuffer.h
-        SEA/Macro.h
-        SEA/Align.h
+        SEA/Time.c
+        SEA/Time.h
+        SEA/UUID.c
+        SEA/UUID.h
 
-        SEA/JSON/JSONValue.c
-        SEA/JSON/JSONValue.h
         Sea/JSON/JSONArray.c
         SEA/JSON/JSONArray.h
         SEA/JSON/JSONObject.c
         SEA/JSON/JSONObject.h
         SEA/JSON/JSONParser.c
         SEA/JSON/JSONParser.h
-
+        SEA/JSON/JSONValue.c
+        SEA/JSON/JSONValue.h
 )
 
 add_executable(
         Test
+
         Test/Main.c
         Test/Person.c
         Test/Person.h
