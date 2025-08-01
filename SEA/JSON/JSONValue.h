@@ -1,5 +1,5 @@
-#ifndef SEA_LIB_JSON_H
-#define SEA_LIB_JSON_H
+#ifndef SEA_JSON_VALUE_H
+#define SEA_JSON_VALUE_H
 
 #include "../Allocator.h"
 
@@ -41,4 +41,4 @@ extern const struct SEA_JSONValue_CLS {
 	void (*free)(struct SEA_JSONValue* self, struct SEA_Allocator* allocator);
 } SEA_JSONValue;
 
-#endif//SEA_LIB_JSON_H
+#endif//SEA_JSON_VALUE_H

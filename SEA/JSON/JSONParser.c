@@ -9,10 +9,9 @@
 #include "JSONArray.h"
 #include "JSONObject.h"
 #include "JSONValue.h"
+
 #include "../Allocator.h"
 #include "../Error.h"
-#include "../StringBuffer.h"
-#include "../Time.h"
 
 // ===================================
 // MARK: Utility
@@ -55,7 +54,7 @@ static struct SEA_JSONValue* ParseString(SEA_JSONParser* parser) {
 	if (parser->pos >= parser->len) return NULL; // Unterminated string
 
 	const size_t len = parser->pos - start;
-	char *str = SEA_Allocator.alloc(parser->allocator, len + 1);
+	char* str = SEA_Allocator.alloc(parser->allocator, len + 1);
 
 	if (!str) return NULL;
 	strncpy(str, parser->json + start, len);
@@ -195,7 +194,10 @@ static struct SEA_JSONValue* ParseObject(SEA_JSONParser* parser) {
 			return NULL;
 		}
 
-		SEA_JSONObject.put(object->object, key->string, value, parser->allocator);
+		const enum SEA_ErrorType error = SEA_JSONObject.put(object->object, key->string, value, parser->allocator);
+		if (error != SEA_ERROR_NONE) {
+			return NULL;
+		}
 		SEA_JSONValue.free(key, parser->allocator);
 
 		SkipWhitespace(parser);

@@ -1,10 +1,14 @@
 #include "JSONObject.h"
 
+#include <string.h>
+
 #include "JSONValue.h"
 #include "../Allocator.h"
 #include "../Compat.h"
 #include "../Error.h"
 #include "../Time.h"
+#include "SEA/Align.h"
+#include "SEA/Memory.h"
 
 
 // ===================================
@@ -78,7 +82,7 @@ static enum SEA_ErrorType JSONObject_put(struct SEA_JSONObject* self, const char
 
 	SEA_JSONObjectEntry* e = SEA_Allocator.alloc(alloc, sizeof(*e));
 	e->key_len = strlen(key);
-	e->key = SEA_Allocator.strdup(alloc, key, e->key_len);
+	e->key = SEA_Allocator.strdup(alloc, key, e->key_len + 1);
 	e->value = value;
 	e->next = *bucket;
 	*bucket = e;

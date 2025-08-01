@@ -10,7 +10,6 @@
 #include "JSONObject.h"
 #include "JSONParser.h"
 #include "../Allocator.h"
-#include "../Error.h"
 #include "../StringBuffer.h"
 #include "../Time.h"
 

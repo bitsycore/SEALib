@@ -1,8 +1,7 @@
-#ifndef ALLOCATOR_SEALIB_3c01bdbb_H
-#define ALLOCATOR_SEALIB_3c01bdbb_H
+#ifndef SEA_ALLOCATOR_H
+#define SEA_ALLOCATOR_H
 
 #include <stddef.h>
-#include <string.h>
 
 struct SEA_Allocator {
 	void* (*alloc)(void* ctx, size_t size);
@@ -19,4 +18,4 @@ extern const struct SEA_Allocator_CLS {
 	struct SEA_Allocator* Malloc;
 } SEA_Allocator;
 
-#endif // ALLOCATOR_SEALIB_3c01bdbb_H
+#endif//SEA_ALLOCATOR_H

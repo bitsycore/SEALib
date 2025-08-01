@@ -1,5 +1,5 @@
-#ifndef SEA_JSONARRAY_H
-#define SEA_JSONARRAY_H
+#ifndef SEA_JSON_ARRAY_H
+#define SEA_JSON_ARRAY_H
 
 #include "../Allocator.h"
 
@@ -26,4 +26,4 @@ extern const struct SEA_JSONArray_CLS {
 	void (*free)(struct SEA_JSONValue * self, struct SEA_Allocator * alloc);
 } SEA_JSONArray;
 
-#endif//SEA_JSONARRAY_H
+#endif//SEA_JSON_ARRAY_H

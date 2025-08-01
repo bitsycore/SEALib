@@ -19,20 +19,4 @@
 	#error "Cannot determine thread-local storage specifier"
 #endif
 
-// =================================
-// MARK: Alignof
-// =================================
-
-#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
-  #include <stdalign.h>
-  #define SEA_ALIGNOF(type) alignof(type)
-#elif defined(__GNUC__) || defined(__clang__)
-  #define SEA_ALIGNOF(type) __alignof__(type)
-#else
-  #include <stddef.h>
-  #define SEA_ALIGNOF(type) offsetof(struct { char c; type x; }, x)
-#endif
-
-#define SEA_MAX(a, b) ((a) > (b) ? (a) : (b))
-
 #endif// COMPAT_SEALIB_3676198b_H

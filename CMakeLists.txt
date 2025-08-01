@@ -1,35 +1,39 @@
 cmake_minimum_required(VERSION 3.22)
-project(SeaLib C)
+project(SEALib C)
 
 set(CMAKE_C_STANDARD 11)
 
 add_library(
-        Sea
-        # Sources
-        Sea/Random.c
-        Sea/Random.h
-        Sea/UUID.c
-        Sea/UUID.h
-        Sea/Arena.c
-        Sea/Arena.h
-        Sea/Allocator.c
-        Sea/Allocator.h
-        Sea/Compat.h
-        Sea/Error.c
-        Sea/Error.h
-        Sea/Memory.h
-        Sea/Time.c
-        Sea/Time.h
-        SEA/JSON/JSONValue.c
-        SEA/JSON/JSONValue.h
+        SEA
+
+        SEA/Random.c
+        SEA/Random.h
+        SEA/UUID.c
+        SEA/UUID.h
+        SEA/Arena.c
+        SEA/Arena.h
+        SEA/Allocator.c
+        SEA/Allocator.h
+        SEA/Compat.h
+        SEA/Error.c
+        SEA/Error.h
+        SEA/Memory.h
+        SEA/Time.c
+        SEA/Time.h
         SEA/StringBuffer.c
         SEA/StringBuffer.h
-        Sea/Json/JsonArray.c
-        Sea/Json/JsonArray.h
-        Sea/Json/JSONObject.c
-        Sea/Json/JSONObject.h
+        SEA/Macro.h
+        SEA/Align.h
+
+        SEA/JSON/JSONValue.c
+        SEA/JSON/JSONValue.h
+        Sea/JSON/JSONArray.c
+        SEA/JSON/JSONArray.h
+        SEA/JSON/JSONObject.c
+        SEA/JSON/JSONObject.h
         SEA/JSON/JSONParser.c
         SEA/JSON/JSONParser.h
+
 )
 
 add_executable(
@@ -40,7 +44,7 @@ add_executable(
 )
 
 if(WIN32)
-    target_link_libraries(Sea bcrypt)
+    target_link_libraries(SEA bcrypt)
 endif()
-target_include_directories(Sea PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(Test Sea)
+target_include_directories(SEA PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(Test SEA)

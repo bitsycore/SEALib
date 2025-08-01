@@ -2,21 +2,10 @@
 
 #include "Allocator.h"
 #include "Error.h"
-#include "Compat.h"
 
 #include <stdint.h>
 
-typedef union {
-	char c;
-	short s;
-	int i;
-	long l;
-	long long ll;
-	float f;
-	double d;
-	long double ld;
-	void* p;
-} SEA_Max_Align;
+#include "Align.h"
 
 static void init(struct SEA_Arena* self, void* buffer, const size_t capacity) {
 	self->buffer = (uint8_t*) buffer;
@@ -32,7 +21,7 @@ static void* allocEx(struct SEA_Arena* self, const size_t size, const size_t ali
 
 	size_t vAlignment = 0;
 	if (alignment == 0) {
-		vAlignment = SEA_ALIGNOF(SEA_Max_Align);
+		vAlignment = SEA_ALIGNOF(SEA_MaxAlign);
 	} else {
 		vAlignment = alignment;
 	}

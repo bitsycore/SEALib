@@ -1,7 +1,6 @@
 #ifndef ARENA_SEALIB_3c01bdbb_H
 #define ARENA_SEALIB_3c01bdbb_H
 
-#include <stddef.h>
 #include <stdint.h>
 #include "Allocator.h"
 

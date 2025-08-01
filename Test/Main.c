@@ -4,13 +4,11 @@
 #include <SEA/Arena.h>
 #include <SEA/Memory.h>
 #include <SEA/Random.h>
-#include <SEA/JSON/JSONValue.h>
 #include <SEA/JSON/JSONObject.h>
+#include <SEA/JSON/JSONValue.h>
 
 #include <stdio.h>
 #include <stdlib.h>
-
-
 
 const char* randomName() {
 	switch (SEA_Random.Uint64() % 16) {
