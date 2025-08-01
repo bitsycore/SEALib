@@ -102,7 +102,8 @@ int main() {
 			char* abc_str = SEA_JSONValue.toString(json, &allocator);
 			printf("\n%s\n", abc_str);
 			printf("Remaining: %zu\n", SEA_Arena.remaining(arena));
-			free(abc_str);
+
+			SEA_Allocator.free(&allocator, abc_str);
 			SEA_JSONValue.free(json, &allocator);
 		}
 
