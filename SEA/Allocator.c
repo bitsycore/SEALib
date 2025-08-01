@@ -37,7 +37,7 @@ static char* Strdup(struct SEA_Allocator* self, const char* str, const size_t le
 	if (!str || !self || !self->alloc) return NULL;
 
 	const size_t vLen = len == 0 ? strlen(str) + 1 :  len;
-	char* result = self->allocEx(self->context, vLen, SEA_ALIGNOF(char));
+	char* result = self->allocEx(self->context, vLen, SEA_alignof(char));
 	if (!result) return NULL;
 #ifdef _MSC_VER
 	strcpy_s(result, vLen , str);

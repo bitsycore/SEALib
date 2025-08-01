@@ -21,7 +21,7 @@ static void* allocEx(struct SEA_Arena* self, const size_t size, const size_t ali
 
 	size_t vAlignment = 0;
 	if (alignment == 0) {
-		vAlignment = SEA_ALIGNOF(SEA_MaxAlign);
+		vAlignment = SEA_alignof(SEA_MaxAlign);
 	} else {
 		vAlignment = alignment;
 	}

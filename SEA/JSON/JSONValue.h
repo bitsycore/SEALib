@@ -1,19 +1,11 @@
 #ifndef SEA_JSON_VALUE_H
 #define SEA_JSON_VALUE_H
 
+#include "JSONType.h"
 #include "../Allocator.h"
 
 #include <stdbool.h>
 #include <stdint.h>
-
-typedef enum {
-	SEA_JSON_NULL,
-	SEA_JSON_BOOL,
-	SEA_JSON_NUMBER,
-	SEA_JSON_STRING,
-	SEA_JSON_ARRAY,
-	SEA_JSON_OBJECT
-} SEA_JsonType;
 
 struct SEA_JSONValue {
 	union {
@@ -23,7 +15,7 @@ struct SEA_JSONValue {
 		struct SEA_JSONArray* array;
 		struct SEA_JSONObject* object;
 	};
-	SEA_JsonType type;
+	SEA_JSONType type;
 	uint64_t timestamp;
 };
 

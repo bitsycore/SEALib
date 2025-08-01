@@ -112,7 +112,7 @@ static bool JSONObject_has(const struct SEA_JSONObject* self, const char* key) {
 static const char** JSONObject_keys(const struct SEA_JSONObject* self, const struct SEA_Allocator* alloc) {
 	if (!self || !alloc) return NULL;
 	const size_t count = self->size;
-	const char** keys = SEA_Allocator.allocEx(alloc, count * sizeof(char*), SEA_ALIGNOF(char *));
+	const char** keys = SEA_Allocator.allocEx(alloc, count * sizeof(char*), SEA_alignof(char *));
 	if (!keys) return NULL;
 	size_t idx = 0;
 	for (size_t i = 0; i < self->bucketCount; i++) {

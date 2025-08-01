@@ -25,7 +25,7 @@ add_library(
         SEA/UUID.c
         SEA/UUID.h
 
-        Sea/JSON/JSONArray.c
+        SEA/JSON/JSONArray.c
         SEA/JSON/JSONArray.h
         SEA/JSON/JSONObject.c
         SEA/JSON/JSONObject.h
@@ -35,6 +35,7 @@ add_library(
         SEA/JSON/JSONValue.h
         SEA/String.h
         SEA/String.c
+        SEA/JSON/JSONType.h
 )
 
 add_executable(

@@ -23,12 +23,12 @@ typedef union {
 
 #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
   #include <stdalign.h>
-  #define SEA_ALIGNOF(type) alignof(type)
+  #define SEA_alignof(type) alignof(type)
 #elif defined(__GNUC__) || defined(__clang__)
-  #define SEA_ALIGNOF(type) __alignof__(type)
+  #define SEA_alignof(type) __alignof__(type)
 #else
   #include <stddef.h>
-  #define SEA_ALIGNOF(type) offsetof(struct { char c; type x; }, x)
+  #define SEA_alignof(type) offsetof(struct { char c; type x; }, x)
 #endif
 
 #endif //SEA_ALIGN_H
