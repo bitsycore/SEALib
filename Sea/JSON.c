@@ -143,7 +143,7 @@ struct SeaJsonValue* CreateObject(struct SeaAllocator* alloc) {
 		alloc,
 		sizeof(struct SeaJsonValue)
 			+ sizeof(struct SeaJsonObject)
-			+ sizeof(InternalJsonObjectEntry) * SEA_JSON_OBJECT_BUCKETS_NUMBERS
+			+ sizeof(InternalJsonObjectEntry*) * SEA_JSON_OBJECT_BUCKETS_NUMBERS
 	);
 	if (!buffer) return NULL;
 
