@@ -1,7 +1,7 @@
 #ifndef SEA_JSON_OBJECT_H
 #define SEA_JSON_OBJECT_H
 
-#include "../Allocator.h"
+#include "Allocator.h"
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -27,28 +27,22 @@ extern const struct SEA_JSONObject_CLS {
 	// =====================================
 	// STATIC
 	// =====================================
-	/**Refcount(ret +)*/
 	struct SEA_JSONValue* (*New)(struct SEA_Allocator* alloc);
 
 	// =====================================
 	// INSTANCE
 	// =====================================
-	/**Refcount(ret +)*/
 	struct SEA_JSONValue* (*get)(const struct SEA_JSONObject* self, const char* key);
 	enum SEA_ErrorType (*put)(struct SEA_JSONObject* self, const char* key, struct SEA_JSONValue* value, struct SEA_Allocator* allocator);
-	/**Refcount(ret?+)*/
 	struct SEA_JSONValue* (*getOrPut)(struct SEA_JSONObject* self, const char* key, struct SEA_JSONValue* value, struct SEA_Allocator* allocator);
-	/**Refcount(self+)*/
 	struct SEA_JSONValue* (*newRef)(const struct SEA_JSONObject* self);
-	/**Refcount(ret +)*/
 	struct SEA_JSONValue* (*clone)(const struct SEA_JSONObject* self, struct SEA_Allocator* allocator);
 	bool (*has)(const struct SEA_JSONObject* self, const char* key);
 	const char** (*keys)(const struct SEA_JSONObject* self, const struct SEA_Allocator* allocator);
 	size_t (*size)(const struct SEA_JSONObject* self);
-	/**Refcount(ret -)*/
 	bool (*remove)(struct SEA_JSONObject* self, const char* key, struct SEA_Allocator* allocator);
-	/**Refcount(self-)*/
 	void (*free)(struct SEA_JSONValue * self, struct SEA_Allocator * alloc);
+	struct SEA_JSONValue* (*toJSONValue)(const struct SEA_JSONObject* self);
 } SEA_JSONObject;
 
 #endif //SEA_JSON_OBJECT_H

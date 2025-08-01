@@ -2,7 +2,7 @@
 #define SEA_JSON_VALUE_H
 
 #include "JSONType.h"
-#include "../Allocator.h"
+#include "Allocator.h"
 
 #include <stdbool.h>
 #include <stdint.h>

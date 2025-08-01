@@ -1,7 +1,7 @@
 #ifndef SEA_JSON_ARRAY_H
 #define SEA_JSON_ARRAY_H
 
-#include "../Allocator.h"
+#include "Allocator.h"
 
 #include <stddef.h>
 

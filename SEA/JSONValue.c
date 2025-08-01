@@ -4,12 +4,12 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "Allocator.h"
 #include "JSONArray.h"
 #include "JSONObject.h"
 #include "JSONParser.h"
-#include "../Allocator.h"
-#include "../StringBuffer.h"
-#include "../Time.h"
+#include "StringBuffer.h"
+#include "Time.h"
 
 // ===================================
 // MARK: Internal

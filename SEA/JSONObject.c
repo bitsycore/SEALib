@@ -2,11 +2,11 @@
 
 #include <string.h>
 
+#include "Align.h"
+#include "Allocator.h"
+#include "Error.h"
 #include "JSONValue.h"
-#include "../Align.h"
-#include "../Allocator.h"
-#include "../Error.h"
-#include "../Time.h"
+#include "Time.h"
 
 
 // ===================================
@@ -165,6 +165,11 @@ static void JSONObject_free(struct SEA_JSONValue* self, struct SEA_Allocator* al
 	SEA_Allocator.free(alloc, self);
 }
 
+static struct SEA_JSONValue* JSONObject_toJSONValue(const struct SEA_JSONObject* self) {
+	if (!self) return NULL;
+	return (struct SEA_JSONValue*)self - sizeof(struct SEA_JSONValue);
+}
+
 const struct SEA_JSONObject_CLS SEA_JSONObject = {
 	.New = JSONObject_New,
 	.put = JSONObject_put,
@@ -174,4 +179,5 @@ const struct SEA_JSONObject_CLS SEA_JSONObject = {
 	.keys = JSONObject_keys,
 	.remove = JSONObject_remove,
 	.free = JSONObject_free,
+	.toJSONValue = JSONObject_toJSONValue,
 };

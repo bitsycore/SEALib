@@ -1,16 +1,14 @@
 #include "JSONParser.h"
 
 #include <ctype.h>
-#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "Allocator.h"
+#include "Error.h"
 #include "JSONArray.h"
 #include "JSONObject.h"
 #include "JSONValue.h"
-
-#include "../Allocator.h"
-#include "../Error.h"
 #include "SEA/String.h"
 
 // ===================================

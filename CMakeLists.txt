@@ -14,28 +14,27 @@ add_library(
         SEA/Compat.h
         SEA/Error.c
         SEA/Error.h
+        SEA/JSONArray.c
+        SEA/JSONArray.h
+        SEA/JSONObject.c
+        SEA/JSONObject.h
+        SEA/JSONParser.c
+        SEA/JSONParser.h
+        SEA/JSONType.h
+        SEA/JSONValue.c
+        SEA/JSONValue.h
         SEA/Macro.h
         SEA/Memory.h
         SEA/Random.c
         SEA/Random.h
+        SEA/String.c
+        SEA/String.h
         SEA/StringBuffer.c
         SEA/StringBuffer.h
         SEA/Time.c
         SEA/Time.h
         SEA/UUID.c
         SEA/UUID.h
-
-        SEA/JSON/JSONArray.c
-        SEA/JSON/JSONArray.h
-        SEA/JSON/JSONObject.c
-        SEA/JSON/JSONObject.h
-        SEA/JSON/JSONParser.c
-        SEA/JSON/JSONParser.h
-        SEA/JSON/JSONValue.c
-        SEA/JSON/JSONValue.h
-        SEA/String.h
-        SEA/String.c
-        SEA/JSON/JSONType.h
 )
 
 add_executable(
