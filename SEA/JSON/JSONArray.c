@@ -74,6 +74,7 @@ static void JSONArray_free(struct SEA_JSONValue * self, struct SEA_Allocator * a
 	for (size_t i = 0; i < self->array->count; i++) {
 		SEA_JSONValue.free(self->array->items[i], alloc);
 	}
+	SEA_Allocator.free(alloc, self->array->items);
 	SEA_Allocator.free(alloc, self);
 }
 

@@ -33,49 +33,6 @@ static struct SEA_JSONValue InternalFalseSingleton = {
 	.timestamp = 0
 };
 
-// ===================================
-// MARK: Create
-// ===================================
-
-struct SEA_JSONValue* CreateNull() {
-	return &InternalNullSingleton;
-}
-
-struct SEA_JSONValue* CreateBool(const bool val) {
-	return val ? &InternalTrueSingleton : &InternalFalseSingleton;
-}
-
-struct SEA_JSONValue* CreateNumber(const double val, struct SEA_Allocator* alloc) {
-	if (!alloc || !alloc->alloc) return NULL;
-
-	struct SEA_JSONValue* value = SEA_Allocator.alloc(alloc, sizeof(struct SEA_JSONValue));
-	if (!value) return NULL;
-	value->type = SEA_JSON_NUMBER;
-	value->number = val;
-	value->timestamp = SEA_Time.getMillis();
-
-	return value;
-}
-
-struct SEA_JSONValue* CreateString(const char* val, struct SEA_Allocator* alloc) {
-	if (!alloc || !alloc->alloc || !val) return NULL;
-
-	const size_t bufferLen = sizeof(struct SEA_JSONValue) + strlen(val) + 1;
-	uint8_t* buffer =  SEA_Allocator.alloc(alloc, bufferLen);
-	if (!buffer) return NULL;
-	struct SEA_JSONValue* value = (struct SEA_JSONValue*) buffer;
-	value->string = (char*) (buffer + sizeof(struct SEA_JSONValue));
-	memcpy(value->string, val, strlen(val) + 1);
-	value->type = SEA_JSON_STRING;
-	value->timestamp = SEA_Time.getMillis();
-	if (!value->string) {
-		SEA_Allocator.free(alloc, value);
-		return NULL;
-	}
-
-	return value;
-}
-
 // =========================================
 // MARK: Stringify
 // =========================================
@@ -177,11 +134,50 @@ static void WriteJson(const struct SEA_JSONValue* value, struct SeaStringBuffer*
 // MARK: JsonValue
 // =========================================
 
-static struct SEA_JSONValue* JsonValue_FromString(const char* string, const size_t len, struct SEA_Allocator* allocator) {
-	return JSONParser_FromString(string, len, allocator);
+struct SEA_JSONValue* JSONValue_CreateNull() {
+	return &InternalNullSingleton;
 }
 
-static char* JsonValue_toString(const struct SEA_JSONValue* self, struct SEA_Allocator* allocator) {
+struct SEA_JSONValue* JSONValue_CreateBool(const bool val) {
+	return val ? &InternalTrueSingleton : &InternalFalseSingleton;
+}
+
+struct SEA_JSONValue* JSONValue_CreateNumber(const double val, struct SEA_Allocator* alloc) {
+	if (!alloc || !alloc->alloc) return NULL;
+
+	struct SEA_JSONValue* value = SEA_Allocator.alloc(alloc, sizeof(struct SEA_JSONValue));
+	if (!value) return NULL;
+	value->type = SEA_JSON_NUMBER;
+	value->number = val;
+	value->timestamp = SEA_Time.getMillis();
+
+	return value;
+}
+
+struct SEA_JSONValue* JSONValue_CreateString(const char* val, struct SEA_Allocator* alloc) {
+	if (!alloc || !alloc->alloc || !val) return NULL;
+
+	const size_t bufferLen = sizeof(struct SEA_JSONValue) + strlen(val) + 1;
+	uint8_t* buffer =  SEA_Allocator.alloc(alloc, bufferLen);
+	if (!buffer) return NULL;
+	struct SEA_JSONValue* value = (struct SEA_JSONValue*) buffer;
+	value->string = (char*) (buffer + sizeof(struct SEA_JSONValue));
+	memcpy(value->string, val, strlen(val) + 1);
+	value->type = SEA_JSON_STRING;
+	value->timestamp = SEA_Time.getMillis();
+	if (!value->string) {
+		SEA_Allocator.free(alloc, value);
+		return NULL;
+	}
+
+	return value;
+}
+
+static struct SEA_JSONValue* JSONValue_FromString(const char* string, const size_t len, struct SEA_Allocator* allocator) {
+	return SEA_JSONParser.FromString(string, len, allocator);
+}
+
+static char* JSONValue_toString(const struct SEA_JSONValue* self, struct SEA_Allocator* allocator) {
 	if (!self || !allocator || !allocator->alloc) return NULL;
 	struct SeaStringBuffer buffer = {};
 	const size_t size = MeasureJson(self);
@@ -190,7 +186,7 @@ static char* JsonValue_toString(const struct SEA_JSONValue* self, struct SEA_All
 	return buffer.data;
 }
 
-static void JsonValue_free(struct SEA_JSONValue* self, struct SEA_Allocator* alloc) {
+static void JSONValue_free(struct SEA_JSONValue* self, struct SEA_Allocator* alloc) {
 	if (!self) return;
 	switch (self->type) {
 		case SEA_JSON_ARRAY: SEA_JSONArray.free(self, alloc);
@@ -206,13 +202,13 @@ static void JsonValue_free(struct SEA_JSONValue* self, struct SEA_Allocator* all
 
 const struct SEA_JSONValue_CLS SEA_JSONValue = {
 	// Static
-	.FromString = JsonValue_FromString,
-	.CreateNull = CreateNull,
-	.CreateBool = CreateBool,
-	.CreateNumber = CreateNumber,
-	.CreateString = CreateString,
+	.FromString = JSONValue_FromString,
+	.CreateNull = JSONValue_CreateNull,
+	.CreateBool = JSONValue_CreateBool,
+	.CreateNumber = JSONValue_CreateNumber,
+	.CreateString = JSONValue_CreateString,
 
 	// Instance
-	.toString = JsonValue_toString,
-	.free = JsonValue_free,
+	.toString = JSONValue_toString,
+	.free = JSONValue_free,
 };

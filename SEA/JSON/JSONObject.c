@@ -78,7 +78,7 @@ static enum SEA_ErrorType JSONObject_put(struct SEA_JSONObject* self, const char
 		}
 	}
 
-	SEA_JSONObjectEntry* e = SEA_Allocator.alloc(alloc, sizeof(*e));
+	SEA_JSONObjectEntry* e = SEA_Allocator.alloc(alloc, sizeof(SEA_JSONObjectEntry));
 	e->key_len = strlen(key);
 	e->key = SEA_Allocator.strdup(alloc, key, e->key_len + 1);
 	e->value = value;
@@ -151,12 +151,14 @@ static void JSONObject_free(struct SEA_JSONValue* self, struct SEA_Allocator* al
 		self->object->ref_count--;
 		return;
 	}
+
 	for (size_t i = 0; i < self->object->bucketCount; i++) {
-		const SEA_JSONObjectEntry* next = self->object->buckets[i];
-		for (const SEA_JSONObjectEntry* e = next; e != NULL; e = next) {
+		SEA_JSONObjectEntry* next = self->object->buckets[i];
+		for (SEA_JSONObjectEntry* e = next; e != NULL; e = next) {
 			next = e->next;
 			SEA_JSONValue.free(e->value, alloc);
 			SEA_Allocator.free(alloc, e->key);
+			SEA_Allocator.free(alloc, e);
 		}
 	}
 

@@ -3,13 +3,15 @@
 
 #include <stddef.h>
 
-typedef struct {
+struct SEA_JSONParser {
 	const char* json;
 	size_t pos;
 	size_t len;
 	struct SEA_Allocator* allocator;
-} SEA_JSONParser;
+};
 
-struct SEA_JSONValue* JSONParser_FromString(const char* string, size_t len, struct SEA_Allocator* allocator);
+extern const struct SEA_JSONParser_CLS {
+	struct SEA_JSONValue* (*FromString)(const char* string, size_t len, struct SEA_Allocator* allocator);
+} SEA_JSONParser;
 
 #endif//SEA_JSON_PARSER_H
