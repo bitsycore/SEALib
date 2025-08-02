@@ -147,10 +147,8 @@ static bool JSONObject_remove(struct SEA_JSONObject* self, const char* key, stru
 }
 
 static void JSONObject_free(struct SEA_JSONValue* self, struct SEA_Allocator* alloc) {
-	if (self->object->ref_count > 1) {
-		self->object->ref_count--;
-		return;
-	}
+	self->object->ref_count--;
+	if (self->object->ref_count > 0) return;
 
 	for (size_t i = 0; i < self->object->bucketCount; i++) {
 		SEA_JSONObjectEntry* next = self->object->buckets[i];
@@ -167,7 +165,7 @@ static void JSONObject_free(struct SEA_JSONValue* self, struct SEA_Allocator* al
 
 static struct SEA_JSONValue* JSONObject_toJSONValue(const struct SEA_JSONObject* self) {
 	if (!self) return NULL;
-	return (struct SEA_JSONValue*)self - sizeof(struct SEA_JSONValue);
+	return (struct SEA_JSONValue*)((char*)self - sizeof(struct SEA_JSONValue));
 }
 
 const struct SEA_JSONObject_CLS SEA_JSONObject = {

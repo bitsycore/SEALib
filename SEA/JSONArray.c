@@ -67,10 +67,8 @@ static struct SEA_JSONValue* JSONArray_get(const struct SEA_JSONArray* array, co
 }
 
 static void JSONArray_free(struct SEA_JSONValue * self, struct SEA_Allocator * alloc) {
-	if (self->array->ref_count > 1) {
-		self->array->ref_count--;
-		return;
-	}
+	self->array->ref_count--;
+	if (self->array->ref_count > 0) return;
 	for (size_t i = 0; i < self->array->count; i++) {
 		SEA_JSONValue.free(self->array->items[i], alloc);
 	}
@@ -78,9 +76,15 @@ static void JSONArray_free(struct SEA_JSONValue * self, struct SEA_Allocator * a
 	SEA_Allocator.free(alloc, self);
 }
 
+static struct SEA_JSONValue* JSONArray_toJSONValue(const struct SEA_JSONArray* self) {
+	if (!self) return NULL;
+	return (struct SEA_JSONValue*)((char*)self - sizeof(struct SEA_JSONValue));
+}
+
 const struct SEA_JSONArray_CLS SEA_JSONArray = {
 	.New = JSONArray_New,
 	.add = JSONArray_add,
 	.get = JSONArray_get,
 	.free = JSONArray_free,
+	.toJSONValue = JSONArray_toJSONValue,
 };
