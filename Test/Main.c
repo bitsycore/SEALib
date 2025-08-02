@@ -31,7 +31,7 @@ const char* randomName() {
 	}
 }
 
-void arena_test(struct SEA_Arena* arena) {
+void testArena(struct SEA_Arena* arena) {
 	const struct SEA_Allocator arena_allocator = SEA_Arena.allocator(arena);
 
 	struct Person* me = SEA_Arena.alloc(arena, sizeof(struct Person));
@@ -125,7 +125,7 @@ int main() {
 		SEA_Arena.init(arena, SEA_SCOPE_BUFFER + sizeof(struct SEA_Arena), arenaSize);
 		for (int i = 0; i < 5; i++) {
 			SEA_ARENA_SCOPE(arena) {
-				arena_test(arena);
+				testArena(arena);
 				puts("\n-----------------------------\n");
 			}
 		}
