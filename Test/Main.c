@@ -32,7 +32,7 @@ const char* randomName() {
 }
 
 void arena_test(struct SEA_Arena* arena) {
-	const struct SEA_Allocator arena_allocator = SEA_Arena.getAllocator(arena);
+	const struct SEA_Allocator arena_allocator = SEA_Arena.allocator(arena);
 
 	struct Person* me = SEA_Arena.alloc(arena, sizeof(struct Person));
 	Person.initWithName(me, randomName());
@@ -90,7 +90,7 @@ int main() {
 
 		SEA_ARENA_SCOPE(arena) {
 
-			struct SEA_Allocator allocator = *SEA_Allocator.Malloc;
+			struct SEA_Allocator allocator = SEA_Arena.allocator(arena);
 			printf("Remaining: %zu\n", SEA_Arena.remaining(arena));
 			struct SEA_JSONValue* json = SEA_JSONValue.FromString(str, str_len, &allocator);
 			printf("Remaining: %zu\n", SEA_Arena.remaining(arena));
@@ -98,7 +98,7 @@ int main() {
 			if (json->type != SEA_JSON_OBJECT) { exit(12345678); }
 			const struct SEA_JSONValue* menu = SEA_JSONObject.get(json->object, "menu");
 			const struct SEA_JSONObject* objTest = menu->object;
-			const struct SEA_JSONValue* valTest = SEA_JSONObject.toJSONValue(objTest);
+			const struct SEA_JSONValue* valTest = SEA_JSONObject.asJSONValue(objTest);
 			printf("Remaining: %zu\n", SEA_Arena.remaining(arena));
 			if (menu->type != SEA_JSON_OBJECT) { exit(12349999); }
 			char* abc_str = SEA_JSONValue.toString(valTest, &allocator);

@@ -16,7 +16,7 @@ extern const struct SEA_Arena_CLS {
 	void* (* allocEx)(struct SEA_Arena* self, size_t size, size_t alignment);
 	void (* reset)(struct SEA_Arena* self);
 	size_t (* remaining)(const struct SEA_Arena* self);
-	struct SEA_Allocator (* getAllocator)(struct SEA_Arena* self);
+	struct SEA_Allocator (* allocator)(struct SEA_Arena* self);
 } SEA_Arena;
 
 #define SEA_ARENA_SCOPE(arena) \

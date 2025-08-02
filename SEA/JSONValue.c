@@ -18,19 +18,16 @@
 static struct SEA_JSONValue InternalNullSingleton = {
 	.type = SEA_JSON_NULL,
 	.string = NULL,
-	.timestamp = 0
 };
 
 static struct SEA_JSONValue InternalTrueSingleton = {
 	.type = SEA_JSON_BOOL,
 	.boolean = true,
-	.timestamp = 0
 };
 
 static struct SEA_JSONValue InternalFalseSingleton = {
 	.type = SEA_JSON_BOOL,
 	.boolean = false,
-	.timestamp = 0
 };
 
 // =========================================
@@ -149,7 +146,6 @@ struct SEA_JSONValue* JSONValue_CreateNumber(const double val, struct SEA_Alloca
 	if (!value) return NULL;
 	value->type = SEA_JSON_NUMBER;
 	value->number = val;
-	value->timestamp = SEA_Time.getMillis();
 
 	return value;
 }
@@ -164,7 +160,7 @@ struct SEA_JSONValue* JSONValue_CreateString(const char* val, struct SEA_Allocat
 	value->string = (char*) (buffer + sizeof(struct SEA_JSONValue));
 	memcpy(value->string, val, strlen(val) + 1);
 	value->type = SEA_JSON_STRING;
-	value->timestamp = SEA_Time.getMillis();
+
 	if (!value->string) {
 		SEA_Allocator.free(alloc, value);
 		return NULL;

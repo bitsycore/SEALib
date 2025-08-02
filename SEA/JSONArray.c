@@ -19,7 +19,6 @@ static struct SEA_JSONValue* JSONArray_New(struct SEA_Allocator* alloc) {
 
 	struct SEA_JSONValue* value = (struct SEA_JSONValue*)buffer;
 	value->type = SEA_JSON_ARRAY;
-	value->timestamp = SEA_Time.getMillis();
 	value->array = (struct SEA_JSONArray*)(buffer + sizeof(struct SEA_JSONValue));
 	value->array->items = NULL;
 	value->array->count = 0;
@@ -76,7 +75,7 @@ static void JSONArray_free(struct SEA_JSONValue * self, struct SEA_Allocator * a
 	SEA_Allocator.free(alloc, self);
 }
 
-static struct SEA_JSONValue* JSONArray_toJSONValue(const struct SEA_JSONArray* self) {
+static struct SEA_JSONValue* JSONArray_asJSONValue(const struct SEA_JSONArray* self) {
 	if (!self) return NULL;
 	return (struct SEA_JSONValue*)((char*)self - sizeof(struct SEA_JSONValue));
 }
@@ -86,5 +85,5 @@ const struct SEA_JSONArray_CLS SEA_JSONArray = {
 	.add = JSONArray_add,
 	.get = JSONArray_get,
 	.free = JSONArray_free,
-	.toJSONValue = JSONArray_toJSONValue,
+	.asJSONValue = JSONArray_asJSONValue,
 };

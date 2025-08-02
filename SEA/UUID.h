@@ -1,5 +1,5 @@
-#ifndef RANDOM_SEALIB_d7a966a2_H
-#define RANDOM_SEALIB_d7a966a2_H
+#ifndef SEA_UUID_H
+#define SEA_UUID_H
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -11,8 +11,8 @@ struct SEA_UUID {
 extern const struct SEA_UUID_CLS {
 	void (* generateV4)(struct SEA_UUID* self);
 	void (* generateV7)(struct SEA_UUID* self);
-	void (* toString)(const struct SEA_UUID* self, char out[37]);
 	bool (* equals)(const struct SEA_UUID* a, const struct SEA_UUID* b);
+	void (* toString)(const struct SEA_UUID* self, char out[37]);
 } SEA_UUID;
 
-#endif// RANDOM_SEALIB_d7a966a2_H
+#endif //SEA_UUID_H

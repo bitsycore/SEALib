@@ -42,7 +42,6 @@ static struct SEA_JSONValue* JSONObject_New(struct SEA_Allocator* alloc) {
 	memset(value->object->buckets, 0, SEA_JSON_OBJECT_BUCKETS_NUMBERS * sizeof(SEA_JSONObjectEntry*));
 
 	value->type = SEA_JSON_OBJECT;
-	value->timestamp = SEA_Time.getMillis();
 	value->object->bucketCount = SEA_JSON_OBJECT_BUCKETS_NUMBERS;
 	value->object->size = 0;
 	value->object->ref_count = 1;
@@ -112,7 +111,7 @@ static bool JSONObject_has(const struct SEA_JSONObject* self, const char* key) {
 static const char** JSONObject_keys(const struct SEA_JSONObject* self, const struct SEA_Allocator* alloc) {
 	if (!self || !alloc) return NULL;
 	const size_t count = self->size;
-	const char** keys = SEA_Allocator.allocEx(alloc, count * sizeof(char*), SEA_alignof(char *));
+	const char** keys = SEA_Allocator.allocAligned(alloc, count * sizeof(char*), SEA_alignof(char *));
 	if (!keys) return NULL;
 	size_t idx = 0;
 	for (size_t i = 0; i < self->bucketCount; i++) {
@@ -163,7 +162,7 @@ static void JSONObject_free(struct SEA_JSONValue* self, struct SEA_Allocator* al
 	SEA_Allocator.free(alloc, self);
 }
 
-static struct SEA_JSONValue* JSONObject_toJSONValue(const struct SEA_JSONObject* self) {
+static struct SEA_JSONValue* JSONObject_asJSONValue(const struct SEA_JSONObject* self) {
 	if (!self) return NULL;
 	return (struct SEA_JSONValue*)((char*)self - sizeof(struct SEA_JSONValue));
 }
@@ -177,5 +176,5 @@ const struct SEA_JSONObject_CLS SEA_JSONObject = {
 	.keys = JSONObject_keys,
 	.remove = JSONObject_remove,
 	.free = JSONObject_free,
-	.toJSONValue = JSONObject_toJSONValue,
+	.asJSONValue = JSONObject_asJSONValue,
 };

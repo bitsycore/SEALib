@@ -16,7 +16,6 @@ struct SEA_JSONValue {
 		struct SEA_JSONObject* object;
 	};
 	SEA_JSONType type;
-	uint64_t timestamp;
 };
 
 extern const struct SEA_JSONValue_CLS {

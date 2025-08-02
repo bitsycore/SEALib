@@ -7,24 +7,19 @@
 
 #include "Align.h"
 
-static void init(struct SEA_Arena* self, void* buffer, const size_t capacity) {
+static void Arena_init(struct SEA_Arena* self, void* buffer, const size_t capacity) {
 	self->buffer = (uint8_t*) buffer;
 	self->capacity = capacity;
 	self->offset = 0;
 }
 
-static void* allocEx(struct SEA_Arena* self, const size_t size, const size_t alignment) {
+static void* Arena_allocAligned(struct SEA_Arena* self, const size_t size, const size_t alignment) {
 	if (self == NULL) {
-		SEA_Error.SetError(SEA_ERROR_ARENA_INVALID_CONTEXT);
+		SEA_Error.SetError(SEA_ERROR_GENERIC_ARGUMENT_NULL);
 		return NULL;
 	}
 
-	size_t vAlignment = 0;
-	if (alignment == 0) {
-		vAlignment = SEA_alignof(SEA_MaxAlign);
-	} else {
-		vAlignment = alignment;
-	}
+	const size_t vAlignment = alignment == 0 ? SEA_alignof(SEA_MaxAlign) : alignment;
 
 	// Alignment must be a power of 2
 	if (vAlignment & (vAlignment - 1)) {
@@ -46,32 +41,32 @@ static void* allocEx(struct SEA_Arena* self, const size_t size, const size_t ali
 	return ptr;
 }
 
-static void* alloc(struct SEA_Arena* self, const size_t size) {
-	return allocEx(self, size, 0);
+static void* Arena_alloc(struct SEA_Arena* self, const size_t size) {
+	return Arena_allocAligned(self, size, 0);
 }
 
-static void reset(struct SEA_Arena* self) {
+static void Arena_reset(struct SEA_Arena* self) {
 	self->offset = 0;
 }
 
-static size_t remaining(const struct SEA_Arena* self) {
+static size_t Arena_remaining(const struct SEA_Arena* self) {
 	return self->capacity - self->offset;
 }
 
-static struct SEA_Allocator getAllocator(struct SEA_Arena* self) {
+static struct SEA_Allocator Arena_allocator(struct SEA_Arena* self) {
 	return (struct SEA_Allocator) {
-		.alloc = (void* (*)(void*, size_t)) alloc,
-		.allocEx = (void* (*)(void*, size_t, size_t)) allocEx,
+		.alloc = (void* (*)(void*, size_t)) Arena_alloc,
+		.allocAligned = (void* (*)(void*, size_t, size_t)) Arena_allocAligned,
 		.free = NULL,
 		.context = self
 	};
 }
 
 const struct SEA_Arena_CLS SEA_Arena = {
-	.init = init,
-	.alloc = alloc,
-	.allocEx = allocEx,
-	.reset = reset,
-	.remaining = remaining,
-	.getAllocator = getAllocator,
+	.init = Arena_init,
+	.alloc = Arena_alloc,
+	.allocEx = Arena_allocAligned,
+	.reset = Arena_reset,
+	.remaining = Arena_remaining,
+	.allocator = Arena_allocator,
 };

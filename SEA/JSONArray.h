@@ -22,7 +22,7 @@ extern const struct SEA_JSONArray_CLS {
 	void (*add)(struct SEA_JSONArray* self, struct SEA_JSONValue* value, struct SEA_Allocator* allocator);
 	struct SEA_JSONValue* (*get)(const struct SEA_JSONArray* self, size_t index);
 	void (*free)(struct SEA_JSONValue* self, struct SEA_Allocator* alloc);
-	struct SEA_JSONValue* (*toJSONValue)(const struct SEA_JSONArray* self);
+	struct SEA_JSONValue* (*asJSONValue)(const struct SEA_JSONArray* self);
 } SEA_JSONArray;
 
 #endif//SEA_JSON_ARRAY_H

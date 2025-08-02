@@ -4,15 +4,15 @@
 
 static SEA_THREAD_LOCAL enum SEA_ErrorType THREAD_ERRNO = 0;
 
-void SetErrno(const enum SEA_ErrorType error) {
+void Error_SetError(const enum SEA_ErrorType error) {
 	THREAD_ERRNO = error;
 }
 
-int GetErrno() {
+int Error_GetError() {
 	return THREAD_ERRNO;
 }
 
 const struct SEA_Error_CLS SEA_Error = {
-	.SetError = SetErrno,
-	.GetError = GetErrno,
+	.SetError = Error_SetError,
+	.GetError = Error_GetError,
 };

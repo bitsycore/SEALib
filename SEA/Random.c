@@ -19,11 +19,11 @@
 static SEA_THREAD_LOCAL bool SEED_INITIALIZED = false;
 static SEA_THREAD_LOCAL uint64_t SEED[4];
 
-static uint64_t rotate_left(const uint64_t x, int k) {
+static uint64_t rotateLeft(const uint64_t x, const int k) {
 	return (x << k) | (x >> (64 - k));
 }
 
-static void seed256(uint64_t seed[4]) {
+static void initSeed256(uint64_t seed[4]) {
 #if defined(_WIN32) || defined(_WIN64)
 	BCRYPT_ALG_HANDLE hAlgorithm = NULL;
 	NTSTATUS status = BCryptOpenAlgorithmProvider(
@@ -72,13 +72,17 @@ static void seed256(uint64_t seed[4]) {
 #endif
 }
 
+// =======================================
+// MARK: Public
+// =======================================
+
 static uint64_t Random_Uint64() {
 	if (SEED_INITIALIZED == false) {
 		SEED_INITIALIZED = true;
-		seed256(SEED);
+		initSeed256(SEED);
 	}
 
-	const uint64_t result = rotate_left(SEED[0] + SEED[3], 23) + SEED[0];
+	const uint64_t result = rotateLeft(SEED[0] + SEED[3], 23) + SEED[0];
 
 	const uint64_t t = SEED[1] << 17;
 
@@ -89,7 +93,7 @@ static uint64_t Random_Uint64() {
 
 	SEED[2] ^= t;
 
-	SEED[3] = rotate_left(SEED[3], 45);
+	SEED[3] = rotateLeft(SEED[3], 45);
 
 	return result;
 }

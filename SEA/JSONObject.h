@@ -42,7 +42,7 @@ extern const struct SEA_JSONObject_CLS {
 	size_t (*size)(const struct SEA_JSONObject* self);
 	bool (*remove)(struct SEA_JSONObject* self, const char* key, struct SEA_Allocator* allocator);
 	void (*free)(struct SEA_JSONValue * self, struct SEA_Allocator * alloc);
-	struct SEA_JSONValue* (*toJSONValue)(const struct SEA_JSONObject* self);
+	struct SEA_JSONValue* (*asJSONValue)(const struct SEA_JSONObject* self);
 } SEA_JSONObject;
 
 #endif //SEA_JSON_OBJECT_H

@@ -257,6 +257,10 @@ static struct SEA_JSONValue* ParseValue(struct SEA_JSONParser* parser) {
 	}
 }
 
+// =======================================
+// MARK: Public
+// =======================================
+
 struct SEA_JSONValue* JSONParser_FromString(const char* string, const size_t len, struct SEA_Allocator* allocator) {
 	if (!string) return NULL;
 	if (!allocator || !allocator->alloc) allocator = SEA_Allocator.Malloc;
