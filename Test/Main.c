@@ -97,12 +97,10 @@ int main() {
 
 			if (json->type != SEA_JSON_OBJECT) { exit(12345678); }
 			const struct SEA_JSONValue* menu = SEA_JSONObject.get(json->object, "menu");
-			const struct SEA_JSONObject* objTest = menu->object;
-			const struct SEA_JSONValue* valTest = SEA_JSONObject.asJSONValue(objTest);
-			printf("Remaining: %zu\n", SEA_Arena.remaining(arena));
 			if (menu->type != SEA_JSON_OBJECT) { exit(12349999); }
-			char* abc_str = SEA_JSONValue.toString(valTest, &allocator);
-			printf("\n%s\n", abc_str);
+			char* abc_str = SEA_JSONValue.toString(menu, &allocator);
+
+			printf("\n%s\n\n", abc_str);
 			printf("Remaining: %zu\n", SEA_Arena.remaining(arena));
 
 			SEA_Allocator.free(&allocator, abc_str);
