@@ -24,7 +24,7 @@ add_library(
         SEA/JSONValue.c
         SEA/JSONValue.h
         SEA/MacroUtilities.h
-        SEA/Memory.h
+        SEA/MemoryUtilities.h
         SEA/Random.c
         SEA/Random.h
         SEA/StringCompat.c

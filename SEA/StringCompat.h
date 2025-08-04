@@ -1,5 +1,5 @@
-#ifndef SEA_STRING_H
-#define SEA_STRING_H
+#ifndef SEA_STRINGCOMPAT_H
+#define SEA_STRINGCOMPAT_H
 
 #include <string.h>
 
@@ -9,4 +9,4 @@
 int SEA_strncpy_s(char *restrict dest, size_t destsz, const char *restrict src, size_t count);
 #endif
 
-#endif //SEA_STRING_H
+#endif//SEA_STRINGCOMPAT_H

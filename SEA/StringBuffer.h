@@ -6,7 +6,7 @@
 #include <stddef.h>
 
 #define SEA_STRING_BUFFER_INITIAL_CAPACITY 64
-#define SEA_STRING_BUFFER_INCREASE_FACTOR 2.0f
+#define SEA_STRING_BUFFER_INCREASE_FACTOR 4/2 // integer math
 
 struct SeaStringBuffer {
 	char* data;

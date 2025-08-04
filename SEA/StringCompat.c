@@ -1,6 +1,5 @@
 #include "StringCompat.h"
 
-
 #if defined(__STDC_LIB_EXT1__) || (defined(_MSC_VER) && _MSC_VER >= 1400) || defined(__MINGW32__)
 #else
 #include <errno.h>

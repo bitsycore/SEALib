@@ -1,5 +1,5 @@
-#ifndef COMPAT_SEALIB_3676198b_H
-#define COMPAT_SEALIB_3676198b_H
+#ifndef SEA_THREADCOMPAT_H
+#define SEA_THREADCOMPAT_H
 
 // =================================
 // MARK: Thread-Local
@@ -19,4 +19,4 @@
 	#error "Cannot determine thread-local storage specifier"
 #endif
 
-#endif// COMPAT_SEALIB_3676198b_H
+#endif //SEA_THREADCOMPAT_H
