@@ -1,6 +1,6 @@
 #include "Random.h"
 
-#include "ThreadCompat.h"
+#include "Compat/ThreadCompat.h"
 
 #if defined(_WIN32) || defined(_WIN64)
 	#include <Windows.h>

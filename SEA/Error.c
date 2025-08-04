@@ -1,6 +1,6 @@
 #include "Error.h"
 
-#include "ThreadCompat.h"
+#include "Compat/ThreadCompat.h"
 
 static SEA_THREAD_LOCAL enum SEA_ErrorType THREAD_ERRNO = 0;
 

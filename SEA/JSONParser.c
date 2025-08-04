@@ -9,7 +9,7 @@
 #include "JSONArray.h"
 #include "JSONObject.h"
 #include "JSONValue.h"
-#include "SEA/StringCompat.h"
+#include "Compat/StringCompat.h"
 
 // ===================================
 // MARK: Utility

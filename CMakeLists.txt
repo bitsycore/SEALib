@@ -11,7 +11,7 @@ add_library(
         SEA/Allocator.h
         SEA/Arena.c
         SEA/Arena.h
-        SEA/ThreadCompat.h
+        SEA/Compat/ThreadCompat.h
         SEA/Error.c
         SEA/Error.h
         SEA/JSONArray.c
@@ -23,12 +23,12 @@ add_library(
         SEA/JSONType.h
         SEA/JSONValue.c
         SEA/JSONValue.h
-        SEA/MacroUtilities.h
-        SEA/MemoryUtilities.h
+        SEA/Utilities/MacroUtilities.h
+        SEA/Utilities/MemoryUtilities.h
         SEA/Random.c
         SEA/Random.h
-        SEA/StringCompat.c
-        SEA/StringCompat.h
+        SEA/Compat/StringCompat.c
+        SEA/Compat/StringCompat.h
         SEA/StringBuffer.c
         SEA/StringBuffer.h
         SEA/Time.c
