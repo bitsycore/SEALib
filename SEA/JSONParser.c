@@ -66,44 +66,20 @@ static struct SEA_JSONValue* ParseString(struct SEA_JSONParser* parser) {
 }
 
 static struct SEA_JSONValue* ParseNumber(struct SEA_JSONParser* parser) {
-	const size_t start = parser->pos;
+	const char* start_ptr = parser->json + parser->pos;
+	char* end_ptr;
 
-	if (parser->json[parser->pos] == '-') parser->pos++;
+	const double num = strtod(start_ptr, &end_ptr);
 
-	if (!isdigit(parser->json[parser->pos])) return NULL;
-
-	while (parser->pos < parser->len && isdigit(parser->json[parser->pos])) {
-		parser->pos++;
+	if (end_ptr == start_ptr) {
+		return NULL;
 	}
 
-	if (parser->pos < parser->len && parser->json[parser->pos] == '.') {
-		parser->pos++;
-		if (!isdigit(parser->json[parser->pos])) return NULL;
-		while (parser->pos < parser->len && isdigit(parser->json[parser->pos])) {
-			parser->pos++;
-		}
-	}
-
-	if (parser->pos < parser->len && (parser->json[parser->pos] == 'e' || parser->json[parser->pos] == 'E')) {
-		parser->pos++;
-		if (parser->json[parser->pos] == '+' || parser->json[parser->pos] == '-') parser->pos++;
-		if (!isdigit(parser->json[parser->pos])) return NULL;
-		while (parser->pos < parser->len && isdigit(parser->json[parser->pos])) {
-			parser->pos++;
-		}
-	}
-
-	const size_t len = parser->pos - start;
-	const size_t alloc_len = len + 1;
-	char* num_str = SEA_Allocator.alloc(parser->allocator, alloc_len);
-	if (!num_str) return NULL;
-	SEA_strncpy_s(num_str, alloc_len, parser->json + start, len);
-
-	const double num = atof(num_str);
-	SEA_Allocator.free(parser->allocator, num_str);
+	parser->pos = end_ptr - parser->json;
 
 	return SEA_JSONValue.CreateNumber(num, parser->allocator);
 }
+
 
 static struct SEA_JSONValue* ParseArray(struct SEA_JSONParser* parser) {
 	if (parser->pos >= parser->len || parser->json[parser->pos] != '[') return NULL;
