@@ -43,6 +43,8 @@ add_executable(
         Test/Main.c
         Test/Person.c
         Test/Person.h
+        Test/TestJsonNumbers.c
+        Test/TestJsonNumbers.h
 )
 
 if(WIN32)

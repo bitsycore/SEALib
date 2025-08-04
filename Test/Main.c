@@ -10,6 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "TestJsonNumbers.h"
+
 const char* randomName() {
 	switch (SEA_Random.Uint64() % 16) {
 		case 0: return "Bob";
@@ -68,6 +70,8 @@ void testArena(struct SEA_Arena* arena) {
 }
 
 int main() {
+
+	testJsonNumbersParsing();
 
 	puts("");
 	puts("=========================================================================");
