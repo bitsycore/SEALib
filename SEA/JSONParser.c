@@ -9,7 +9,7 @@
 #include "JSONArray.h"
 #include "JSONObject.h"
 #include "JSONValue.h"
-#include "SEA/String.h"
+#include "SEA/StringCompat.h"
 
 // ===================================
 // MARK: Utility
@@ -39,31 +39,62 @@ static struct SEA_JSONValue* ParseString(struct SEA_JSONParser* parser) {
 	if (parser->pos >= parser->len || parser->json[parser->pos] != '"') return NULL;
 	parser->pos++; // Skip opening quote
 
-	const size_t start = parser->pos;
-	while (parser->pos < parser->len && parser->json[parser->pos] != '"') {
-		if (parser->json[parser->pos] == '\\' && parser->pos + 1 < parser->len) {
-			parser->pos += 2; // Skip escape sequence
-		}
-		else {
-			parser->pos++;
+	const char* start_ptr = parser->json + parser->pos;
+	const char* p = start_ptr;
+
+	// First, find the closing quote to identify the full escaped string slice.
+	while (p < parser->json + parser->len && *p != '"') {
+		if (*p == '\\' && p + 1 < parser->json + parser->len) {
+			p += 2;
+		} else {
+			p++;
 		}
 	}
 
-	if (parser->pos >= parser->len) return NULL; // Unterminated string
+	if (p >= parser->json + parser->len) return NULL; // Unterminated string
 
-	const size_t str_len = parser->pos - start;
-	const size_t alloc_len = str_len + 1;
-	char* str = SEA_Allocator.alloc(parser->allocator, alloc_len);
-	if (!str) return NULL;
-	SEA_strncpy_s(str, alloc_len, parser->json + start, str_len);
+	const size_t escaped_len = p - start_ptr;
+	char* unescaped_str = SEA_Allocator.alloc(parser->allocator, escaped_len + 1);
+	if (!unescaped_str) return NULL;
 
-	parser->pos++; // Skip closing quote
+	char* dest = unescaped_str;
+	p = start_ptr; // Reset p to the beginning of the string content.
 
-	struct SEA_JSONValue* value = SEA_JSONValue.CreateString(str, parser->allocator);
-	SEA_Allocator.free(parser->allocator, str);
+	// Copy and unescape the string content.
+	while (p < start_ptr + escaped_len) {
+		if (*p == '\\' && p + 1 < start_ptr + escaped_len + 1) {
+			p++; // Move to the character after '\'
+			switch (*p) {
+				case '"':  *dest++ = '"'; break;
+				case '\\': *dest++ = '\\'; break;
+				case '/':  *dest++ = '/'; break;
+				case 'b':  *dest++ = '\b'; break;
+				case 'f':  *dest++ = '\f'; break;
+				case 'n':  *dest++ = '\n'; break;
+				case 'r':  *dest++ = '\r'; break;
+				case 't':  *dest++ = '\t'; break;
+				// TODO: Full JSON compliance would also handle \uXXXX sequences.
+				// Copy unknown escape sequences as-is.
+				default:   *dest++ = *p; break;
+			}
+			p++;
+		} else {
+			*dest++ = *p++;
+		}
+	}
+
+	// Null-terminate the destination string.
+	*dest = '\0';
+
+	// Move the parser position past the closing quote.
+	parser->pos += escaped_len + 1;
+
+	struct SEA_JSONValue* value = SEA_JSONValue.CreateString(unescaped_str, parser->allocator);
+	SEA_Allocator.free(parser->allocator, unescaped_str);
 
 	return value;
 }
+
 
 static struct SEA_JSONValue* ParseNumber(struct SEA_JSONParser* parser) {
 	const char* start_ptr = parser->json + parser->pos;
