@@ -5,7 +5,7 @@
 
 #include <stdint.h>
 
-#include "Align.h"
+#include "Compat/AlignCompat.h"
 
 static void Arena_init(struct SEA_Arena* self, void* buffer, const size_t capacity) {
 	self->buffer = (uint8_t*) buffer;

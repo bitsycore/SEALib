@@ -2,7 +2,7 @@
 
 #include <string.h>
 
-#include "Align.h"
+#include "Compat/AlignCompat.h"
 #include "Allocator.h"
 #include "Error.h"
 #include "JSONValue.h"

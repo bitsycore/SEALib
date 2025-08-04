@@ -6,7 +6,7 @@ set(CMAKE_C_STANDARD 17)
 add_library(
         SEA
 
-        SEA/Align.h
+        SEA/Compat/AlignCompat.h
         SEA/Allocator.c
         SEA/Allocator.h
         SEA/Arena.c
