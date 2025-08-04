@@ -4,7 +4,7 @@
 #include <SEA/Arena.h>
 #include <SEA/JSONObject.h>
 #include <SEA/JSONValue.h>
-#include <SEA/Utilities/MemoryUtilities.h>
+#include <SEA/Utils/MemoryUtils.h>
 #include <SEA/Random.h>
 
 #include <stdio.h>
