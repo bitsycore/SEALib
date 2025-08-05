@@ -73,7 +73,7 @@ static struct SEA_JSONValue* ParseString(struct SEA_JSONParser* parser) {
 				case 'n':  *dest++ = '\n'; break;
 				case 'r':  *dest++ = '\r'; break;
 				case 't':  *dest++ = '\t'; break;
-				// TODO: Full JSON compliance would also handle \uXXXX sequences.
+				// TODO: Full JSON compliance need handle \uXXXX sequences.
 				// Copy unknown escape sequences as-is.
 				default:   *dest++ = *p; break;
 			}
