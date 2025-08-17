@@ -35,6 +35,11 @@ add_library(
         SEA/Time.h
         SEA/UUID.c
         SEA/UUID.h
+        SEA/ArraySegmented.c
+        SEA/ArraySegmented.h
+        SEA/Compat/MathCompat.h
+        SEA/Compat/MathCompat.c
+        SEA/Compat/TypeCompat.h
 )
 
 add_executable(

@@ -4,14 +4,15 @@
 #include <SEA/Arena.h>
 #include <SEA/JSONObject.h>
 #include <SEA/JSONValue.h>
-#include <SEA/Utils/MemoryUtils.h>
 #include <SEA/Random.h>
+#include <SEA/Utils/MemoryUtils.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "TestJsonNumbers.h"
+#include "SEA/ArraySegmented.h"
 
 const char *randomName() {
     switch (SEA_Random.Uint64() % 16) {
@@ -199,7 +200,41 @@ void testJsonBatch(void) {
     }
 }
 
+void testArraySegmented(void) {
+    typedef struct Test {
+        int a;
+        int b;
+    } TestType;
+
+    struct SEA_ArraySegmented arr = SEA_ArraySegmented(TestType, NULL);
+    for (int i = 0; i < 10000; i++) {
+        SEA_ArraySegmented.add(&arr, &(TestType){i, i + 1});
+    }
+    printf("Size: %zu\n", SEA_ArraySegmented.count(&arr));
+
+    SEA_ArraySegmented_foreach(TestType, &arr) {
+        if (it.index % 50 == 0)
+            printf("Index: %zu: TestType(%d, %d)\n", it.index, it.value->a, it.value->b);
+    }
+
+    SEA_ArraySegmented.free(&arr);
+
+    printf("Size: %zu\n", SEA_ArraySegmented.count(&arr));
+    SEA_ArraySegmented_foreach(TestType, &arr) {
+        if (it.index % 50 == 0)
+            printf("Index: %zu: TestType(%d, %d)\n", it.index, it.value->a, it.value->b);
+    }
+}
+
 int main() {
+
+    puts("");
+    puts("=========================================================================");
+    puts("*   Array Segmented                                                     *");
+    puts("=========================================================================");
+    puts("");
+
+    testArraySegmented();
 
     puts("");
     puts("=========================================================================");
