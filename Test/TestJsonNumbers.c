@@ -8,7 +8,7 @@
 #include "SEA/JSONParser.h"
 #include "SEA/JSONValue.h"
 
-void test_number_parsing() {
+static void test_number_parsing() {
     printf("Testing JSON Number Parsing...\n\n");
 
     // Test cases with different number formats
@@ -143,7 +143,7 @@ void test_number_parsing() {
     printf("Success rate: %.1f%%\n", (double) passed / test_count * 100.0);
 }
 
-void test_complex_json_with_numbers() {
+static void test_complex_json_with_numbers() {
     printf("\n\nTesting Complex JSON with Various Numbers...\n\n");
 
     // Complex JSON with various number types
@@ -191,7 +191,7 @@ void test_complex_json_with_numbers() {
     SEA_JSONValue.free(json, SEA_Allocator.Malloc);
 }
 
-void test_invalid_numbers() {
+static void test_invalid_numbers() {
     printf("\n\nTesting Invalid Number Cases...\n\n");
 
     const char *invalid_cases[] = {
@@ -241,15 +241,7 @@ void test_invalid_numbers() {
     printf("Incorrectly accepted: %d\n", invalid_test_count - correctly_rejected);
 }
 
-#if defined(_WIN32) || defined(_WIN64)
-#include <windows.h>
-#endif
-
 void testJsonNumbersParsing() {
-#if defined(_WIN32) || defined(_WIN64)
-    SetConsoleOutputCP(CP_UTF8);
-    SetConsoleCP(CP_UTF8);
-#endif
     test_number_parsing();
     test_complex_json_with_numbers();
     test_invalid_numbers();

@@ -19,7 +19,4 @@ extern const struct SEA_Arena_CLS {
 	struct SEA_Allocator (* allocator)(struct SEA_Arena* self);
 } SEA_Arena;
 
-#define SEA_ARENA_SCOPE(arena) \
-    for (bool _done = false; _done == false; _done = true, SEA_Arena.reset(arena))
-
 #endif //ARENA_SEALIB_3c01bdbb_H

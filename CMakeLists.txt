@@ -1,17 +1,24 @@
 cmake_minimum_required(VERSION 3.22)
 project(SEALib C)
 
-set(CMAKE_C_STANDARD 17)
+set(CMAKE_C_STANDARD 11)
 
 add_library(
         SEA
 
-        SEA/Compat/AlignCompat.h
         SEA/Allocator.c
         SEA/Allocator.h
         SEA/Arena.c
         SEA/Arena.h
+        SEA/ArraySegmented.c
+        SEA/ArraySegmented.h
+        SEA/Compat/AlignCompat.h
+        SEA/Compat/MathCompat.c
+        SEA/Compat/MathCompat.h
+        SEA/Compat/StringCompat.c
+        SEA/Compat/StringCompat.h
         SEA/Compat/ThreadCompat.h
+        SEA/Compat/TypeCompat.h
         SEA/Error.c
         SEA/Error.h
         SEA/JSONArray.c
@@ -23,23 +30,15 @@ add_library(
         SEA/JSONType.h
         SEA/JSONValue.c
         SEA/JSONValue.h
-        SEA/Utils/MacroUtils.h
-        SEA/Utils/MemoryUtils.h
         SEA/Random.c
         SEA/Random.h
-        SEA/Compat/StringCompat.c
-        SEA/Compat/StringCompat.h
         SEA/StringBuffer.c
         SEA/StringBuffer.h
         SEA/Time.c
         SEA/Time.h
+        SEA/Utils/ScopeUtils.h
         SEA/UUID.c
         SEA/UUID.h
-        SEA/ArraySegmented.c
-        SEA/ArraySegmented.h
-        SEA/Compat/MathCompat.h
-        SEA/Compat/MathCompat.c
-        SEA/Compat/TypeCompat.h
 )
 
 add_executable(
@@ -48,6 +47,14 @@ add_executable(
         Test/Main.c
         Test/Person.c
         Test/Person.h
+        Test/TestArena.c
+        Test/TestArena.h
+        Test/TestArraySegmented.c
+        Test/TestArraySegmented.h
+        Test/TestJsonBatch.c
+        Test/TestJsonBatch.h
+        Test/TestJsonGeneric.c
+        Test/TestJsonGeneric.h
         Test/TestJsonNumbers.c
         Test/TestJsonNumbers.h
 )

@@ -1,0 +1,6 @@
+#ifndef SEALIB_TESTJSONBATCH_H
+#define SEALIB_TESTJSONBATCH_H
+
+void testJsonBatch(void);
+
+#endif //SEALIB_TESTJSONBATCH_H

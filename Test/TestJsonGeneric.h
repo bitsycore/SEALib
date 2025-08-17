@@ -1,0 +1,6 @@
+#ifndef SEALIB_TESTJSONGENERIC_H
+#define SEALIB_TESTJSONGENERIC_H
+
+void testJsonGeneric(void);
+
+#endif //SEALIB_TESTJSONGENERIC_H

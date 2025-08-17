@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "Compat/AlignCompat.h"
+#include "Compat/StringCompat.h"
 
 // =========================================
 // MARK: Custom Allocator Utility
