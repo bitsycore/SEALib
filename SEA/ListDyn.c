@@ -130,14 +130,14 @@ static void ListDyn_free(struct SEA_ListDyn* da) {
 // MARK: Iterator
 // =====================================
 
-struct ListDyn_IteratorData {
+struct IteratorData {
     struct SEA_ListDyn* list;
     size_t currentIndex;
     struct SEA_Allocator allocator;
 };
 
 static void* ListDyn_iterator_next(const struct SEA_Iterator* iter) {
-    struct ListDyn_IteratorData* data = iter->data;
+    struct IteratorData* data = iter->data;
     if (data->currentIndex >= data->list->count) {
         return NULL;
     }
@@ -147,12 +147,12 @@ static void* ListDyn_iterator_next(const struct SEA_Iterator* iter) {
 }
 
 static bool ListDyn_iterator_hasNext(const struct SEA_Iterator* iter) {
-    const struct ListDyn_IteratorData* data = iter->data;
+    const struct IteratorData* data = iter->data;
     return data->currentIndex < data->list->count;
 }
 
 static void ListDyn_iterator_destroy(struct SEA_Iterator* iter) {
-    const struct ListDyn_IteratorData* data = iter->data;
+    const struct IteratorData* data = iter->data;
     if (data != NULL) {
         const struct SEA_Allocator allocator = data->allocator;
         iter->data = NULL;
@@ -163,14 +163,12 @@ static void ListDyn_iterator_destroy(struct SEA_Iterator* iter) {
 static struct SEA_Iterator* ListDyn_iterator(struct SEA_ListDyn* da, const struct SEA_Allocator *allocatorOverride) {
     const struct SEA_Allocator* allocator = allocatorOverride == NULL ? da->allocator : allocatorOverride;
 
-    const size_t totalAlloc = sizeof(struct SEA_Iterator) + sizeof(struct ListDyn_IteratorData);
+    const size_t totalAlloc = sizeof(struct SEA_Iterator) + sizeof(struct IteratorData);
 
-    struct SEA_Iterator* iter = SEA_Allocator.alloc(
-        allocator,
-        totalAlloc
+    struct SEA_Iterator* iter = SEA_Allocator.alloc(allocator, totalAlloc);
+    struct IteratorData* data = (struct IteratorData*)(
+        (uint8_t*)iter + sizeof(struct SEA_Iterator)
     );
-
-    struct ListDyn_IteratorData* data = (struct ListDyn_IteratorData*)(iter + sizeof(struct SEA_Iterator));
 
     if (data) {
         data->allocator = *allocator;

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #include "TestArena.h"
 #include "TestJsonBatch.h"
@@ -18,15 +19,30 @@ int main() {
     SetConsoleCP(CP_UTF8);
 #endif
 
-    struct SEA_ListDyn list = SEA_ListDyn(int, SEA_Allocator.Heap);
+    struct SEA_ListDyn *list = &SEA_ListDyn(int, SEA_Allocator.Heap);
 
-    SEA_ListDyn.add(&list, &(int){1});
-    SEA_ListDyn.add(&list, &(int){2});
-    SEA_ListDyn.add(&list, &(int){3});
+    SEA_ListDyn.reserve(list, 512);
 
-    SEA_Iterator_foreach(int, SEA_ListDyn.iterator(&list, NULL)) {
+    for (int i = 0; i < 5; i++) {
+        SEA_ListDyn.add(list, &(int){1});
+        // Cheaper version, is compiler enough smart to make it itself ?
+        (*(int*)SEA_ListDyn.alloc(list)) = 2;
+        SEA_ListDyn.add(list, &(int){3});
+        SEA_ListDyn.add(list, &(int){4});
+        SEA_ListDyn.insert(list, 2, &(int){999});
+        SEA_ListDyn.remove(list, 0);
+    }
+
+    SEA_ListDyn.shrink(list);
+
+    printf("List size: %zu\n", SEA_ListDyn.count(list));
+    printf("List capacity: %zu\n", SEA_ListDyn.capacity(list));
+
+    SEA_Iterator_foreach(int, SEA_ListDyn.iterator(list, NULL)) {
         printf("%d\n", *it.value);
     }
+
+    return 0;
 
     test_lists_all();
 
