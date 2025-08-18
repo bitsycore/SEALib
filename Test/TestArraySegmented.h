@@ -1,6 +1,0 @@
-#ifndef SEALIB_TESTARRAYSEGMENTED_H
-#define SEALIB_TESTARRAYSEGMENTED_H
-
-void testArraySegmented(void);
-
-#endif //SEALIB_TESTARRAYSEGMENTED_H

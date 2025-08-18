@@ -10,8 +10,6 @@ add_library(
         SEA/Allocator.h
         SEA/Arena.c
         SEA/Arena.h
-        SEA/ArraySegmented.c
-        SEA/ArraySegmented.h
         SEA/Compat/AlignCompat.h
         SEA/Compat/MathCompat.c
         SEA/Compat/MathCompat.h
@@ -30,6 +28,12 @@ add_library(
         SEA/JSONType.h
         SEA/JSONValue.c
         SEA/JSONValue.h
+        SEA/ListChunked.c
+        SEA/ListChunked.h
+        SEA/ListDyn.c
+        SEA/ListDyn.h
+        SEA/ListSegmented.c
+        SEA/ListSegmented.h
         SEA/Random.c
         SEA/Random.h
         SEA/StringBuffer.c
@@ -49,14 +53,14 @@ add_executable(
         Test/Person.h
         Test/TestArena.c
         Test/TestArena.h
-        Test/TestArraySegmented.c
-        Test/TestArraySegmented.h
         Test/TestJsonBatch.c
         Test/TestJsonBatch.h
         Test/TestJsonGeneric.c
         Test/TestJsonGeneric.h
         Test/TestJsonNumbers.c
         Test/TestJsonNumbers.h
+        Test/TestLists.c
+        Test/TestLists.h
 )
 
 if(WIN32)

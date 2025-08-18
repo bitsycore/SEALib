@@ -1,10 +1,10 @@
 #include <stdio.h>
 
 #include "TestArena.h"
-#include "TestArraySegmented.h"
 #include "TestJsonBatch.h"
 #include "TestJsonGeneric.h"
 #include "TestJsonNumbers.h"
+#include "TestLists.h"
 
 #if defined(_WIN32) || defined(_WIN64)
     #include <windows.h>
@@ -17,13 +17,7 @@ int main() {
     SetConsoleCP(CP_UTF8);
 #endif
 
-    puts("");
-    puts("=========================================================================");
-    puts("*   Array Segmented                                                     *");
-    puts("=========================================================================");
-    puts("");
-
-    testArraySegmented();
+    test_lists_all();
 
     puts("");
     puts("=========================================================================");
