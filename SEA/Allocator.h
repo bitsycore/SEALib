@@ -15,7 +15,7 @@ extern const struct SEA_Allocator_CLS {
 	void* (*alloc)(const struct SEA_Allocator* self, size_t size);
 	void* (*allocAligned)(const struct SEA_Allocator* self, size_t size, size_t alignment);
 	void (*free)(const struct SEA_Allocator* self, void* ptr);
-	struct SEA_Allocator* Malloc;
+	struct SEA_Allocator* Heap;
 } SEA_Allocator;
 
 #endif//SEA_ALLOCATOR_H

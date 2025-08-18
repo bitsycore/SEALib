@@ -6,7 +6,7 @@
 static void StringBuffer_init(struct SeaStringBuffer* buffer, size_t capacity, struct SEA_Allocator* allocator) {
 	if (buffer->data) return;
 	if (capacity == 0) capacity = SEA_STRING_BUFFER_INITIAL_CAPACITY;
-	buffer->allocator = allocator ? allocator : SEA_Allocator.Malloc;
+	buffer->allocator = allocator ? allocator : SEA_Allocator.Heap;
 	buffer->data = SEA_Allocator.alloc(buffer->allocator, capacity);
 	memset(buffer->data, 0, capacity);
 	if (!buffer->data) return;

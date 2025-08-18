@@ -9,4 +9,10 @@
 int SEA_strncpy_s(char *restrict dest, size_t destsz, const char *restrict src, size_t count);
 #endif
 
+#if defined(__STDC_LIB_EXT1__) || (defined(_MSC_VER) && _MSC_VER >= 1400) || defined(__MINGW32__)
+#define SEA_strcpy_s(dest_, destsize_, src_) strncpy_s((dest_), (destsize_), (src_))
+#else
+int SEA_strcpy_s(char* restrict dest, size_t destsz, const char* restrict src);
+#endif
+
 #endif//SEA_STRINGCOMPAT_H

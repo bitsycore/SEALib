@@ -12,11 +12,11 @@ struct SEA_ArraySegmented {
 	uint32_t count;
 	size_t usedSegments;
 	uint8_t* segments[26];
-} ;
+};
 
 #define SEA_ArraySegmented(type, _allocator) \
 	(struct SEA_ArraySegmented) { \
-		.allocator = (_allocator == NULL ? SEA_Allocator.Malloc : _allocator), \
+		.allocator = (_allocator == NULL ? SEA_Allocator.Heap : _allocator), \
 		.elementSize = (sizeof(type)), \
 		.count = 0,\
 		.usedSegments = 0, \

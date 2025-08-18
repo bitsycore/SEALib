@@ -14,7 +14,7 @@ static void* Func_HeapAlloc(void* _, const size_t size) {
 	return malloc(size);
 }
 
-static void* Func_HeapAllocEx(void* _, const size_t size, const size_t alignment) {
+static void* Func_HeapAllocAligned(void* _, const size_t size, const size_t alignment) {
 	(void)alignment;
 	return malloc(size);
 }
@@ -26,7 +26,7 @@ static void Func_HeapFree(void* _, void* ptr) {
 static struct SEA_Allocator HEAP_ALLOCATOR = {
 	.context = NULL,
 	.alloc = Func_HeapAlloc,
-	.allocAligned = Func_HeapAllocEx,
+	.allocAligned = Func_HeapAllocAligned,
 	.free = Func_HeapFree,
 };
 
@@ -68,5 +68,5 @@ const struct SEA_Allocator_CLS SEA_Allocator = {
 	.alloc = Allocator_Alloc,
 	.allocAligned = Allocator_AllocAligned,
 	.free = Allocator_Free,
-	.Malloc = &HEAP_ALLOCATOR,
+	.Heap = &HEAP_ALLOCATOR,
 };

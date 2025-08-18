@@ -100,7 +100,7 @@ static void test_number_parsing() {
         const char *test_input = test_cases[i];
 
         // Parse the number
-        struct SEA_JSONValue *result = SEA_JSONParser.FromString(test_input, 0, SEA_Allocator.Malloc);
+        struct SEA_JSONValue *result = SEA_JSONParser.FromString(test_input, 0, SEA_Allocator.Heap);
 
         test_count++;
 
@@ -112,7 +112,7 @@ static void test_number_parsing() {
 
         if (result->type != SEA_JSON_NUMBER) {
             printf("❌ Test %d FAILED: '%s' -> wrong type (expected NUMBER, got %d)\n", i + 1, test_input, result->type);
-            SEA_JSONValue.free(result, SEA_Allocator.Malloc);
+            SEA_JSONValue.free(result, SEA_Allocator.Heap);
             failed++;
             continue;
         }
@@ -133,7 +133,7 @@ static void test_number_parsing() {
             failed++;
         }
 
-        SEA_JSONValue.free(result, SEA_Allocator.Malloc);
+        SEA_JSONValue.free(result, SEA_Allocator.Heap);
     }
 
     printf("\n=== Test Summary ===\n");
@@ -171,7 +171,7 @@ static void test_complex_json_with_numbers() {
             "  ]\n"
             "}";
 
-    struct SEA_JSONValue *json = SEA_JSONParser.FromString(complex_json, 0, SEA_Allocator.Malloc);
+    struct SEA_JSONValue *json = SEA_JSONParser.FromString(complex_json, 0, SEA_Allocator.Heap);
 
     if (json == NULL) {
         printf("❌ Failed to parse complex JSON\n");
@@ -180,15 +180,15 @@ static void test_complex_json_with_numbers() {
 
     if (json->type != SEA_JSON_OBJECT) {
         printf("❌ Expected JSON object, got type %d\n", json->type);
-        SEA_JSONValue.free(json, SEA_Allocator.Malloc);
+        SEA_JSONValue.free(json, SEA_Allocator.Heap);
         return;
     }
 
-    char *json_string = SEA_JSONValue.toString(json, SEA_Allocator.Malloc);
+    char *json_string = SEA_JSONValue.toString(json, SEA_Allocator.Heap);
     printf("✅ Successfully parsed complex JSON:\n%s\n", json_string);
 
-    SEA_Allocator.free(SEA_Allocator.Malloc, json_string);
-    SEA_JSONValue.free(json, SEA_Allocator.Malloc);
+    SEA_Allocator.free(SEA_Allocator.Heap, json_string);
+    SEA_JSONValue.free(json, SEA_Allocator.Heap);
 }
 
 static void test_invalid_numbers() {
@@ -221,7 +221,7 @@ static void test_invalid_numbers() {
     for (int i = 0; invalid_cases[i] != NULL; i++) {
         const char *test_input = invalid_cases[i];
 
-        struct SEA_JSONValue *result = SEA_JSONParser.FromString(test_input, 0, SEA_Allocator.Malloc);
+        struct SEA_JSONValue *result = SEA_JSONParser.FromString(test_input, 0, SEA_Allocator.Heap);
 
         invalid_test_count++;
 
@@ -231,7 +231,7 @@ static void test_invalid_numbers() {
         } else {
             printf("❌ Should have rejected: '%s' but got %.17g\n", test_input,
                    result->type == SEA_JSON_NUMBER ? result->number : 0.0);
-            SEA_JSONValue.free(result, SEA_Allocator.Malloc);
+            SEA_JSONValue.free(result, SEA_Allocator.Heap);
         }
     }
 

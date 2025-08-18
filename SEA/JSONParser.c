@@ -270,7 +270,7 @@ static struct SEA_JSONValue* ParseValue(struct SEA_JSONParser* parser) {
 
 struct SEA_JSONValue* JSONParser_FromString(const char* string, const size_t len, struct SEA_Allocator* allocator) {
 	if (!string) return NULL;
-	if (!allocator || !allocator->alloc) allocator = SEA_Allocator.Malloc;
+	if (!allocator || !allocator->alloc) allocator = SEA_Allocator.Heap;
 	struct SEA_JSONParser parser = {
 		.json = string,
 		.pos = 0,
