@@ -1,6 +1,10 @@
 #include "ListDyn.h"
 
+#include <stdbool.h>
+#include <stdlib.h>
 #include <string.h>
+
+#include "Iterator.h"
 
 static void ListDyn_ensureCapacity(struct SEA_ListDyn* da, const size_t minCapacity) {
     if (da->capacity >= minCapacity) return;
@@ -122,6 +126,65 @@ static void ListDyn_free(struct SEA_ListDyn* da) {
     da->capacity = 0;
 }
 
+// =====================================
+// MARK: Iterator
+// =====================================
+
+struct ListDyn_IteratorData {
+    struct SEA_ListDyn* list;
+    size_t currentIndex;
+    struct SEA_Allocator allocator;
+};
+
+static void* ListDyn_iterator_next(const struct SEA_Iterator* iter) {
+    struct ListDyn_IteratorData* data = iter->data;
+    if (data->currentIndex >= data->list->count) {
+        return NULL;
+    }
+    void* element = SEA_ListDyn.get(data->list, data->currentIndex);
+    data->currentIndex++;
+    return element;
+}
+
+static bool ListDyn_iterator_hasNext(const struct SEA_Iterator* iter) {
+    const struct ListDyn_IteratorData* data = iter->data;
+    return data->currentIndex < data->list->count;
+}
+
+static void ListDyn_iterator_destroy(struct SEA_Iterator* iter) {
+    const struct ListDyn_IteratorData* data = iter->data;
+    if (data != NULL) {
+        const struct SEA_Allocator allocator = data->allocator;
+        iter->data = NULL;
+        SEA_Allocator.free(&allocator, iter);
+    }
+}
+
+static struct SEA_Iterator* ListDyn_iterator(struct SEA_ListDyn* da, const struct SEA_Allocator *allocatorOverride) {
+    const struct SEA_Allocator* allocator = allocatorOverride == NULL ? da->allocator : allocatorOverride;
+
+    const size_t totalAlloc = sizeof(struct SEA_Iterator) + sizeof(struct ListDyn_IteratorData);
+
+    struct SEA_Iterator* iter = SEA_Allocator.alloc(
+        allocator,
+        totalAlloc
+    );
+
+    struct ListDyn_IteratorData* data = (struct ListDyn_IteratorData*)(iter + sizeof(struct SEA_Iterator));
+
+    if (data) {
+        data->allocator = *allocator;
+        data->list = da;
+        data->currentIndex = 0;
+        iter->data = data;
+        iter->next = ListDyn_iterator_next;
+        iter->hasNext = ListDyn_iterator_hasNext;
+        iter->destroy = ListDyn_iterator_destroy;
+    }
+
+    return iter;
+}
+
 const struct SEA_ListDyn_CLS SEA_ListDyn = {
     .get = ListDyn_get,
     .alloc = ListDyn_alloc,
@@ -134,4 +197,5 @@ const struct SEA_ListDyn_CLS SEA_ListDyn = {
     .shrink = ListDyn_shrink,
     .clear = ListDyn_clear,
     .free = ListDyn_free,
+    .iterator = ListDyn_iterator,
 };

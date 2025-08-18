@@ -43,6 +43,8 @@ add_library(
         SEA/Utils/ScopeUtils.h
         SEA/UUID.c
         SEA/UUID.h
+        SEA/Iterator.c
+        SEA/Iterator.h
 )
 
 add_executable(

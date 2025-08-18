@@ -5,6 +5,7 @@
 #include "TestJsonGeneric.h"
 #include "TestJsonNumbers.h"
 #include "TestLists.h"
+#include "SEA/ListDyn.h"
 
 #if defined(_WIN32) || defined(_WIN64)
     #include <windows.h>
@@ -16,6 +17,16 @@ int main() {
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
 #endif
+
+    struct SEA_ListDyn list = SEA_ListDyn(int, SEA_Allocator.Heap);
+
+    SEA_ListDyn.add(&list, &(int){1});
+    SEA_ListDyn.add(&list, &(int){2});
+    SEA_ListDyn.add(&list, &(int){3});
+
+    SEA_Iterator_foreach(int, SEA_ListDyn.iterator(&list, NULL)) {
+        printf("%d\n", *it.value);
+    }
 
     test_lists_all();
 
