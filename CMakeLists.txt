@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.22)
 project(SEALib C)
 
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD 23)
+
+add_subdirectory(BlockRuntime)
 
 add_library(
         SEA
@@ -65,8 +67,26 @@ add_executable(
         Test/TestLists.h
 )
 
+add_executable(
+        TestBlock
+
+        TestBlock/main.c
+)
+
+
+if (CMAKE_C_COMPILER_ID STREQUAL "Clang")
+    target_compile_options(TestBlock PRIVATE -fblocks)
+    target_link_libraries(TestBlock PRIVATE BlockRuntime)
+    add_custom_command(TARGET TestBlock POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:BlockRuntime>
+            $<TARGET_FILE_DIR:TestBlock>
+    )
+endif ()
+
 if(WIN32)
     target_link_libraries(SEA bcrypt)
 endif()
+
 target_include_directories(SEA PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(Test SEA)
+target_link_libraries(Test PRIVATE SEA BlockRuntime)
