@@ -5,7 +5,7 @@
 
 #if defined(__STDC_LIB_EXT1__) || (defined(_MSC_VER) && _MSC_VER >= 1400) || defined(__MINGW32__)
 
-#define SEA_strcpy_s(dest_, destsize_, src_) strncpy_s((dest_), (destsize_), (src_))
+#define SEA_strcpy_s(dest_, destsize_, src_) strcpy_s((dest_), (destsize_), (src_))
 #define SEA_strncpy_s(dest_, size_, src_, count_) strncpy_s((dest_), (size_), (src_), (count_))
 
 #else

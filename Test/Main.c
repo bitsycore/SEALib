@@ -25,7 +25,6 @@ int main() {
 
     for (int i = 0; i < 5; i++) {
         SEA_ListDyn.add(list, &(int){1});
-        // Cheaper version, is compiler enough smart to make it itself ?
         (*(int*)SEA_ListDyn.alloc(list)) = 2;
         SEA_ListDyn.add(list, &(int){3});
         SEA_ListDyn.add(list, &(int){4});

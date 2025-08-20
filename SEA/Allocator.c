@@ -40,11 +40,8 @@ static char* Allocator_Strdup(struct SEA_Allocator* self, const char* str, const
 	const size_t vLen = len == 0 ? strlen(str) + 1 :  len;
 	char* result = self->allocAligned(self->context, vLen, SEA_alignof(char));
 	if (!result) return NULL;
-#ifdef _MSC_VER
-	strcpy_s(result, vLen , str);
-#else
-	strcpy(result, str);
-#endif
+	SEA_strcpy_s(result, vLen , str);
+	
 	return result;
 }
 

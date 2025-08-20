@@ -136,7 +136,7 @@ struct IteratorData {
     struct SEA_Allocator allocator;
 };
 
-static void* ListDyn_iterator_next(const struct SEA_Iterator* iter) {
+static void* Iterator_next(const struct SEA_Iterator* iter) {
     struct IteratorData* data = iter->data;
     if (data->currentIndex >= data->list->count) {
         return NULL;
@@ -146,12 +146,12 @@ static void* ListDyn_iterator_next(const struct SEA_Iterator* iter) {
     return element;
 }
 
-static bool ListDyn_iterator_hasNext(const struct SEA_Iterator* iter) {
+static bool Iterator_hasNext(const struct SEA_Iterator* iter) {
     const struct IteratorData* data = iter->data;
     return data->currentIndex < data->list->count;
 }
 
-static void ListDyn_iterator_destroy(struct SEA_Iterator* iter) {
+static void Iterator_destroy(struct SEA_Iterator* iter) {
     const struct IteratorData* data = iter->data;
     if (data != NULL) {
         const struct SEA_Allocator allocator = data->allocator;
@@ -164,20 +164,21 @@ static struct SEA_Iterator* ListDyn_iterator(struct SEA_ListDyn* da, const struc
     const struct SEA_Allocator* allocator = allocatorOverride == NULL ? da->allocator : allocatorOverride;
 
     const size_t totalAlloc = sizeof(struct SEA_Iterator) + sizeof(struct IteratorData);
-
     struct SEA_Iterator* iter = SEA_Allocator.alloc(allocator, totalAlloc);
+
     struct IteratorData* data = (struct IteratorData*)(
         (uint8_t*)iter + sizeof(struct SEA_Iterator)
     );
 
     if (data) {
+        iter->next = Iterator_next;
+        iter->hasNext = Iterator_hasNext;
+        iter->destroy = Iterator_destroy;
+        iter->data = data;
+
         data->allocator = *allocator;
         data->list = da;
         data->currentIndex = 0;
-        iter->data = data;
-        iter->next = ListDyn_iterator_next;
-        iter->hasNext = ListDyn_iterator_hasNext;
-        iter->destroy = ListDyn_iterator_destroy;
     }
 
     return iter;
