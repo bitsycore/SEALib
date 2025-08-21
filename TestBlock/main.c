@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <malloc.h>
-#include <stdarg.h>
-#include <vcruntime_string.h>
+#include <string.h>
+#include <stdbool.h>
 
 #ifdef var
 #undef var
@@ -91,6 +91,7 @@ ListNode* _listOfN(size_t size_element, size_t nb_elem, char* elem1, char* elem2
     }
     return head;
 }
+
 #define _listOf1(size_element, ele1 ) _listOfN(size_element, 1, (char*)ele1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
 #define _listOf2(size_element, ele1, ele2 ) _listOfN(size_element, 2, (char*)ele1, (char*)ele2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
 #define _listOf3(size_element, ele1, ele2, ele3 ) _listOfN(size_element, 3, (char*)ele1, (char*)ele2, (char*)ele3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
@@ -135,17 +136,73 @@ struct Player {
     int age;
 };
 
+#define lazy_init(_f) { .f = _f, .done = false, }
+#define lazy_set(lazy_, _f) ({ (lazy_)->f = _f; (lazy_)->done = false; })
+
+#define lazy_get(lazy_) ( __typeof__((lazy_)->result) ) ({ \
+	if (!(lazy_)->done) { (lazy_)->result = (lazy_)->f(); (lazy_)->done = true; }  \
+	(lazy_)->result; \
+})
+#define lazy_copy(lazy_, arg) ({ memcpy((lazy_), (arg), sizeof(*(lazy_))); })
+
+#define Lazy(type) \
+    struct  { \
+        bool done; \
+        type (^f)(); \
+        type result; \
+    }
+
+
+
+
+void test_arg(Lazy(int)* arg) {
+	val a = lazy_get(arg);
+	printf("%d\n", a);
+}
+
 int main() {
-    printf("Hello World!\n");
+	Lazy(int) lazy = lazy_init(^{
+		printf("Hello world\n");
+		return 42;
+	});
+
+	//Lazy(int) lazy2 = lazy;
+	lazy_set(&lazy, ^{ return 112; });
+
+	// Lazy(int) lazy2 = lazy;
+	// Lazy(float) lazy3 = lazy;
+
+	test_arg(&lazy);
+
+	val result1 = lazy_get(&lazy);
+	val result2 = lazy_get(&lazy);
+	val result3 = lazy_get(&lazy);
+
+	Lazy(int)* lazy_heaped = malloc(sizeof(Lazy(int)));
+	lazy_copy(lazy_heaped, &lazy);
+	val result4 = lazy_get(lazy_heaped);
+	val result5 = lazy_get(lazy_heaped);
+	val result6 = lazy_get(lazy_heaped);
+
+	free(lazy_heaped);
+//
+//	val result7 = lazy_get(lazy2);
+//	val result8 = lazy_get(lazy2);
+//	val result9 = lazy_get(lazy2);
+
+
+
     var players = listOf(
         &((struct Player) {"Alice", 30}),
         &((struct Player) {"Bob", 12}),
         &((struct Player) {"Charlie", 25}),
         &((struct Player) {"Elmo", 11})
     );
+
     forEach(&players) {
         printf("%s is %d years old\n", it->name, it->age);
     }
+
     var abcde = listOf(1,2,3,4,5,6,7);
     forEach(&abcde) {
         printf("%d\n", it);
