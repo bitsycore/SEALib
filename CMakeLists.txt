@@ -71,6 +71,8 @@ add_executable(
         TestBlock
 
         TestBlock/main.c
+        TestBlock/Lazy.h
+        TestBlock/Macro.h
 )
 
 
