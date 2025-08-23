@@ -88,10 +88,13 @@ ListNode* __listOfN(size_t size_element, size_t nb_elem, ...) {
 #define forEachValue (*__it.value)
 #define forEachIndex (__it.index)
 
+#define TEST_TITLE(x__) \
+puts("\n================================================"); \
+puts("               Testing " x__ ); \
+puts("================================================\n");
+
 void test_lazy() {
-	puts("================================================");
-	puts("=               Testing Lazy                   =");
-	puts("================================================");
+	TEST_TITLE("Lazy")
 
 	Lazy(int) lazy = Lazy_init(^{
 		puts("Lazy evaluated");
@@ -121,11 +124,9 @@ void test_listof() {
 		int age;
 	};
 
-	puts("================================================");
-	puts("=               Testing listOf                 =");
-	puts("================================================");
+	TEST_TITLE("listOf")
 
-	puts("\n --- listOf struct --- \n");
+	puts(" --- listOf struct --- \n");
 
 	var players = listOf(
 		&((struct Player) {"Alice", 30}),
@@ -145,7 +146,7 @@ void test_listof() {
 	var abcde = listOf(1,2,3,4,5,6,7);
 
 	forEach(&abcde) {
-		printf("%d\n", forEachValue);
+		printf("%d, ", forEachValue);
 	}
 
 	free(abcde.head);
