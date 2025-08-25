@@ -44,7 +44,6 @@ ListNode* ___listOfN(size_t size_element, size_t nb_elem, ...) {
     ListNode *current = NULL;
     va_list args;
     va_start(args, nb_elem);
-	va_copy_value(args, size_element);
 	val size = (sizeof(ListNode) + size_element);
 	var buffer = (char*)calloc(nb_elem, size);
     for (size_t i = 0; i < nb_elem; i++) {
@@ -72,7 +71,7 @@ ListNode* ___listOfN(size_t size_element, size_t nb_elem, ...) {
 })
 
 #define ___listOfHolder(x) ({ \
-    typeOf(x) holder = x;           \
+    static typeOf(x) holder = x;           \
     &holder;                        \
 })
 
