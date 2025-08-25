@@ -16,7 +16,7 @@
 	puts("================================================\n");
 
 struct Player {
-	char name[100];
+	const char* name;
 	int age;
 };
 
@@ -53,24 +53,45 @@ void test_listof() {
 		((struct Player) {"Alice", 30}),
 		((struct Player) {"Bob", 12}),
 		((struct Player) {"Charlie", 25}),
-		((struct Player) {"Elmo", 11})
+		((struct Player) {"Elmo", 28}),
+		((struct Player) {"Bob", 17}),
+		((struct Player) {"Joe", 11}),
+		((struct Player) {"Morice", 11}),
+		((struct Player) {"Ami", 21}),
+		((struct Player) {"Tamile", 54}),
+		((struct Player) {"Edo", 66})
 	);
+
+	printf("Size: %zu\n", players.list->size);
 
 	forEach(&players) {
 		printf("[%zu] : %s is %d years old\n", forEachIndex, forEachValue.name, forEachValue.age);
 	}
 
-	freeListOf(&players);
+	puts("\n --- listOf struct ref --- \n");
+
+	var players2 = listOf(
+		listGet(&players, 0),
+		listGet(&players, 1),
+		listGet(&players, 2),
+		listGet(&players, 3)
+		);
+
+	forEach(&players2) {
+		printf("[%zu] : %s is %d years old\n", forEachIndex, forEachValue->name, forEachValue->age);
+	}
+
+	listFree(&players);
+	listFree(&players2);
 
 	puts("\n --- listOf int --- \n");
 
 	var abcde = listOf(1,2,3,4,5,6,7);
-
 	forEach(&abcde) {
 		printf("%d, ", forEachValue);
 	}
 
-	freeListOf(&abcde);
+	listFree(&abcde);
 }
 
 int main() {
