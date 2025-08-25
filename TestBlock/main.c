@@ -58,18 +58,18 @@ ListNode* __listOfN(size_t size_element, size_t nb_elem, ...) {
 }
 
 
-#define listOfImpl(_first_, _name_list_, _type_, _nb_arg_, ...) ({ \
+#define listOfImpl(_name_list_, _type_, _nb_arg_, ...) ({ \
     List(_type_) _name_list_ = {0};    \
     _name_list_.head = __listOfN(sizeof(_type_), _nb_arg_, __VA_ARGS__); \
     _name_list_;\
 })
 
-#define listOf(...) listOfImpl( \
-    SEA_ARG1(__VA_ARGS__), \
-    SEA_CONCAT(__list_, __COUNTER__),       \
-    typeOf(SEA_ARG1(__VA_ARGS__)), \
-    SEA_NARG(__VA_ARGS__),               \
-    __VA_ARGS__                         \
+#define listOf(first, ...) listOfImpl( 	\
+    SEA_CONCAT(__list_, __COUNTER__),   \
+    typeOf(first), 						\
+    SEA_NARG(__VA_ARGS__) + 1,          \
+    first,                             	\
+	__VA_ARGS__                         \
 )
 
 // =====================================
