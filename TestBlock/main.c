@@ -28,17 +28,23 @@ struct ListNode {
     type *payload; \
 }
 
+
+struct Player {
+	char name[100];
+	int age;
+};
+
 // =====================================
 // MARK: listOf
 // =====================================
 
-ListNode* __listOfN(size_t size_element, size_t nb_elem, ...) {
+ListNode* ___listOfN(size_t size_element, size_t nb_elem, ...) {
 	printf("size_element = %zu\n", size_element);
-
     ListNode *head = NULL;
     ListNode *current = NULL;
     va_list args;
     va_start(args, nb_elem);
+	va_copy_value(args, size_element);
 	val size = (sizeof(ListNode) + size_element);
 	var buffer = (char*)calloc(nb_elem, size);
     for (size_t i = 0; i < nb_elem; i++) {
@@ -50,26 +56,31 @@ ListNode* __listOfN(size_t size_element, size_t nb_elem, ...) {
             current->next = node;
             current = node;
         }
-        char* data_in = va_arg(args, char*);
-        memcpy(node->data, &data_in, size_element);
+        void* data_in = va_arg(args, void*);
+        memcpy(node->data, data_in, size_element);
     }
     va_end(args);
     return head;
 }
 
+#define freeListOf(list) free((list)->head)
 
-#define listOfImpl(_name_list_, _type_, _nb_arg_, ...) ({ \
+#define ___listOfImpl(_name_list_, _type_, _nb_arg_, ...) ({ \
     List(_type_) _name_list_ = {0};    \
-    _name_list_.head = __listOfN(sizeof(_type_), _nb_arg_, __VA_ARGS__); \
+    _name_list_.head = ___listOfN(sizeof(_type_), _nb_arg_, __VA_ARGS__); \
     _name_list_;\
 })
 
-#define listOf(first, ...) listOfImpl( 	\
-    SEA_CONCAT(__list_, __COUNTER__),   \
-    typeOf(first), 						\
-    SEA_NARG(__VA_ARGS__) + 1,          \
-    first,                             	\
-	__VA_ARGS__                         \
+#define ___listOfHolder(x) ({ \
+    typeOf(x) holder = x;           \
+    &holder;                        \
+})
+
+#define listOf(_first_, ...) ___listOfImpl(                 \
+    SEA_PP_CONCAT(__list_, __COUNTER__),                 \
+    typeOf(_first_),                                     \
+    SEA_PP_NARG(__VA_ARGS__) + 1,                        \
+    SEA_MAP(___listOfHolder, _first_, __VA_ARGS__) \
 )
 
 // =====================================
@@ -84,7 +95,7 @@ ListNode* __listOfN(size_t size_element, size_t nb_elem, ...) {
         name_node = name_node->next, name_node != NULL && (__it.value = (type)name_node->data) && (__it.index = __it.index+1 ) \
     )
 
-#define forEach(list) forEachImpl(list, typeOf((list)->payload), SEA_CONCAT(__foreach_node, __COUNTER__) )
+#define forEach(list) forEachImpl(list, typeOf((list)->payload), SEA_PP_CONCAT(__foreach_node, __COUNTER__) )
 #define forEachValue (*__it.value)
 #define forEachIndex (__it.index)
 
@@ -118,28 +129,22 @@ void test_lazy() {
 }
 
 void test_listof() {
-
-	struct Player {
-		char name[100];
-		int age;
-	};
-
 	TEST_TITLE("listOf")
 
 	puts(" --- listOf struct --- \n");
 
 	var players = listOf(
-		&((struct Player) {"Alice", 30}),
-		&((struct Player) {"Bob", 12}),
-		&((struct Player) {"Charlie", 25}),
-		&((struct Player) {"Elmo", 11})
+		((struct Player) {"Alice", 30}),
+		((struct Player) {"Bob", 12}),
+		((struct Player) {"Charlie", 25}),
+		((struct Player) {"Elmo", 11})
 	);
 
 	forEach(&players) {
-		printf("[%zu] : %s is %d years old\n", forEachIndex, forEachValue->name, forEachValue->age);
+		printf("[%zu] : %s is %d years old\n", forEachIndex, forEachValue.name, forEachValue.age);
 	}
 
-	free(players.head);
+	freeListOf(&players);
 
 	puts("\n --- listOf int --- \n");
 
@@ -149,7 +154,7 @@ void test_listof() {
 		printf("%d, ", forEachValue);
 	}
 
-	free(abcde.head);
+	freeListOf(&abcde);
 }
 
 int main() {
