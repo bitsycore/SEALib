@@ -73,6 +73,8 @@ add_executable(
         TestBlock/main.c
         TestBlock/Lazy.h
         TestBlock/Macro.h
+        TestBlock/ListOf.h
+        TestBlock/ForEach.h
 )
 
 

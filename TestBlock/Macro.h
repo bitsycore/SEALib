@@ -1,6 +1,11 @@
 #ifndef SEALIB_MACRO_H
 #define SEALIB_MACRO_H
 
+#define typeOf __typeof__
+#define typeOfUn __typeof_unqual__
+#define var __auto_type
+#define val const __auto_type
+
 #define SEA____NSEQ_N() \
         64, 63, 62, 61, 60, 59, 58, 57, 56, 55, \
         54, 53, 52, 51, 50, 49, 48, 47, 46, 45, \
