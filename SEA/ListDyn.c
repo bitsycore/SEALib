@@ -147,8 +147,8 @@ static void* Iterator_next(const struct SEA_Iterator* iter) {
 }
 
 static bool Iterator_hasNext(const struct SEA_Iterator* iter) {
-    const struct IteratorData* selfta = iter->data;
-    return selfta->currentIndex < selfta->list->count;
+    const struct IteratorData* data = iter->data;
+    return data->currentIndex < data->list->count;
 }
 
 static void Iterator_destroy(struct SEA_Iterator* iter) {
