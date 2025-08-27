@@ -6,15 +6,15 @@
 #include <stdio.h>
 #include <string.h>
 
-static void UUID_generateV4(struct SEA_UUID* self) {
+void SEA_UUID_generateV4(struct SEA_UUID* self) {
 	SEA_Random.Bytes(self->bytes, 16);
 	// Set version (4) and variant (RFC4122)
 	self->bytes[6] = (self->bytes[6] & 0x0F) | 0x40; // Version 4
 	self->bytes[8] = (self->bytes[8] & 0x3F) | 0x80; // Variant 10xx
 }
 
-static void UUID_generateV7(struct SEA_UUID* self) {
-	const uint64_t now = SEA_Time.getMillis();
+void SEA_UUID_generateV7(struct SEA_UUID* self) {
+	const uint64_t now = SEA_Time_GetMillis();
 
 	// Set timestamp (48 bits, big endian)
 	for (int i = 0; i < 6; ++i) {
@@ -36,13 +36,13 @@ static void UUID_generateV7(struct SEA_UUID* self) {
 	self->bytes[8] = (self->bytes[8] & 0x3F) | 0x80;
 }
 
-static bool UUID_equals(const struct SEA_UUID* a, const struct SEA_UUID* b) {
+bool SEA_UUID_equals(const struct SEA_UUID* a, const struct SEA_UUID* b) {
 	if (a == b) return true;
 	if (a == NULL || b == NULL) return false;
 	return memcmp(a->bytes, b->bytes, sizeof(a->bytes)) == 0;
 }
 
-static void UUID_toString(const struct SEA_UUID* self, char out[37]) {
+void SEA_UUID_toString(const struct SEA_UUID* self, char out[37]) {
 	snprintf(
 		out,
 		37,
@@ -53,10 +53,3 @@ static void UUID_toString(const struct SEA_UUID* self, char out[37]) {
 		self->bytes[12], self->bytes[13], self->bytes[14], self->bytes[15]
 	);
 }
-
-const struct SEA_UUID_CLS SEA_UUID = {
-	.generateV4 = UUID_generateV4,
-	.generateV7 = UUID_generateV7,
-	.equals = UUID_equals,
-	.toString = UUID_toString,
-};

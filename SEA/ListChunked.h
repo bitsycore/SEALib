@@ -1,6 +1,7 @@
 #ifndef SEALIB_ARRAY_CHUNKED_H
 #define SEALIB_ARRAY_CHUNKED_H
 
+#include "Config/CompConfig.h"
 #include "Allocator.h"
 
 #include <stddef.h>
@@ -25,7 +26,7 @@ struct SEA_ListChunked {
 
 #define SEA_ListChunked(type, _allocator) \
     (struct SEA_ListChunked) { \
-        .allocator = (_allocator == NULL ? SEA_Allocator.Heap : _allocator), \
+        .allocator = (_allocator == NULL ? SEA_Allocator_Heap : _allocator), \
         .head = NULL, \
         .tail = NULL, \
         .elementSize = sizeof(type), \

@@ -6,8 +6,8 @@
 static void StringBuffer_init(struct SeaStringBuffer* buffer, size_t capacity, struct SEA_Allocator* allocator) {
 	if (buffer->data) return;
 	if (capacity == 0) capacity = SEA_STRING_BUFFER_INITIAL_CAPACITY;
-	buffer->allocator = allocator ? allocator : SEA_Allocator.Heap;
-	buffer->data = SEA_Allocator.alloc(buffer->allocator, capacity);
+	buffer->allocator = allocator ? allocator : SEA_Allocator_Heap;
+	buffer->data = SEA_Allocator_alloc(buffer->allocator, capacity);
 	memset(buffer->data, 0, capacity);
 	if (!buffer->data) return;
 	buffer->size = capacity;
@@ -26,7 +26,7 @@ static void StringBuffer_append(struct SeaStringBuffer* buffer, const char* str)
 		char* new_data = buffer->allocator->alloc(buffer->allocator->context, new_size);
 		if (!new_data) return;
 		memcpy(new_data, buffer->data, buffer->pos);
-		SEA_Allocator.free(buffer->allocator, buffer->data);
+		SEA_Allocator_free(buffer->allocator, buffer->data);
 		buffer->data = new_data;
 		buffer->size = new_size;
 	}

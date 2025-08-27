@@ -20,24 +20,24 @@ void testJsonGeneric(void) {
 
     SEA_SCOPE_MALLOC(finalBufferSize) {
         struct SEA_Arena *arena = (struct SEA_Arena *) SEA_SCOPE_BUFFER;
-        SEA_Arena.init(arena, SEA_SCOPE_BUFFER + sizeof(struct SEA_Arena), bufferSize);
+        SEA_Arena_init(arena, SEA_SCOPE_BUFFER + sizeof(struct SEA_Arena), bufferSize);
 
         SEA_SCOPE_ARENA(arena) {
-            struct SEA_Allocator allocator = SEA_Arena.allocator(arena);
-            printf("Remaining: %zu\n", SEA_Arena.remaining(arena));
-            struct SEA_JSONValue *json = SEA_JSONValue.FromString(str, str_len, &allocator);
-            printf("Remaining: %zu\n", SEA_Arena.remaining(arena));
+            struct SEA_Allocator allocator = SEA_Arena_allocator(arena);
+            printf("Remaining: %zu\n", SEA_Arena_remaining(arena));
+            struct SEA_JSONValue *json = SEA_JSONValue_FromString(str, str_len, &allocator);
+            printf("Remaining: %zu\n", SEA_Arena_remaining(arena));
 
             if (json->type != SEA_JSON_OBJECT) { exit(12345678); }
-            const struct SEA_JSONValue *menu = SEA_JSONObject.get(json->object, "menu");
+            const struct SEA_JSONValue *menu = SEA_JSONObject_get(json->object, "menu");
             if (menu->type != SEA_JSON_OBJECT) { exit(12349999); }
-            char *abc_str = SEA_JSONValue.toString(menu, &allocator);
+            char *abc_str = SEA_JSONValue_toString(menu, &allocator);
 
             printf("\n%s\n\n", abc_str);
-            printf("Remaining: %zu\n", SEA_Arena.remaining(arena));
+            printf("Remaining: %zu\n", SEA_Arena_remaining(arena));
 
-            SEA_Allocator.free(&allocator, abc_str);
-            SEA_JSONValue.free(json, &allocator);
+            SEA_Allocator_free(&allocator, abc_str);
+            SEA_JSONValue_free(json, &allocator);
         }
     }
 }

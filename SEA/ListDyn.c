@@ -6,7 +6,7 @@
 
 #include "Iterator.h"
 
-static void ListDyn_ensureCapacity(struct SEA_ListDyn* da, const size_t minCapacity) {
+static void SEA_ListDyn_ensureCapacity(struct SEA_ListDyn* da, const size_t minCapacity) {
     if (da->capacity >= minCapacity) return;
     
     size_t newCapacity = da->capacity == 0 ? SEA_DYNAMIC_ARRAY_INITIAL_CAPACITY : da->capacity;
@@ -14,41 +14,41 @@ static void ListDyn_ensureCapacity(struct SEA_ListDyn* da, const size_t minCapac
         newCapacity *= SEA_DYNAMIC_ARRAY_GROWTH_FACTOR;
     }
     
-    void* newData = SEA_Allocator.alloc(da->allocator, newCapacity * da->elementSize);
+    void* newData = SEA_Allocator_alloc(da->allocator, newCapacity * da->elementSize);
     if (!newData) return;
     
     if (da->data) {
         memcpy(newData, da->data, da->count * da->elementSize);
-        SEA_Allocator.free(da->allocator, da->data);
+        SEA_Allocator_free(da->allocator, da->data);
     }
     
     da->data = newData;
     da->capacity = newCapacity;
 }
 
-static void* ListDyn_get(const struct SEA_ListDyn* da, const size_t index) {
+void* SEA_ListDyn_get(const struct SEA_ListDyn* da, const size_t index) {
     if (index >= da->count) return NULL;
     return (char*)da->data + (index * da->elementSize);
 }
 
-static void* ListDyn_alloc(struct SEA_ListDyn* da) {
-    ListDyn_ensureCapacity(da, da->count + 1);
+void* SEA_ListDyn_alloc(struct SEA_ListDyn* da) {
+    SEA_ListDyn_ensureCapacity(da, da->count + 1);
     da->count++;
-    return ListDyn_get(da, da->count - 1);
+    return SEA_ListDyn_get(da, da->count - 1);
 }
 
-static size_t ListDyn_add(struct SEA_ListDyn* da, const void* ptr) {
-    void* slot = ListDyn_alloc(da);
+size_t SEA_ListDyn_add(struct SEA_ListDyn* da, const void* ptr) {
+    void* slot = SEA_ListDyn_alloc(da);
     if (slot && ptr) {
         memcpy(slot, ptr, da->elementSize);
     }
     return da->count;
 }
 
-static size_t ListDyn_insert(struct SEA_ListDyn* da, size_t index, const void* ptr) {
+size_t SEA_ListDyn_insert(struct SEA_ListDyn* da, size_t index, const void* ptr) {
     if (index > da->count) index = da->count;
     
-    ListDyn_ensureCapacity(da, da->count + 1);
+    SEA_ListDyn_ensureCapacity(da, da->count + 1);
     
     // Shift elements to make room
     if (index < da->count) {
@@ -59,14 +59,14 @@ static size_t ListDyn_insert(struct SEA_ListDyn* da, size_t index, const void* p
     }
     
     da->count++;
-    void* slot = ListDyn_get(da, index);
+    void* slot = SEA_ListDyn_get(da, index);
     if (slot && ptr) {
         memcpy(slot, ptr, da->elementSize);
     }
     return da->count;
 }
 
-static void ListDyn_remove(struct SEA_ListDyn* da, const size_t index) {
+void SEA_ListDyn_remove(struct SEA_ListDyn* da, const size_t index) {
     if (index >= da->count) return;
     
     // Shift elements to fill the gap
@@ -80,22 +80,22 @@ static void ListDyn_remove(struct SEA_ListDyn* da, const size_t index) {
     da->count--;
 }
 
-static size_t ListDyn_count(const struct SEA_ListDyn* da) {
+size_t SEA_ListDyn_count(const struct SEA_ListDyn* da) {
     return da->count;
 }
 
-static size_t ListDyn_capacity(const struct SEA_ListDyn* da) {
+size_t SEA_ListDyn_capacity(const struct SEA_ListDyn* da) {
     return da->capacity;
 }
 
-static void ListDyn_reserve(struct SEA_ListDyn* da, const size_t capacity) {
-    ListDyn_ensureCapacity(da, capacity);
+void SEA_ListDyn_reserve(struct SEA_ListDyn* da, const size_t capacity) {
+    SEA_ListDyn_ensureCapacity(da, capacity);
 }
 
-static void ListDyn_shrink(struct SEA_ListDyn* da) {
+void SEA_ListDyn_shrink(struct SEA_ListDyn* da) {
     if (da->count == 0) {
         if (da->data) {
-            SEA_Allocator.free(da->allocator, da->data);
+            SEA_Allocator_free(da->allocator, da->data);
             da->data = NULL;
             da->capacity = 0;
         }
@@ -103,23 +103,23 @@ static void ListDyn_shrink(struct SEA_ListDyn* da) {
     }
     
     if (da->capacity > da->count) {
-        void* newData = SEA_Allocator.alloc(da->allocator, da->count * da->elementSize);
+        void* newData = SEA_Allocator_alloc(da->allocator, da->count * da->elementSize);
         if (newData) {
             memcpy(newData, da->data, da->count * da->elementSize);
-            SEA_Allocator.free(da->allocator, da->data);
+            SEA_Allocator_free(da->allocator, da->data);
             da->data = newData;
             da->capacity = da->count;
         }
     }
 }
 
-static void ListDyn_clear(struct SEA_ListDyn* da) {
+void SEA_ListDyn_clear(struct SEA_ListDyn* da) {
     da->count = 0;
 }
 
-static void ListDyn_free(struct SEA_ListDyn* da) {
+void SEA_ListDyn_free(struct SEA_ListDyn* da) {
     if (da->data) {
-        SEA_Allocator.free(da->allocator, da->data);
+        SEA_Allocator_free(da->allocator, da->data);
         da->data = NULL;
     }
     da->count = 0;
@@ -141,7 +141,7 @@ static void* Iterator_next(const struct SEA_Iterator* iter) {
     if (data->currentIndex >= data->list->count) {
         return NULL;
     }
-    void* element = SEA_ListDyn.get(data->list, data->currentIndex);
+    void* element = SEA_ListDyn_get(data->list, data->currentIndex);
     data->currentIndex++;
     return element;
 }
@@ -154,17 +154,17 @@ static bool Iterator_hasNext(const struct SEA_Iterator* iter) {
 static void Iterator_destroy(struct SEA_Iterator* iter) {
     const struct IteratorData* data = iter->data;
     if (data != NULL) {
-        const struct SEA_Allocator allocator = data->allocator;
+        struct SEA_Allocator allocator = data->allocator;
         iter->data = NULL;
-        SEA_Allocator.free(&allocator, iter);
+        SEA_Allocator_free(&allocator, iter);
     }
 }
 
-static struct SEA_Iterator* ListDyn_iterator(struct SEA_ListDyn* da, const struct SEA_Allocator *allocatorOverride) {
-    const struct SEA_Allocator* allocator = allocatorOverride == NULL ? da->allocator : allocatorOverride;
+struct SEA_Iterator* SEA_ListDyn_iterator(struct SEA_ListDyn* da, struct SEA_Allocator *allocatorOverride) {
+    struct SEA_Allocator* allocator = allocatorOverride == NULL ? da->allocator : allocatorOverride;
 
     const size_t totalAlloc = sizeof(struct SEA_Iterator) + sizeof(struct IteratorData);
-    struct SEA_Iterator* iter = SEA_Allocator.alloc(allocator, totalAlloc);
+    struct SEA_Iterator* iter = SEA_Allocator_alloc(allocator, totalAlloc);
 
     struct IteratorData* data = (struct IteratorData*)(
         (uint8_t*)iter + sizeof(struct SEA_Iterator)
@@ -183,18 +183,3 @@ static struct SEA_Iterator* ListDyn_iterator(struct SEA_ListDyn* da, const struc
 
     return iter;
 }
-
-const struct SEA_ListDyn_CLS SEA_ListDyn = {
-    .get = ListDyn_get,
-    .alloc = ListDyn_alloc,
-    .add = ListDyn_add,
-    .insert = ListDyn_insert,
-    .remove = ListDyn_remove,
-    .count = ListDyn_count,
-    .capacity = ListDyn_capacity,
-    .reserve = ListDyn_reserve,
-    .shrink = ListDyn_shrink,
-    .clear = ListDyn_clear,
-    .free = ListDyn_free,
-    .iterator = ListDyn_iterator,
-};

@@ -1,6 +1,8 @@
 #ifndef RANDOM_SEALIB_cfb07073_H
 #define RANDOM_SEALIB_cfb07073_H
 
+#include "Config/CompConfig.h"
+
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>

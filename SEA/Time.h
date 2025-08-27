@@ -1,10 +1,26 @@
 #ifndef TIME_SEA_H
 #define TIME_SEA_H
 
+#include "Config/CompConfig.h"
+
 #include <stdint.h>
 
-extern const struct SEA_Time_CLS {
-	uint64_t (*getMillis)();
-} SEA_Time;
+// =======================================
+// MARK: Static
+// =======================================
+
+uint64_t SEA_Time_GetMillis();
+
+// =======================================
+// MARK: Alias
+// =======================================
+
+#if SEA_CONFIG_ENABLE_PREFIXLESS == 1
+
+static inline uint64_t Time_GetMillis() {
+	return SEA_Time_GetMillis();
+}
+
+#endif
 
 #endif// TIME_SEA_H

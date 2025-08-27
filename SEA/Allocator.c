@@ -7,7 +7,7 @@
 #include "Compat/StringCompat.h"
 
 // =========================================
-// MARK: Custom Allocator Utility
+// MARK: Heap Allocator
 // =========================================
 
 static void* Func_HeapAlloc(void* _, const size_t size) {
@@ -30,11 +30,13 @@ static struct SEA_Allocator HEAP_ALLOCATOR = {
 	.free = Func_HeapFree,
 };
 
+struct SEA_Allocator* const SEA_Allocator_Heap = &HEAP_ALLOCATOR;
+
 // =========================================
-// MARK: Custom Allocator Utility
+// MARK: Allocator
 // =========================================
 
-static char* Allocator_Strdup(struct SEA_Allocator* self, const char* str, const size_t len) {
+char* SEA_Allocator_strdup(struct SEA_Allocator* self, const char* str, const size_t len) {
 	if (!str || !self || !self->alloc) return NULL;
 
 	const size_t vLen = len == 0 ? strlen(str) + 1 :  len;
@@ -45,25 +47,17 @@ static char* Allocator_Strdup(struct SEA_Allocator* self, const char* str, const
 	return result;
 }
 
-static void* Allocator_Alloc(const struct SEA_Allocator* self, const size_t size) {
+void* SEA_Allocator_alloc(struct SEA_Allocator* self, const size_t size) {
 	if (!self || !self->alloc || size == 0) return NULL;
 	return self->alloc(self->context, size);
 }
 
-static void* Allocator_AllocAligned(const struct SEA_Allocator* self, const size_t size, const size_t alignment) {
+void* SEA_Allocator_allocAligned(struct SEA_Allocator* self, const size_t size, const size_t alignment) {
 	if (!self || !self->allocAligned || size == 0) return NULL;
 	return self->allocAligned(self->context, size, alignment);
 }
 
-static void Allocator_Free(const struct SEA_Allocator* self, void* ptr) {
+void SEA_Allocator_free(struct SEA_Allocator* self, void* ptr) {
 	if (!self || !self->free || !ptr) return;
 	self->free(self->context, ptr);
 }
-
-const struct SEA_Allocator_CLS SEA_Allocator = {
-	.strdup = Allocator_Strdup,
-	.alloc = Allocator_Alloc,
-	.allocAligned = Allocator_AllocAligned,
-	.free = Allocator_Free,
-	.Heap = &HEAP_ALLOCATOR,
-};

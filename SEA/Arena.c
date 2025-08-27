@@ -7,15 +7,15 @@
 
 #include "Compat/AlignCompat.h"
 
-static void Arena_init(struct SEA_Arena* self, void* buffer, const size_t capacity) {
+void SEA_Arena_init(struct SEA_Arena* self, void* buffer, const size_t capacity) {
 	self->buffer = (uint8_t*) buffer;
 	self->capacity = capacity;
 	self->offset = 0;
 }
 
-static void* Arena_allocAligned(struct SEA_Arena* self, const size_t size, const size_t alignment) {
+void* SEA_Arena_allocAligned(struct SEA_Arena* self, const size_t size, const size_t alignment) {
 	if (self == NULL) {
-		SEA_Error.SetError(SEA_ERROR_GENERIC_ARGUMENT_NULL);
+		SEA_Error_SetError(SEA_ERROR_GENERIC_ARGUMENT_NULL);
 		return NULL;
 	}
 
@@ -23,7 +23,7 @@ static void* Arena_allocAligned(struct SEA_Arena* self, const size_t size, const
 
 	// Alignment must be a power of 2
 	if (vAlignment & (vAlignment - 1)) {
-		SEA_Error.SetError(SEA_ERROR_ARENA_INVALID_ALIGNMENT);
+		SEA_Error_SetError(SEA_ERROR_ARENA_INVALID_ALIGNMENT);
 		return NULL;
 	}
 
@@ -32,7 +32,7 @@ static void* Arena_allocAligned(struct SEA_Arena* self, const size_t size, const
 	const size_t next_offset = aligned - (size_t) self->buffer + size;
 
 	if (next_offset > self->capacity) {
-		SEA_Error.SetError(SEA_ERROR_ARENA_OUT_OF_MEMORY);
+		SEA_Error_SetError(SEA_ERROR_ARENA_OUT_OF_MEMORY);
 		return NULL;
 	}
 
@@ -41,32 +41,23 @@ static void* Arena_allocAligned(struct SEA_Arena* self, const size_t size, const
 	return ptr;
 }
 
-static void* Arena_alloc(struct SEA_Arena* self, const size_t size) {
-	return Arena_allocAligned(self, size, 0);
+void* SEA_Arena_alloc(struct SEA_Arena* self, const size_t size) {
+	return SEA_Arena_allocAligned(self, size, 0);
 }
 
-static void Arena_reset(struct SEA_Arena* self) {
+void SEA_Arena_reset(struct SEA_Arena* self) {
 	self->offset = 0;
 }
 
-static size_t Arena_remaining(const struct SEA_Arena* self) {
+size_t SEA_Arena_remaining(const struct SEA_Arena* self) {
 	return self->capacity - self->offset;
 }
 
-static struct SEA_Allocator Arena_allocator(struct SEA_Arena* self) {
+struct SEA_Allocator SEA_Arena_allocator(struct SEA_Arena* self) {
 	return (struct SEA_Allocator) {
-		.alloc = (void* (*)(void*, size_t)) Arena_alloc,
-		.allocAligned = (void* (*)(void*, size_t, size_t)) Arena_allocAligned,
+		.alloc = (void* (*)(void*, size_t)) SEA_Arena_alloc,
+		.allocAligned = (void* (*)(void*, size_t, size_t)) SEA_Arena_allocAligned,
 		.free = NULL,
 		.context = self
 	};
 }
-
-const struct SEA_Arena_CLS SEA_Arena = {
-	.init = Arena_init,
-	.alloc = Arena_alloc,
-	.allocEx = Arena_allocAligned,
-	.reset = Arena_reset,
-	.remaining = Arena_remaining,
-	.allocator = Arena_allocator,
-};

@@ -1,6 +1,8 @@
 #ifndef SEALIB_ARRAY_H
 #define SEALIB_ARRAY_H
 
+#include "Config/CompConfig.h"
+
 #include <stddef.h>
 #include <stdint.h>
 
@@ -16,7 +18,7 @@ struct SEA_ListSegmented {
 
 #define SEA_ListSegmented(type, _allocator) \
 	(struct SEA_ListSegmented) { \
-		.allocator = (_allocator == NULL ? SEA_Allocator.Heap : _allocator), \
+		.allocator = (_allocator == NULL ? SEA_Allocator_Heap : _allocator), \
 		.elementSize = (sizeof(type)), \
 		.count = 0,\
 		.usedSegments = 0, \

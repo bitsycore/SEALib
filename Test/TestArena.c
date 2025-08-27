@@ -33,12 +33,12 @@ void testArena(void) {
     const size_t arenaSize = 512;
     SEA_SCOPE_MALLOC(arenaSize + sizeof(struct SEA_Arena)) {
         struct SEA_Arena *arena = (struct SEA_Arena *) SEA_SCOPE_BUFFER;
-        SEA_Arena.init(arena, SEA_SCOPE_BUFFER + sizeof(struct SEA_Arena), arenaSize);
+        SEA_Arena_init(arena, SEA_SCOPE_BUFFER + sizeof(struct SEA_Arena), arenaSize);
         for (int i = 0; i < 5; i++) {
             SEA_SCOPE_ARENA(arena) {
-                const struct SEA_Allocator arena_allocator = SEA_Arena.allocator(arena);
+                struct SEA_Allocator arena_allocator = SEA_Arena_allocator(arena);
 
-                struct Person *me = SEA_Arena.alloc(arena, sizeof(struct Person));
+                struct Person *me = SEA_Arena_alloc(arena, sizeof(struct Person));
                 Person.initWithName(me, randomName());
 
                 struct Person *you = &(struct Person){};
@@ -64,7 +64,7 @@ void testArena(void) {
                     puts("They are not equal!");
                 }
 
-                printf("Remaining: %zu\n", SEA_Arena.remaining(arena));
+                printf("Remaining: %zu\n", SEA_Arena_remaining(arena));
             }
             puts("\n-----------------------------\n");
         }

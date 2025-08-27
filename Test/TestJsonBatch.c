@@ -75,8 +75,8 @@ void testJsonBatch(void) {
     const size_t finalBufferSize = bufferSize + sizeof(struct SEA_Arena);
     SEA_SCOPE_MALLOC(finalBufferSize) {
         struct SEA_Arena *arena = (struct SEA_Arena *) SEA_SCOPE_BUFFER;
-        SEA_Arena.init(arena, SEA_SCOPE_BUFFER + sizeof(struct SEA_Arena), bufferSize);
-        struct SEA_Allocator allocator = SEA_Arena.allocator(arena);
+        SEA_Arena_init(arena, SEA_SCOPE_BUFFER + sizeof(struct SEA_Arena), bufferSize);
+        struct SEA_Allocator allocator = SEA_Arena_allocator(arena);
         for (size_t i = 0; i < sizeof(json_tests) / sizeof(json_tests[0]); i++) {
             SEA_SCOPE_ARENA(arena) {
                 const char *str = json_tests[i];
@@ -84,17 +84,17 @@ void testJsonBatch(void) {
 
                 printf("\n---- Test #%zu ----\n", i + 1);
 
-                struct SEA_JSONValue *json = SEA_JSONValue.FromString(str, str_len, &allocator);
+                struct SEA_JSONValue *json = SEA_JSONValue_FromString(str, str_len, &allocator);
                 if (!json) {
                     printf("Parse error\n");
                     continue;
                 }
 
-                char *out_str = SEA_JSONValue.toString(json, &allocator);
+                char *out_str = SEA_JSONValue_toString(json, &allocator);
                 printf("%s\n", out_str);
 
-                SEA_Allocator.free(&allocator, out_str);
-                SEA_JSONValue.free(json, &allocator);
+                SEA_Allocator_free(&allocator, out_str);
+                SEA_JSONValue_free(json, &allocator);
             }
         }
     }

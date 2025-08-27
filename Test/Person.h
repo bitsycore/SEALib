@@ -16,7 +16,7 @@ extern const struct Person_CLS {
 	void (* init)(struct Person* self, const char* name, int age);
 	void (* initWithName)(struct Person* self, const char* name);
 	size_t (* toStringSize)(const struct Person* self);
-	char* (* toString)(const struct Person* self, const struct SEA_Allocator* allocator);
+	char* (* toString)(const struct Person* self, struct SEA_Allocator* allocator);
 	bool (* equals)(const struct Person* self, const struct Person* other);
 	struct SEA_UUID (* getUUID)(const struct Person* self);
 } Person;

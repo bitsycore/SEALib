@@ -1,6 +1,8 @@
 #ifndef SEALIB_ERROR_H
 #define SEALIB_ERROR_H
 
+#include "Config/CompConfig.h"
+
 enum SEA_ErrorType {
 	SEA_ERROR_NONE = 0,
 
@@ -18,9 +20,29 @@ enum SEA_ErrorType {
 
 };
 
-extern const struct SEA_Error_CLS {
-	void (*SetError)(enum SEA_ErrorType error);
-	int (*GetError)();
-} SEA_Error;
+// =======================================
+// MARK: Static
+// =======================================
+
+void SEA_Error_SetError(enum SEA_ErrorType error);
+enum SEA_ErrorType SEA_Error_GetError();
+
+// =======================================
+// MARK: Alias
+// =======================================
+
+#if SEA_CONFIG_ENABLE_PREFIXLESS == 1
+
+typedef enum SEA_ErrorType ErrorType;
+
+static inline void Error_SetError(ErrorType error) {
+	SEA_Error_SetError(error);
+}
+
+static inline ErrorType Error_GetError() {
+	return SEA_Error_GetError();
+}
+
+#endif
 
 #endif //SEALIB_ERROR_H

@@ -24,7 +24,7 @@ static void* ListSegmented_alloc(struct SEA_ListSegmented* sa) {
 	if (sa->count >= capacityForSegmentCount(sa->usedSegments)) {
 		const size_t slots_in_segment = (1 << SEA_SEGMENT_ARRAY_SEGMENTS_TO_SKIP) << sa->usedSegments;
 		const size_t segment_size = sa->elementSize * slots_in_segment;
-		sa->segments[sa->usedSegments] = SEA_Allocator.alloc(sa->allocator, segment_size);
+		sa->segments[sa->usedSegments] = SEA_Allocator_alloc(sa->allocator, segment_size);
 		sa->usedSegments++;
 	}
 	sa->count++;
@@ -42,7 +42,7 @@ static size_t ListSegmented_count(const struct SEA_ListSegmented* sa) {
 
 static void ListSegmented_free(struct SEA_ListSegmented* sa) {
 	for (int i = 0; i < sa->usedSegments; i++) {
-		SEA_Allocator.free(sa->allocator, sa->segments[i]);
+		SEA_Allocator_free(sa->allocator, sa->segments[i]);
 	}
 	sa->count = 0;
 	sa->elementSize = 0;

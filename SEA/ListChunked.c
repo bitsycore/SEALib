@@ -3,12 +3,12 @@
 #include <string.h>
 
 static struct SEA_ListChunk* ListChunked_allocChunk(const struct SEA_ListChunked* ca) {
-    struct SEA_ListChunk* chunk = SEA_Allocator.alloc(ca->allocator, sizeof(struct SEA_ListChunk));
+    struct SEA_ListChunk* chunk = SEA_Allocator_alloc(ca->allocator, sizeof(struct SEA_ListChunk));
     if (!chunk) return NULL;
     
-    chunk->data = SEA_Allocator.alloc(ca->allocator, ca->chunkCapacity * ca->elementSize);
+    chunk->data = SEA_Allocator_alloc(ca->allocator, ca->chunkCapacity * ca->elementSize);
     if (!chunk->data) {
-        SEA_Allocator.free(ca->allocator, chunk);
+        SEA_Allocator_free(ca->allocator, chunk);
         return NULL;
     }
     
@@ -80,8 +80,8 @@ static void ListChunked_free(struct SEA_ListChunked* ca) {
     struct SEA_ListChunk* chunk = ca->head;
     while (chunk) {
         struct SEA_ListChunk* next = chunk->next;
-        SEA_Allocator.free(ca->allocator, chunk->data);
-        SEA_Allocator.free(ca->allocator, chunk);
+        SEA_Allocator_free(ca->allocator, chunk->data);
+        SEA_Allocator_free(ca->allocator, chunk);
         chunk = next;
     }
     ca->head = ca->tail = NULL;

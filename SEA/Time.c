@@ -8,7 +8,7 @@
 	#include <unistd.h>
 #endif
 
-static uint64_t Time_getMillis() {
+uint64_t SEA_Time_GetMillis() {
 #if defined(_POSIX_VERSION)
 	struct timespec ts;
 	clock_gettime(CLOCK_REALTIME, &ts);
@@ -23,7 +23,3 @@ static uint64_t Time_getMillis() {
 	return (uint64_t)seconds * 1000;
 #endif
 }
-
-const struct SEA_Time_CLS SEA_Time = {
-	.getMillis = Time_getMillis
-};
