@@ -6,124 +6,124 @@
 
 #include "Iterator.h"
 
-static void SEA_ListDyn_ensureCapacity(struct SEA_ListDyn* da, const size_t minCapacity) {
-    if (da->capacity >= minCapacity) return;
+static void SEA_ListDyn_ensureCapacity(struct SEA_ListDyn* self, const size_t minCapacity) {
+    if (self->capacity >= minCapacity) return;
     
-    size_t newCapacity = da->capacity == 0 ? SEA_DYNAMIC_ARRAY_INITIAL_CAPACITY : da->capacity;
+    size_t newCapacity = self->capacity == 0 ? SEA_DYNAMIC_ARRAY_INITIAL_CAPACITY : self->capacity;
     while (newCapacity < minCapacity) {
         newCapacity *= SEA_DYNAMIC_ARRAY_GROWTH_FACTOR;
     }
     
-    void* newData = SEA_Allocator_alloc(da->allocator, newCapacity * da->elementSize);
+    void* newData = SEA_Allocator_alloc(self->allocator, newCapacity * self->elementSize);
     if (!newData) return;
     
-    if (da->data) {
-        memcpy(newData, da->data, da->count * da->elementSize);
-        SEA_Allocator_free(da->allocator, da->data);
+    if (self->data) {
+        memcpy(newData, self->data, self->count * self->elementSize);
+        SEA_Allocator_free(self->allocator, self->data);
     }
     
-    da->data = newData;
-    da->capacity = newCapacity;
+    self->data = newData;
+    self->capacity = newCapacity;
 }
 
-void* SEA_ListDyn_get(const struct SEA_ListDyn* da, const size_t index) {
-    if (index >= da->count) return NULL;
-    return (char*)da->data + (index * da->elementSize);
+void* SEA_ListDyn_get(const struct SEA_ListDyn* self, const size_t index) {
+    if (index >= self->count) return NULL;
+    return (char*)self->data + (index * self->elementSize);
 }
 
-void* SEA_ListDyn_alloc(struct SEA_ListDyn* da) {
-    SEA_ListDyn_ensureCapacity(da, da->count + 1);
-    da->count++;
-    return SEA_ListDyn_get(da, da->count - 1);
+void* SEA_ListDyn_alloc(struct SEA_ListDyn* self) {
+    SEA_ListDyn_ensureCapacity(self, self->count + 1);
+    self->count++;
+    return SEA_ListDyn_get(self, self->count - 1);
 }
 
-size_t SEA_ListDyn_add(struct SEA_ListDyn* da, const void* ptr) {
-    void* slot = SEA_ListDyn_alloc(da);
+size_t SEA_ListDyn_add(struct SEA_ListDyn* self, const void* ptr) {
+    void* slot = SEA_ListDyn_alloc(self);
     if (slot && ptr) {
-        memcpy(slot, ptr, da->elementSize);
+        memcpy(slot, ptr, self->elementSize);
     }
-    return da->count;
+    return self->count;
 }
 
-size_t SEA_ListDyn_insert(struct SEA_ListDyn* da, size_t index, const void* ptr) {
-    if (index > da->count) index = da->count;
+size_t SEA_ListDyn_insert(struct SEA_ListDyn* self, size_t index, const void* ptr) {
+    if (index > self->count) index = self->count;
     
-    SEA_ListDyn_ensureCapacity(da, da->count + 1);
+    SEA_ListDyn_ensureCapacity(self, self->count + 1);
     
     // Shift elements to make room
-    if (index < da->count) {
-        char* src = (char*)da->data + (index * da->elementSize);
-        char* dst = src + da->elementSize;
-        const size_t moveBytes = (da->count - index) * da->elementSize;
+    if (index < self->count) {
+        char* src = (char*)self->data + (index * self->elementSize);
+        char* dst = src + self->elementSize;
+        const size_t moveBytes = (self->count - index) * self->elementSize;
         memmove(dst, src, moveBytes);
     }
     
-    da->count++;
-    void* slot = SEA_ListDyn_get(da, index);
+    self->count++;
+    void* slot = SEA_ListDyn_get(self, index);
     if (slot && ptr) {
-        memcpy(slot, ptr, da->elementSize);
+        memcpy(slot, ptr, self->elementSize);
     }
-    return da->count;
+    return self->count;
 }
 
-void SEA_ListDyn_remove(struct SEA_ListDyn* da, const size_t index) {
-    if (index >= da->count) return;
+void SEA_ListDyn_remove(struct SEA_ListDyn* self, const size_t index) {
+    if (index >= self->count) return;
     
     // Shift elements to fill the gap
-    if (index < da->count - 1) {
-        char* dst = (char*)da->data + (index * da->elementSize);
-        const char* src = dst + da->elementSize;
-        const size_t moveBytes = (da->count - index - 1) * da->elementSize;
+    if (index < self->count - 1) {
+        char* dst = (char*)self->data + (index * self->elementSize);
+        const char* src = dst + self->elementSize;
+        const size_t moveBytes = (self->count - index - 1) * self->elementSize;
         memmove(dst, src, moveBytes);
     }
     
-    da->count--;
+    self->count--;
 }
 
-size_t SEA_ListDyn_count(const struct SEA_ListDyn* da) {
-    return da->count;
+size_t SEA_ListDyn_count(const struct SEA_ListDyn* self) {
+    return self->count;
 }
 
-size_t SEA_ListDyn_capacity(const struct SEA_ListDyn* da) {
-    return da->capacity;
+size_t SEA_ListDyn_capacity(const struct SEA_ListDyn* self) {
+    return self->capacity;
 }
 
-void SEA_ListDyn_reserve(struct SEA_ListDyn* da, const size_t capacity) {
-    SEA_ListDyn_ensureCapacity(da, capacity);
+void SEA_ListDyn_reserve(struct SEA_ListDyn* self, const size_t capacity) {
+    SEA_ListDyn_ensureCapacity(self, capacity);
 }
 
-void SEA_ListDyn_shrink(struct SEA_ListDyn* da) {
-    if (da->count == 0) {
-        if (da->data) {
-            SEA_Allocator_free(da->allocator, da->data);
-            da->data = NULL;
-            da->capacity = 0;
+void SEA_ListDyn_shrink(struct SEA_ListDyn* self) {
+    if (self->count == 0) {
+        if (self->data) {
+            SEA_Allocator_free(self->allocator, self->data);
+            self->data = NULL;
+            self->capacity = 0;
         }
         return;
     }
     
-    if (da->capacity > da->count) {
-        void* newData = SEA_Allocator_alloc(da->allocator, da->count * da->elementSize);
+    if (self->capacity > self->count) {
+        void* newData = SEA_Allocator_alloc(self->allocator, self->count * self->elementSize);
         if (newData) {
-            memcpy(newData, da->data, da->count * da->elementSize);
-            SEA_Allocator_free(da->allocator, da->data);
-            da->data = newData;
-            da->capacity = da->count;
+            memcpy(newData, self->data, self->count * self->elementSize);
+            SEA_Allocator_free(self->allocator, self->data);
+            self->data = newData;
+            self->capacity = self->count;
         }
     }
 }
 
-void SEA_ListDyn_clear(struct SEA_ListDyn* da) {
-    da->count = 0;
+void SEA_ListDyn_clear(struct SEA_ListDyn* self) {
+    self->count = 0;
 }
 
-void SEA_ListDyn_free(struct SEA_ListDyn* da) {
-    if (da->data) {
-        SEA_Allocator_free(da->allocator, da->data);
-        da->data = NULL;
+void SEA_ListDyn_free(struct SEA_ListDyn* self) {
+    if (self->data) {
+        SEA_Allocator_free(self->allocator, self->data);
+        self->data = NULL;
     }
-    da->count = 0;
-    da->capacity = 0;
+    self->count = 0;
+    self->capacity = 0;
 }
 
 // =====================================
@@ -147,8 +147,8 @@ static void* Iterator_next(const struct SEA_Iterator* iter) {
 }
 
 static bool Iterator_hasNext(const struct SEA_Iterator* iter) {
-    const struct IteratorData* data = iter->data;
-    return data->currentIndex < data->list->count;
+    const struct IteratorData* selfta = iter->data;
+    return selfta->currentIndex < selfta->list->count;
 }
 
 static void Iterator_destroy(struct SEA_Iterator* iter) {
@@ -160,8 +160,8 @@ static void Iterator_destroy(struct SEA_Iterator* iter) {
     }
 }
 
-struct SEA_Iterator* SEA_ListDyn_iterator(struct SEA_ListDyn* da, struct SEA_Allocator *allocatorOverride) {
-    struct SEA_Allocator* allocator = allocatorOverride == NULL ? da->allocator : allocatorOverride;
+struct SEA_Iterator* SEA_ListDyn_iterator(struct SEA_ListDyn* self, struct SEA_Allocator *allocatorOverride) {
+    struct SEA_Allocator* allocator = allocatorOverride == NULL ? self->allocator : allocatorOverride;
 
     const size_t totalAlloc = sizeof(struct SEA_Iterator) + sizeof(struct IteratorData);
     struct SEA_Iterator* iter = SEA_Allocator_alloc(allocator, totalAlloc);
@@ -177,7 +177,7 @@ struct SEA_Iterator* SEA_ListDyn_iterator(struct SEA_ListDyn* da, struct SEA_All
         iter->data = data;
 
         data->allocator = *allocator;
-        data->list = da;
+        data->list = self;
         data->currentIndex = 0;
     }
 
