@@ -20,10 +20,10 @@ pub fn uuidToHex(uuid: []const u8, allocator: *std.mem.Allocator) ![]u8 {
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     var allocator = gpa.allocator();
-
+    const str = "{\"test\":52}";
     const jsonObjectResult = SEA.SEA_JSONValue.FromString.?(
-        "{\"test\":52}",
-        0,
+        str,
+        str.len,
         SEA.SEA_Allocator.Heap
     );
     const stringified = SEA.SEA_JSONValue.toString.?(jsonObjectResult, SEA.SEA_Allocator.Heap);
