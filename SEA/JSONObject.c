@@ -2,11 +2,11 @@
 
 #include <string.h>
 
-#include "Compat/AlignCompat.h"
 #include "Allocator.h"
 #include "Error.h"
 #include "JSONValue.h"
 #include "Time.h"
+#include "Compat/AlignCompat.h"
 
 
 // ===================================
@@ -25,7 +25,7 @@ static size_t HashString(const char* s) {
 // MARK: JsonObject
 // ===================================
 
-struct SEA_JSONValue* SEA_JSONObject_New(struct SEA_Allocator* alloc) {
+SEA_JSONValue* SEA_JSONObject_New(SEA_Allocator* alloc) {
 	if (!alloc || !alloc->alloc) return NULL;
 
 	uint8_t* buffer = SEA_Allocator_alloc(
@@ -36,9 +36,9 @@ struct SEA_JSONValue* SEA_JSONObject_New(struct SEA_Allocator* alloc) {
 	);
 	if (!buffer) return NULL;
 
-	struct SEA_JSONValue* value = (struct SEA_JSONValue*)buffer;
-	value->object = (struct SEA_JSONObject*)(buffer + sizeof(struct SEA_JSONValue));
-	value->object->buckets = (SEA_JSONObjectEntry**)(buffer + sizeof(struct SEA_JSONValue) + sizeof(struct SEA_JSONObject));
+	SEA_JSONValue* value = (struct SEA_JSONValue*)buffer;
+	value->object = (SEA_JSONObject*)(buffer + sizeof(SEA_JSONValue));
+	value->object->buckets = (SEA_JSONObjectEntry**)(buffer + sizeof(SEA_JSONValue) + sizeof(SEA_JSONObject));
 	memset(value->object->buckets, 0, SEA_JSON_OBJECT_BUCKETS_NUMBERS * sizeof(SEA_JSONObjectEntry*));
 
 	value->type = SEA_JSON_OBJECT;
@@ -49,7 +49,7 @@ struct SEA_JSONValue* SEA_JSONObject_New(struct SEA_Allocator* alloc) {
 	return value;
 }
 
-enum SEA_ErrorType SEA_JSONObject_put(struct SEA_JSONObject* self, const char* key, struct SEA_JSONValue* value, struct SEA_Allocator* alloc) {
+enum SEA_ErrorType SEA_JSONObject_put(SEA_JSONObject* self, const char* key, SEA_JSONValue* value, SEA_Allocator* alloc) {
 	if (!self) {
 		SEA_Error_SetError(SEA_ERROR_GENERIC_SELF_NULL);
 		return SEA_ERROR_GENERIC_SELF_NULL;
@@ -88,7 +88,7 @@ enum SEA_ErrorType SEA_JSONObject_put(struct SEA_JSONObject* self, const char* k
 	return SEA_ERROR_NONE;
 }
 
-struct SEA_JSONValue* SEA_JSONObject_get(const struct SEA_JSONObject* self, const char* key) {
+SEA_JSONValue* SEA_JSONObject_get(const SEA_JSONObject* self, const char* key) {
 	const size_t idx = HashString(key) % self->bucketCount;
 	for (const SEA_JSONObjectEntry* e = self->buckets[idx]; e; e = e->next) {
 		if (strcmp(e->key, key) == 0) {
@@ -99,7 +99,7 @@ struct SEA_JSONValue* SEA_JSONObject_get(const struct SEA_JSONObject* self, cons
 }
 
 
-bool SEA_JSONObject_has(const struct SEA_JSONObject* self, const char* key) {
+bool SEA_JSONObject_has(const SEA_JSONObject* self, const char* key) {
 	if (!self || !key) return false;
 	const size_t idx = HashString(key) % self->bucketCount;
 	for (const SEA_JSONObjectEntry* e = self->buckets[idx]; e; e = e->next) {
@@ -108,7 +108,7 @@ bool SEA_JSONObject_has(const struct SEA_JSONObject* self, const char* key) {
 	return false;
 }
 
-const char** SEA_JSONObject_keys(const struct SEA_JSONObject* self, struct SEA_Allocator* alloc) {
+const char** SEA_JSONObject_keys(const SEA_JSONObject* self, SEA_Allocator* alloc) {
 	if (!self || !alloc) return NULL;
 	const size_t count = self->size;
 	const char** keys = SEA_Allocator_allocAligned(alloc, count * sizeof(char*), SEA_alignof(char *));
@@ -122,12 +122,12 @@ const char** SEA_JSONObject_keys(const struct SEA_JSONObject* self, struct SEA_A
 	return keys;
 }
 
-size_t SEA_JSONObject_size(const struct SEA_JSONObject* self) {
+size_t SEA_JSONObject_size(const SEA_JSONObject* self) {
 	if (!self) return 0;
 	return self->size;
 }
 
-bool SEA_JSONObject_remove(struct SEA_JSONObject* self, const char* key, struct SEA_Allocator* alloc) {
+bool SEA_JSONObject_remove(SEA_JSONObject* self, const char* key, SEA_Allocator* alloc) {
 	if (!self || !key || !alloc) return false;
 
 	const size_t idx = HashString(key) % self->bucketCount;
@@ -145,7 +145,7 @@ bool SEA_JSONObject_remove(struct SEA_JSONObject* self, const char* key, struct 
 	return false;
 }
 
-void SEA_JSONObject_free(struct SEA_JSONValue* self, struct SEA_Allocator* alloc) {
+void SEA_JSONObject_free(SEA_JSONValue* self, SEA_Allocator* alloc) {
 	self->object->ref_count--;
 	if (self->object->ref_count > 0) return;
 
@@ -162,7 +162,7 @@ void SEA_JSONObject_free(struct SEA_JSONValue* self, struct SEA_Allocator* alloc
 	SEA_Allocator_free(alloc, self);
 }
 
-struct SEA_JSONValue* SEA_JSONObject_asJSONValue(const struct SEA_JSONObject* self) {
+SEA_JSONValue* SEA_JSONObject_asJSONValue(const SEA_JSONObject* self) {
 	if (!self) return NULL;
-	return (struct SEA_JSONValue*)((char*)self - sizeof(struct SEA_JSONValue));
+	return (SEA_JSONValue*)((char*)self - sizeof(SEA_JSONValue));
 }

@@ -33,15 +33,14 @@ enum SEA_ErrorType SEA_Error_GetError();
 
 #if SEA_CONFIG_ENABLE_PREFIXLESS == 1
 
+// =========================
+// Types
 typedef enum SEA_ErrorType ErrorType;
 
-static inline void Error_SetError(ErrorType error) {
-	SEA_Error_SetError(error);
-}
-
-static inline ErrorType Error_GetError() {
-	return SEA_Error_GetError();
-}
+// =========================
+// Static
+static inline void Error_SetError(const ErrorType error) { SEA_Error_SetError(error); }
+static inline ErrorType Error_GetError() { return SEA_Error_GetError(); }
 
 #endif
 

@@ -8,12 +8,12 @@
 static void Person_init(struct Person* self, const char* name, const int age) {
 	self->name = name;
 	self->age = age;
-	memset(&self->uuid, 0, sizeof(struct SEA_UUID));
+	memset(&self->uuid, 0, sizeof(SEA_UUID));
 	SEA_UUID_generateV7(&self->uuid);
 }
 
 static void Person_initWithName(struct Person* self, const char* name) {
-	Person_init(self, name, (int) (SEA_Random.Uint64() % 100));
+	Person_init(self, name, (int) (SEA_Random_Uint64() % 100));
 }
 
 static const char TO_STRING_FORMAT[] = "Person(name: %s, age: %d, uuid: %s)";
@@ -22,7 +22,7 @@ static size_t Person_toStringSize(const struct Person* self) {
 	return snprintf(NULL, 0, TO_STRING_FORMAT, self->name, self->age, "F") + 1 /*NULL Terminated*/ + 35 /*UUID (36) - F (1) from (%s)*/;
 }
 
-static char* Person_toString(const struct Person* self, struct SEA_Allocator* allocator) {
+static char* Person_toString(const struct Person* self, SEA_Allocator* allocator) {
 	char uuid[37];
 	SEA_UUID_toString(&self->uuid, uuid);
 	const size_t size = Person_toStringSize(self);
@@ -36,7 +36,7 @@ static bool Person_equals(const struct Person* self, const struct Person* other)
 	return SEA_UUID_equals(&self->uuid, &other->uuid);
 }
 
-static struct SEA_UUID Person_getUUID(const struct Person* self) {
+static SEA_UUID Person_getUUID(const struct Person* self) {
 	return self->uuid;
 }
 

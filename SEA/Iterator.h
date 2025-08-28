@@ -38,8 +38,15 @@ typedef struct SEA_Iterator {
 // =======================================
 
 #if SEA_CONFIG_ENABLE_PREFIXLESS == 1
+
+// =========================
+// Types
 typedef SEA_Iterator Iterator;
+
+// =========================
+// Instance
 #define Iterator_foreach SEA_Iterator_foreach
+
 #endif
 
 #endif //SEALIB_ITERATOR_H

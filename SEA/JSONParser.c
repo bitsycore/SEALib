@@ -9,13 +9,12 @@
 #include "JSONArray.h"
 #include "JSONObject.h"
 #include "JSONValue.h"
-#include "Compat/StringCompat.h"
 
 // ===================================
 // MARK: Utility
 // ===================================
 
-static void SkipWhitespace(struct SEA_JSONParser* parser) {
+static void SkipWhitespace(SEA_JSONParser* parser) {
 	while (parser->pos < parser->len && isspace(parser->json[parser->pos])) {
 		parser->pos++;
 	}
@@ -25,9 +24,9 @@ static void SkipWhitespace(struct SEA_JSONParser* parser) {
 // MARK: Parse
 // ===================================
 
-static struct SEA_JSONValue* ParseValue(struct SEA_JSONParser* parser);
+static SEA_JSONValue* ParseValue(SEA_JSONParser* parser);
 
-static bool ParseLiteral(struct SEA_JSONParser* parser, const char* literal) {
+static bool ParseLiteral(SEA_JSONParser* parser, const char* literal) {
 	const size_t len = strlen(literal);
 	if (parser->pos + len > parser->len) return false;
 	if (strncmp(parser->json + parser->pos, literal, len) != 0) return false;
@@ -35,7 +34,7 @@ static bool ParseLiteral(struct SEA_JSONParser* parser, const char* literal) {
 	return true;
 }
 
-static struct SEA_JSONValue* ParseString(struct SEA_JSONParser* parser) {
+static SEA_JSONValue* ParseString(SEA_JSONParser* parser) {
 	if (parser->pos >= parser->len || parser->json[parser->pos] != '"') return NULL;
 	parser->pos++; // Skip opening quote
 
@@ -89,14 +88,14 @@ static struct SEA_JSONValue* ParseString(struct SEA_JSONParser* parser) {
 	// Move the parser position past the closing quote.
 	parser->pos += escaped_len + 1;
 
-	struct SEA_JSONValue* value = SEA_JSONValue_CreateString(unescaped_str, parser->allocator);
+	SEA_JSONValue* value = SEA_JSONValue_CreateString(unescaped_str, parser->allocator);
 	SEA_Allocator_free(parser->allocator, unescaped_str);
 
 	return value;
 }
 
 
-static struct SEA_JSONValue* ParseNumber(struct SEA_JSONParser* parser) {
+static SEA_JSONValue* ParseNumber(SEA_JSONParser* parser) {
 	const char* start_ptr = parser->json + parser->pos;
 	char* end_ptr;
 
@@ -112,11 +111,11 @@ static struct SEA_JSONValue* ParseNumber(struct SEA_JSONParser* parser) {
 }
 
 
-static struct SEA_JSONValue* ParseArray(struct SEA_JSONParser* parser) {
+static SEA_JSONValue* ParseArray(SEA_JSONParser* parser) {
 	if (parser->pos >= parser->len || parser->json[parser->pos] != '[') return NULL;
 	parser->pos++; // Skip '['
 
-	struct SEA_JSONValue* array = SEA_JSONArray_New(parser->allocator);
+	SEA_JSONValue* array = SEA_JSONArray_New(parser->allocator);
 	if (!array) return NULL;
 
 	SkipWhitespace(parser);
@@ -128,7 +127,7 @@ static struct SEA_JSONValue* ParseArray(struct SEA_JSONParser* parser) {
 	}
 
 	while (parser->pos < parser->len) {
-		struct SEA_JSONValue* value = ParseValue(parser);
+		SEA_JSONValue* value = ParseValue(parser);
 		if (!value) {
 			SEA_JSONValue_free(array, parser->allocator);
 			return NULL;
@@ -158,11 +157,11 @@ static struct SEA_JSONValue* ParseArray(struct SEA_JSONParser* parser) {
 	return NULL;
 }
 
-static struct SEA_JSONValue* ParseObject(struct SEA_JSONParser* parser) {
+static SEA_JSONValue* ParseObject(SEA_JSONParser* parser) {
 	if (parser->pos >= parser->len || parser->json[parser->pos] != '{') return NULL;
 	parser->pos++; // Skip '{'
 
-	struct SEA_JSONValue* object = SEA_JSONObject_New(parser->allocator);
+	SEA_JSONValue* object = SEA_JSONObject_New(parser->allocator);
 	if (!object) return NULL;
 
 	SkipWhitespace(parser);
@@ -175,7 +174,7 @@ static struct SEA_JSONValue* ParseObject(struct SEA_JSONParser* parser) {
 	while (parser->pos < parser->len) {
 		SkipWhitespace(parser);
 
-		struct SEA_JSONValue* key = ParseString(parser);
+		SEA_JSONValue* key = ParseString(parser);
 		if (!key) {
 			SEA_JSONValue_free(object, parser->allocator);
 			return NULL;
@@ -192,7 +191,7 @@ static struct SEA_JSONValue* ParseObject(struct SEA_JSONParser* parser) {
 		parser->pos++; // Skip ':'
 		SkipWhitespace(parser);
 
-		struct SEA_JSONValue* value = ParseValue(parser);
+		SEA_JSONValue* value = ParseValue(parser);
 		if (!value) {
 			SEA_JSONValue_free(key, parser->allocator);
 			SEA_JSONValue_free(object, parser->allocator);
@@ -226,7 +225,7 @@ static struct SEA_JSONValue* ParseObject(struct SEA_JSONParser* parser) {
 	return NULL;
 }
 
-static struct SEA_JSONValue* ParseValue(struct SEA_JSONParser* parser) {
+static SEA_JSONValue* ParseValue(SEA_JSONParser* parser) {
 	SkipWhitespace(parser);
 
 	if (parser->pos >= parser->len)
@@ -268,10 +267,10 @@ static struct SEA_JSONValue* ParseValue(struct SEA_JSONParser* parser) {
 // MARK: Public
 // =======================================
 
-struct SEA_JSONValue* SEA_JSONParser_FromString(const char* string, const size_t len, struct SEA_Allocator* allocator) {
+SEA_JSONValue* SEA_JSONParser_FromString(const char* string, const size_t len, SEA_Allocator* allocator) {
 	if (!string) return NULL;
 	if (!allocator || !allocator->alloc) allocator = SEA_Allocator_Heap;
-	struct SEA_JSONParser parser = {
+	SEA_JSONParser parser = {
 		.json = string,
 		.pos = 0,
 		.len = len == 0 ? strlen(string) : len,

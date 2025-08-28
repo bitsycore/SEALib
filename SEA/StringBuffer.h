@@ -2,6 +2,7 @@
 #define SEA_STRING_H
 
 #include "Config/CompConfig.h"
+
 #include "Allocator.h"
 
 #include <stddef.h>
@@ -17,7 +18,7 @@ struct SeaStringBuffer {
 };
 
 extern const struct SeaStringBuffer_CLS {
-	void (*init)(struct SeaStringBuffer* buffer, size_t capacity, struct SEA_Allocator* allocator);
+	void (*init)(struct SeaStringBuffer* buffer, size_t capacity, SEA_Allocator* allocator);
 	void (*append)(struct SeaStringBuffer* self, const char* str);
 	char* (*toString)(const struct SeaStringBuffer* self);
 } SeaStringBuffer;

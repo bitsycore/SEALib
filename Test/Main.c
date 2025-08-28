@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <string.h>
 
 #include "TestArena.h"
 #include "TestJsonBatch.h"
@@ -7,8 +6,6 @@
 #include "TestJsonNumbers.h"
 #include "TestLists.h"
 #include "SEA/ListDyn.h"
-
-#include "BlockRuntime/Block.h"
 
 #if defined(_WIN32) || defined(_WIN64)
     #include <windows.h>
@@ -22,7 +19,6 @@ int main() {
 #endif
 
     ListDyn *list = &ListDyn(int, Allocator_Heap);
-
     ListDyn_reserve(list, 512);
 
     for (int i = 0; i < 5; i++) {

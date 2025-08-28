@@ -2,10 +2,10 @@
 #define SEALIB_ARRAY_CHUNKED_H
 
 #include "Config/CompConfig.h"
+
 #include "Allocator.h"
 
 #include <stddef.h>
-#include <stdint.h>
 
 #define SEA_CHUNKED_ARRAY_CHUNK_SIZE 64
 
@@ -16,7 +16,7 @@ struct SEA_ListChunk {
 };
 
 struct SEA_ListChunked {
-    struct SEA_Allocator* allocator;
+    SEA_Allocator* allocator;
     struct SEA_ListChunk* head;
     struct SEA_ListChunk* tail;
     size_t elementSize;
@@ -47,16 +47,13 @@ struct SEA_ListChunked {
         it.index++, it.value = (type*)SEA_ListChunked.get(ca, it.index) \
     )
 
-    // Forward declaration for iterator
-    struct SEA_Iterator;
-
-    extern const struct SEA_ListChunked_CLS {
-        void* (*get)(const struct SEA_ListChunked* ca, size_t index);
-        void* (*alloc)(struct SEA_ListChunked* ca);
-        size_t (*add)(struct SEA_ListChunked* ca, const void* ptr);
-        size_t (*count)(const struct SEA_ListChunked* ca);
-        void (*clear)(struct SEA_ListChunked* ca);
-        void (*free)(struct SEA_ListChunked* ca);
+extern const struct SEA_ListChunked_CLS {
+    void* (*get)(const struct SEA_ListChunked* ca, size_t index);
+    void* (*alloc)(struct SEA_ListChunked* ca);
+    size_t (*add)(struct SEA_ListChunked* ca, const void* ptr);
+    size_t (*count)(const struct SEA_ListChunked* ca);
+    void (*clear)(struct SEA_ListChunked* ca);
+    void (*free)(struct SEA_ListChunked* ca);
 } SEA_ListChunked;
 
 #endif //SEALIB_ARRAY_CHUNKED_H

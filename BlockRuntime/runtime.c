@@ -22,11 +22,11 @@
  *
  */
 
-#include "Block_private.h"
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdint.h>
+#include "Block_private.h"
 
 #include "config.h"
 
@@ -48,13 +48,13 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include <windows.h>
 
-static __inline bool OSAtomicCompareAndSwapLong(long oldl, long newl, long volatile *dst) {
+static __inline bool OSAtomicCompareAndSwapLong(const long oldl, const long newl, long volatile *dst) {
     /* fixme barrier is overkill -- see objc-os.h */
     long original = InterlockedCompareExchange(dst, newl, oldl);
     return (original == oldl);
 }
 
-static __inline bool OSAtomicCompareAndSwapInt(int oldi, int newi, int volatile *dst) {
+static __inline bool OSAtomicCompareAndSwapInt(const int oldi, const int newi, int volatile *dst) {
     /* fixme barrier is overkill -- see objc-os.h */
     int original = InterlockedCompareExchange(dst, newi, oldi);
     return (original == oldi);
@@ -191,7 +191,7 @@ static void _Block_assign_weak_default(const void *ptr, void *dest) {
     *(void **)dest = (void *)ptr;
 }
 
-static void _Block_memmove_default(void *dst, void *src, unsigned long size) {
+static void _Block_memmove_default(void *dst, void *src, const unsigned long size) {
     memmove(dst, src, (size_t)size);
 }
 

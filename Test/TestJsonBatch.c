@@ -7,9 +7,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../SEA/Utils/ScopeUtils.h"
 #include "SEA/Arena.h"
 #include "SEA/JSONValue.h"
-#include "../SEA/Utils/ScopeUtils.h"
 
 static const char *json_tests[] = {
     // 1. Minimal object
@@ -74,9 +74,9 @@ void testJsonBatch(void) {
     const size_t bufferSize = 16 * 1024;
     const size_t finalBufferSize = bufferSize + sizeof(struct SEA_Arena);
     SEA_SCOPE_MALLOC(finalBufferSize) {
-        struct SEA_Arena *arena = (struct SEA_Arena *) SEA_SCOPE_BUFFER;
-        SEA_Arena_init(arena, SEA_SCOPE_BUFFER + sizeof(struct SEA_Arena), bufferSize);
-        struct SEA_Allocator allocator = SEA_Arena_allocator(arena);
+        SEA_Arena *arena = (struct SEA_Arena *) SEA_SCOPE_BUFFER;
+        SEA_Arena_init(arena, SEA_SCOPE_BUFFER + sizeof(SEA_Arena), bufferSize);
+        SEA_Allocator allocator = SEA_Arena_allocator(arena);
         for (size_t i = 0; i < sizeof(json_tests) / sizeof(json_tests[0]); i++) {
             SEA_SCOPE_ARENA(arena) {
                 const char *str = json_tests[i];
@@ -84,7 +84,7 @@ void testJsonBatch(void) {
 
                 printf("\n---- Test #%zu ----\n", i + 1);
 
-                struct SEA_JSONValue *json = SEA_JSONValue_FromString(str, str_len, &allocator);
+                SEA_JSONValue *json = SEA_JSONValue_FromString(str, str_len, &allocator);
                 if (!json) {
                     printf("Parse error\n");
                     continue;

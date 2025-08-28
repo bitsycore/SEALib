@@ -3,11 +3,9 @@
 
 #include "Macro.h"
 
-#include <stdint.h>
-#include <stdarg.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 
 typedef struct ListData {
 	size_t size;
@@ -20,7 +18,7 @@ typedef struct ListData {
     _type_ *payload; \
 }
 
-static inline ListData* ___listOfN(size_t elementSize, size_t numberOfElement, char* array) {
+static inline ListData* ___listOfN(const size_t elementSize, const size_t numberOfElement, char* array) {
 	val sizeToAlloc = sizeof(ListData) + (elementSize * numberOfElement);
 	printf("elementSize: %zu, numberOfElement: %zu, sizeToAlloc: %zu\n", elementSize, numberOfElement, sizeToAlloc);
 	ListData* list = malloc(sizeToAlloc);

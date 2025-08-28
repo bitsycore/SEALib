@@ -3,10 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "../SEA/Utils/ScopeUtils.h"
 #include "SEA/Arena.h"
 #include "SEA/JSONObject.h"
 #include "SEA/JSONValue.h"
-#include "../SEA/Utils/ScopeUtils.h"
 
 void testJsonGeneric(void) {
     // ---- JSON -------------------------------------------------
@@ -19,17 +19,17 @@ void testJsonGeneric(void) {
     const size_t finalBufferSize = bufferSize + sizeof(struct SEA_Arena);
 
     SEA_SCOPE_MALLOC(finalBufferSize) {
-        struct SEA_Arena *arena = (struct SEA_Arena *) SEA_SCOPE_BUFFER;
-        SEA_Arena_init(arena, SEA_SCOPE_BUFFER + sizeof(struct SEA_Arena), bufferSize);
+        SEA_Arena *arena = (struct SEA_Arena *) SEA_SCOPE_BUFFER;
+        SEA_Arena_init(arena, SEA_SCOPE_BUFFER + sizeof(SEA_Arena), bufferSize);
 
         SEA_SCOPE_ARENA(arena) {
-            struct SEA_Allocator allocator = SEA_Arena_allocator(arena);
+            SEA_Allocator allocator = SEA_Arena_allocator(arena);
             printf("Remaining: %zu\n", SEA_Arena_remaining(arena));
-            struct SEA_JSONValue *json = SEA_JSONValue_FromString(str, str_len, &allocator);
+            SEA_JSONValue *json = SEA_JSONValue_FromString(str, str_len, &allocator);
             printf("Remaining: %zu\n", SEA_Arena_remaining(arena));
 
             if (json->type != SEA_JSON_OBJECT) { exit(12345678); }
-            const struct SEA_JSONValue *menu = SEA_JSONObject_get(json->object, "menu");
+            const SEA_JSONValue *menu = SEA_JSONObject_get(json->object, "menu");
             if (menu->type != SEA_JSON_OBJECT) { exit(12349999); }
             char *abc_str = SEA_JSONValue_toString(menu, &allocator);
 

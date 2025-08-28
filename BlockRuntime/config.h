@@ -38,7 +38,7 @@ static __inline bool OSAtomicCompareAndSwap64Compat(int64_t o, int64_t n, volati
 /* Poor runtime.c code causes warnings calling InterlockedCompareExchange */
 #define _CRT_SECURE_NO_WARNINGS 1
 #include <windows.h>
-static __inline int InterlockedCompareExchangeCompat(volatile void *v, long n, long o)
+static __inline int InterlockedCompareExchangeCompat(volatile void *v, const long n, const long o)
 {return (int)InterlockedCompareExchange((LONG *)v, (LONG)n, (LONG)o);}
 #undef InterlockedCompareExchange
 #define InterlockedCompareExchange(v,n,o) InterlockedCompareExchangeCompat(v,n,o)

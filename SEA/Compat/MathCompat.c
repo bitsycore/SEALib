@@ -4,7 +4,7 @@
 #include <Windows.h>
 #endif
 
-int SEA_count_leading_zeros(uint64_t x) {
+int SEA_count_leading_zeros(const uint64_t x) {
 #if defined(__GNUC__) || defined(__clang__)
 	return __builtin_clzll(x);
 #elif defined(_MSC_VER)

@@ -2,11 +2,11 @@
 #define SEALIB_ARRAY_DYNAMIC_H
 
 #include "Config/CompConfig.h"
+
 #include "Allocator.h"
 #include "Iterator.h"
 
 #include <stddef.h>
-#include <stdint.h>
 
 // =======================================
 // MARK: Config
@@ -20,7 +20,7 @@
 // =======================================
 
 typedef struct SEA_ListDyn {
-    struct SEA_Allocator* allocator;
+    SEA_Allocator* allocator;
     void* data;
     size_t elementSize;
     size_t count;
@@ -57,18 +57,18 @@ typedef struct SEA_ListDyn {
 // MARK: Instance
 // =======================================
 
-void* SEA_ListDyn_get(const struct SEA_ListDyn* self, size_t index);
-void* SEA_ListDyn_alloc(struct SEA_ListDyn* self);
-size_t SEA_ListDyn_add(struct SEA_ListDyn* self, const void* ptr);
-size_t SEA_ListDyn_insert(struct SEA_ListDyn* self, size_t index, const void* ptr);
-void SEA_ListDyn_remove(struct SEA_ListDyn* self, size_t index);
-size_t SEA_ListDyn_count(const struct SEA_ListDyn* self);
-size_t SEA_ListDyn_capacity(const struct SEA_ListDyn* self);
-void SEA_ListDyn_reserve(struct SEA_ListDyn* self, size_t capacity);
-void SEA_ListDyn_shrink(struct SEA_ListDyn* self);
-void SEA_ListDyn_clear(struct SEA_ListDyn* self);
-void SEA_ListDyn_free(struct SEA_ListDyn* self);
-struct SEA_Iterator* SEA_ListDyn_iterator(struct SEA_ListDyn* self, struct SEA_Allocator* allocatorOverride);
+void* SEA_ListDyn_get(const SEA_ListDyn* self, size_t index);
+void* SEA_ListDyn_alloc(SEA_ListDyn* self);
+size_t SEA_ListDyn_add(SEA_ListDyn* self, const void* ptr);
+size_t SEA_ListDyn_insert(SEA_ListDyn* self, size_t index, const void* ptr);
+void SEA_ListDyn_remove(SEA_ListDyn* self, size_t index);
+size_t SEA_ListDyn_count(const SEA_ListDyn* self);
+size_t SEA_ListDyn_capacity(const SEA_ListDyn* self);
+void SEA_ListDyn_reserve(SEA_ListDyn* self, size_t capacity);
+void SEA_ListDyn_shrink(SEA_ListDyn* self);
+void SEA_ListDyn_clear(SEA_ListDyn* self);
+void SEA_ListDyn_free(SEA_ListDyn* self);
+SEA_Iterator* SEA_ListDyn_iterator(SEA_ListDyn* self, SEA_Allocator* allocatorOverride);
 
 // =======================================
 // MARK: Alias
@@ -76,58 +76,29 @@ struct SEA_Iterator* SEA_ListDyn_iterator(struct SEA_ListDyn* self, struct SEA_A
 
 #if SEA_CONFIG_ENABLE_PREFIXLESS == 1
 
+// =========================
+// Types
 typedef SEA_ListDyn ListDyn;
 
+// =========================
+// Static
 #define ListDyn(type, allocator) SEA_ListDyn(type, allocator)
+
+// =========================
+// Instance
 #define ListDyn_foreach SEA_ListDyn_foreach
-
-static inline void* ListDyn_get(const ListDyn* self, size_t index) {
-    return SEA_ListDyn_get(self, index);
-}
-
-static inline void* ListDyn_alloc(ListDyn* self) {
-    return SEA_ListDyn_alloc(self);
-}
-
-static inline size_t ListDyn_add(ListDyn* self, const void* ptr) {
-    return SEA_ListDyn_add(self, ptr);
-}
-
-static inline size_t ListDyn_insert(ListDyn* self, size_t index, const void* ptr) {
-    return SEA_ListDyn_insert(self, index, ptr);
-}
-
-static inline void ListDyn_remove(ListDyn* self, size_t index) {
-    SEA_ListDyn_remove(self, index);
-}
-
-static inline size_t ListDyn_count(const ListDyn* self) {
-    return SEA_ListDyn_count(self);
-}
-
-static inline size_t ListDyn_capacity(const ListDyn* self) {
-    return SEA_ListDyn_capacity(self);
-}
-
-static inline void ListDyn_reserve(ListDyn* self, size_t capacity) {
-    SEA_ListDyn_reserve(self, capacity);
-}
-
-static inline void ListDyn_shrink(ListDyn* self) {
-    SEA_ListDyn_shrink(self);
-}
-
-static inline void ListDyn_clear(ListDyn* self) {
-    SEA_ListDyn_clear(self);
-}
-
-static inline void ListDyn_free(ListDyn* self) {
-    SEA_ListDyn_free(self);
-}
-
-static inline struct SEA_Iterator* ListDyn_iterator(ListDyn* self, struct SEA_Allocator* allocatorOverride) {
-    return SEA_ListDyn_iterator(self, allocatorOverride);
-}
+static inline void* ListDyn_get(const ListDyn* self, const size_t index) { return SEA_ListDyn_get(self, index); }
+static inline void* ListDyn_alloc(ListDyn* self) { return SEA_ListDyn_alloc(self); }
+static inline size_t ListDyn_add(ListDyn* self, const void* ptr) { return SEA_ListDyn_add(self, ptr); }
+static inline size_t ListDyn_insert(ListDyn* self, const size_t index, const void* ptr) { return SEA_ListDyn_insert(self, index, ptr); }
+static inline void ListDyn_remove(ListDyn* self, const size_t index) { SEA_ListDyn_remove(self, index); }
+static inline size_t ListDyn_count(const ListDyn* self) { return SEA_ListDyn_count(self); }
+static inline size_t ListDyn_capacity(const ListDyn* self) { return SEA_ListDyn_capacity(self); }
+static inline void ListDyn_reserve(ListDyn* self, const size_t capacity) { SEA_ListDyn_reserve(self, capacity); }
+static inline void ListDyn_shrink(ListDyn* self) { SEA_ListDyn_shrink(self); }
+static inline void ListDyn_clear(ListDyn* self) { SEA_ListDyn_clear(self); }
+static inline void ListDyn_free(ListDyn* self) { SEA_ListDyn_free(self); }
+static inline SEA_Iterator* ListDyn_iterator(ListDyn* self, SEA_Allocator* allocatorOverride) { return SEA_ListDyn_iterator(self, allocatorOverride); }
 
 #endif
 

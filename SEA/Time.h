@@ -17,9 +17,9 @@ uint64_t SEA_Time_GetMillis();
 
 #if SEA_CONFIG_ENABLE_PREFIXLESS == 1
 
-static inline uint64_t Time_GetMillis() {
-	return SEA_Time_GetMillis();
-}
+// =========================
+// Static
+static inline uint64_t Time_GetMillis() { return SEA_Time_GetMillis(); }
 
 #endif
 

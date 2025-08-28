@@ -13,7 +13,11 @@ typedef enum {
 } SEA_JSONType;
 
 #if SEA_CONFIG_ENABLE_PREFIXLESS == 1
+
+// =========================
+// Types
 typedef SEA_JSONType JSONType;
+
 #endif
 
 #endif //SEA_JSON_TYPE_H

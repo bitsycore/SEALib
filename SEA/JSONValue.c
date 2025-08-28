@@ -14,17 +14,17 @@
 // MARK: Internal
 // ===================================
 
-static struct SEA_JSONValue InternalNullSingleton = {
+static SEA_JSONValue InternalNullSingleton = {
 	.type = SEA_JSON_NULL,
 	.string = NULL,
 };
 
-static struct SEA_JSONValue InternalTrueSingleton = {
+static SEA_JSONValue InternalTrueSingleton = {
 	.type = SEA_JSON_BOOL,
 	.boolean = true,
 };
 
-static struct SEA_JSONValue InternalFalseSingleton = {
+static SEA_JSONValue InternalFalseSingleton = {
 	.type = SEA_JSON_BOOL,
 	.boolean = false,
 };
@@ -33,7 +33,7 @@ static struct SEA_JSONValue InternalFalseSingleton = {
 // MARK: Stringify
 // =========================================
 
-static size_t MeasureJson(const struct SEA_JSONValue* value) {
+static size_t MeasureJson(const SEA_JSONValue* value) {
 	if (!value) return 0;
 
 	size_t size = 0;
@@ -57,7 +57,7 @@ static size_t MeasureJson(const struct SEA_JSONValue* value) {
 	case SEA_JSON_OBJECT: {
 		size = 2; // {}
 		bool first = true;
-		const struct SEA_JSONObject* obj = value->object;
+		const SEA_JSONObject* obj = value->object;
 		for (size_t bi = 0; bi < obj->bucketCount; ++bi) {
 			const SEA_JSONObjectEntry* e = obj->buckets[bi];
 			while (e) {
@@ -75,7 +75,7 @@ static size_t MeasureJson(const struct SEA_JSONValue* value) {
 	}
 }
 
-static void WriteJson(const struct SEA_JSONValue* value, struct SeaStringBuffer* buffer) {
+static void WriteJson(const SEA_JSONValue* value, struct SeaStringBuffer* buffer) {
 	if (!value) return;
 
 	switch (value->type) {
@@ -107,7 +107,7 @@ static void WriteJson(const struct SEA_JSONValue* value, struct SeaStringBuffer*
 	case SEA_JSON_OBJECT: {
 		SeaStringBuffer.append(buffer, "{");
 		bool first = true;
-		const struct SEA_JSONObject* obj = value->object;
+		const SEA_JSONObject* obj = value->object;
 		for (size_t bi = 0; bi < obj->bucketCount; ++bi) {
 			const SEA_JSONObjectEntry* e = obj->buckets[bi];
 			while (e) {
@@ -130,18 +130,18 @@ static void WriteJson(const struct SEA_JSONValue* value, struct SeaStringBuffer*
 // MARK: JsonValue
 // =========================================
 
-struct SEA_JSONValue* SEA_JSONValue_CreateNull() {
+SEA_JSONValue* SEA_JSONValue_CreateNull() {
 	return &InternalNullSingleton;
 }
 
-struct SEA_JSONValue* SEA_JSONValue_CreateBool(const bool val) {
+SEA_JSONValue* SEA_JSONValue_CreateBool(const bool val) {
 	return val ? &InternalTrueSingleton : &InternalFalseSingleton;
 }
 
-struct SEA_JSONValue* SEA_JSONValue_CreateNumber(const double val, struct SEA_Allocator* alloc) {
+SEA_JSONValue* SEA_JSONValue_CreateNumber(const double val, SEA_Allocator* alloc) {
 	if (!alloc || !alloc->alloc) return NULL;
 
-	struct SEA_JSONValue* value = SEA_Allocator_alloc(alloc, sizeof(struct SEA_JSONValue));
+	SEA_JSONValue* value = SEA_Allocator_alloc(alloc, sizeof(struct SEA_JSONValue));
 	if (!value) return NULL;
 	value->type = SEA_JSON_NUMBER;
 	value->number = val;
@@ -149,14 +149,14 @@ struct SEA_JSONValue* SEA_JSONValue_CreateNumber(const double val, struct SEA_Al
 	return value;
 }
 
-struct SEA_JSONValue* SEA_JSONValue_CreateString(const char* val, struct SEA_Allocator* alloc) {
+SEA_JSONValue* SEA_JSONValue_CreateString(const char* val, SEA_Allocator* alloc) {
 	if (!alloc || !alloc->alloc || !val) return NULL;
 
 	const size_t bufferLen = sizeof(struct SEA_JSONValue) + strlen(val) + 1;
 	uint8_t* buffer =  SEA_Allocator_alloc(alloc, bufferLen);
 	if (!buffer) return NULL;
-	struct SEA_JSONValue* value = (struct SEA_JSONValue*) buffer;
-	value->string = (char*) (buffer + sizeof(struct SEA_JSONValue));
+	SEA_JSONValue* value = (struct SEA_JSONValue*) buffer;
+	value->string = (char*) (buffer + sizeof(SEA_JSONValue));
 	memcpy(value->string, val, strlen(val) + 1);
 	value->type = SEA_JSON_STRING;
 
@@ -168,11 +168,11 @@ struct SEA_JSONValue* SEA_JSONValue_CreateString(const char* val, struct SEA_All
 	return value;
 }
 
-struct SEA_JSONValue* SEA_JSONValue_FromString(const char* string, const size_t len, struct SEA_Allocator* allocator) {
+SEA_JSONValue* SEA_JSONValue_FromString(const char* string, const size_t len, SEA_Allocator* allocator) {
 	return SEA_JSONParser_FromString(string, len, allocator);
 }
 
-char* SEA_JSONValue_toString(const struct SEA_JSONValue* self, struct SEA_Allocator* allocator) {
+char* SEA_JSONValue_toString(const SEA_JSONValue* self, SEA_Allocator* allocator) {
 	if (!self || !allocator || !allocator->alloc) return NULL;
 	struct SeaStringBuffer buffer = {};
 	const size_t size = MeasureJson(self);
@@ -181,7 +181,7 @@ char* SEA_JSONValue_toString(const struct SEA_JSONValue* self, struct SEA_Alloca
 	return buffer.data;
 }
 
-void SEA_JSONValue_free(struct SEA_JSONValue* self, struct SEA_Allocator* alloc) {
+void SEA_JSONValue_free(SEA_JSONValue* self, SEA_Allocator* alloc) {
 	if (!self) return;
 	switch (self->type) {
 		case SEA_JSON_ARRAY: SEA_JSONArray_free(self, alloc);

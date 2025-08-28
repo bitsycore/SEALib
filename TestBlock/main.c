@@ -1,13 +1,13 @@
-#include "Lazy.h"
-#include "Macro.h"
-#include "ListOf.h"
 #include "ForEach.h"
+#include "Lazy.h"
+#include "ListOf.h"
+#include "Macro.h"
 
-#include <stdio.h>
 #include <malloc.h>
-#include <string.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 #define TEST_TITLE(x__) \

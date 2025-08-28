@@ -23,16 +23,16 @@ pub fn main() !void {
     var allocator = gpa.allocator();
 
     const str = "{\"test\":52, \"abc\":\"hello world\"}";
-    const jsonObjectResult = SEA.SEA_JSONValue_FromString(
+    const jsonObjectResult = SEA.JSONValue_FromString(
         str,
         str.len,
         SEA.SEA_Allocator_Heap
     );
 
-    const stringified = SEA.SEA_JSONValue_toString(jsonObjectResult, SEA.SEA_Allocator_Heap);
+    const stringified = SEA.JSONValue_toString(jsonObjectResult, SEA.SEA_Allocator_Heap);
     std.debug.print("SEA_JSONObject\n\t{s}\n", .{stringified});
     var uuidTest = SEA.SEA_UUID{};
-    SEA.SEA_UUID_generateV7(&uuidTest);
+    SEA.UUID_generateV7(&uuidTest);
 
     const hexStr = try uuidToHex(&uuidTest.bytes, &allocator);
     defer allocator.free(hexStr);

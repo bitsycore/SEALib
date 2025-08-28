@@ -38,15 +38,12 @@ for ( \
 	it.index++, it.value = (type*)SEA_ListSegmented.get(sa, it.index) \
 )
 
-	// Forward declaration for iterator
-	struct SEA_Iterator;
-
-	extern const struct SEA_ListSegmented_CLS {
-		void* (*get)(const struct SEA_ListSegmented* sa, uint32_t index);
-		void* (*alloc)(struct SEA_ListSegmented* sa);
-		size_t (*add)(struct SEA_ListSegmented* sa, const void* ptr);
-		size_t (*count)(const struct SEA_ListSegmented* sa);
-		void (*free)(struct SEA_ListSegmented* sa);
+extern const struct SEA_ListSegmented_CLS {
+	void* (*get)(const struct SEA_ListSegmented* sa, uint32_t index);
+	void* (*alloc)(struct SEA_ListSegmented* sa);
+	size_t (*add)(struct SEA_ListSegmented* sa, const void* ptr);
+	size_t (*count)(const struct SEA_ListSegmented* sa);
+	void (*free)(struct SEA_ListSegmented* sa);
 } SEA_ListSegmented;
 
 #endif //SEALIB_ARRAY_H

@@ -100,7 +100,7 @@ static void test_number_parsing() {
         const char *test_input = test_cases[i];
 
         // Parse the number
-        struct SEA_JSONValue *result = SEA_JSONParser_FromString(test_input, 0, SEA_Allocator_Heap);
+        SEA_JSONValue *result = SEA_JSONParser_FromString(test_input, 0, SEA_Allocator_Heap);
 
         test_count++;
 
@@ -171,7 +171,7 @@ static void test_complex_json_with_numbers() {
             "  ]\n"
             "}";
 
-    struct SEA_JSONValue *json = SEA_JSONParser_FromString(complex_json, 0, SEA_Allocator_Heap);
+    SEA_JSONValue *json = SEA_JSONParser_FromString(complex_json, 0, SEA_Allocator_Heap);
 
     if (json == NULL) {
         printf("❌ Failed to parse complex JSON\n");
@@ -221,7 +221,7 @@ static void test_invalid_numbers() {
     for (int i = 0; invalid_cases[i] != NULL; i++) {
         const char *test_input = invalid_cases[i];
 
-        struct SEA_JSONValue *result = SEA_JSONParser_FromString(test_input, 0, SEA_Allocator_Heap);
+        SEA_JSONValue *result = SEA_JSONParser_FromString(test_input, 0, SEA_Allocator_Heap);
 
         invalid_test_count++;
 

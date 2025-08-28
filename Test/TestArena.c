@@ -4,12 +4,12 @@
 #include <stdlib.h>
 
 #include "Person.h"
+#include "../SEA/Utils/ScopeUtils.h"
 #include "SEA/Arena.h"
 #include "SEA/Random.h"
-#include "../SEA/Utils/ScopeUtils.h"
 
 static const char *randomName() {
-    switch (SEA_Random.Uint64() % 16) {
+    switch (SEA_Random_Uint64() % 16) {
     case 0: return "Bob";
     case 1: return "Claude";
     case 2: return "Alice";
@@ -32,17 +32,17 @@ static const char *randomName() {
 void testArena(void) {
     const size_t arenaSize = 512;
     SEA_SCOPE_MALLOC(arenaSize + sizeof(struct SEA_Arena)) {
-        struct SEA_Arena *arena = (struct SEA_Arena *) SEA_SCOPE_BUFFER;
-        SEA_Arena_init(arena, SEA_SCOPE_BUFFER + sizeof(struct SEA_Arena), arenaSize);
+        SEA_Arena *arena = (struct SEA_Arena *) SEA_SCOPE_BUFFER;
+        SEA_Arena_init(arena, SEA_SCOPE_BUFFER + sizeof(SEA_Arena), arenaSize);
         for (int i = 0; i < 5; i++) {
             SEA_SCOPE_ARENA(arena) {
-                struct SEA_Allocator arena_allocator = SEA_Arena_allocator(arena);
+                SEA_Allocator arena_allocator = SEA_Arena_allocator(arena);
 
                 struct Person *me = SEA_Arena_alloc(arena, sizeof(struct Person));
                 Person.initWithName(me, randomName());
 
                 struct Person *you = &(struct Person){};
-                Person.init(you, randomName(), (int) (SEA_Random.Uint64() % 100));
+                Person.init(you, randomName(), (int) (SEA_Random_Uint64() % 100));
 
                 const struct Person maybeMe = *me;
 

@@ -6,14 +6,14 @@
 #include <stdio.h>
 #include <string.h>
 
-void SEA_UUID_generateV4(struct SEA_UUID* self) {
-	SEA_Random.Bytes(self->bytes, 16);
+void SEA_UUID_generateV4(SEA_UUID* self) {
+	SEA_Random_ByteArray(self->bytes, 16);
 	// Set version (4) and variant (RFC4122)
 	self->bytes[6] = (self->bytes[6] & 0x0F) | 0x40; // Version 4
 	self->bytes[8] = (self->bytes[8] & 0x3F) | 0x80; // Variant 10xx
 }
 
-void SEA_UUID_generateV7(struct SEA_UUID* self) {
+void SEA_UUID_generateV7(SEA_UUID* self) {
 	const uint64_t now = SEA_Time_GetMillis();
 
 	// Set timestamp (48 bits, big endian)
@@ -26,7 +26,7 @@ void SEA_UUID_generateV7(struct SEA_UUID* self) {
 
 	// Fill the Sea_remaining 10 bytes with random
 	for (int i = 6; i < 16; i += 8) {
-		const uint64_t r = SEA_Random.Uint64();
+		const uint64_t r = SEA_Random_Uint64();
 		for (int j = 0; j < 8 && (i + j) < 16; j++) {
 			self->bytes[i + j] = (i + j == 6) ? self->bytes[6] : ((r >> (j * 8)) & 0xFF);
 		}
@@ -36,13 +36,13 @@ void SEA_UUID_generateV7(struct SEA_UUID* self) {
 	self->bytes[8] = (self->bytes[8] & 0x3F) | 0x80;
 }
 
-bool SEA_UUID_equals(const struct SEA_UUID* a, const struct SEA_UUID* b) {
+bool SEA_UUID_equals(const SEA_UUID* a, const SEA_UUID* b) {
 	if (a == b) return true;
 	if (a == NULL || b == NULL) return false;
 	return memcmp(a->bytes, b->bytes, sizeof(a->bytes)) == 0;
 }
 
-void SEA_UUID_toString(const struct SEA_UUID* self, char out[37]) {
+void SEA_UUID_toString(const SEA_UUID* self, char out[37]) {
 	snprintf(
 		out,
 		37,

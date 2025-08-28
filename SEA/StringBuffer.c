@@ -3,7 +3,7 @@
 #include <stddef.h>
 #include <string.h>
 
-static void StringBuffer_init(struct SeaStringBuffer* buffer, size_t capacity, struct SEA_Allocator* allocator) {
+static void StringBuffer_init(struct SeaStringBuffer* buffer, size_t capacity, SEA_Allocator* allocator) {
 	if (buffer->data) return;
 	if (capacity == 0) capacity = SEA_STRING_BUFFER_INITIAL_CAPACITY;
 	buffer->allocator = allocator ? allocator : SEA_Allocator_Heap;

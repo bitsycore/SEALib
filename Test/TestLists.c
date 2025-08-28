@@ -172,7 +172,7 @@ DEFINE_LIST_TESTS(SEA_ListChunked, SEA_ListChunked)
 static void test_list_dyn_insert_remove(void) {
     printf("Testing SEA_ListDyn insert and remove operations...\n");
 
-    struct SEA_ListDyn list = SEA_ListDyn(int, NULL);
+    SEA_ListDyn list = SEA_ListDyn(int, NULL);
 
     // Add initial elements
     for (int i = 0; i < 5; i++) {
@@ -232,7 +232,7 @@ static void test_list_dyn_insert_remove(void) {
 static void test_list_dyn_capacity_management(void) {
     printf("Testing SEA_ListDyn capacity management...\n");
 
-    struct SEA_ListDyn list = SEA_ListDyn(int, NULL);
+    SEA_ListDyn list = SEA_ListDyn(int, NULL);
 
     // Test initial capacity
     assert(SEA_ListDyn_capacity(&list) == 0);
@@ -303,7 +303,7 @@ static void test_list_chunked_clear(void) {
 static void test_list_dyn_clear(void) {
     printf("Testing SEA_ListDyn clear operation...\n");
 
-    struct SEA_ListDyn list = SEA_ListDyn(int, NULL);
+    SEA_ListDyn list = SEA_ListDyn(int, NULL);
 
     // Reserve capacity and add elements
     SEA_ListDyn_reserve(&list, 100);
@@ -359,7 +359,7 @@ static void test_lists_performance_comparison(void) {
 
     // Test ListDyn
     printf("  Testing ListDyn performance...\n");
-    struct SEA_ListDyn dyn_list = SEA_ListDyn(int, NULL);
+    SEA_ListDyn dyn_list = SEA_ListDyn(int, NULL);
     for (int i = 0; i < TEST_SIZE; i++) {
         SEA_ListDyn_add(&dyn_list, &i);
     }
