@@ -6,6 +6,7 @@
 #include "TestJsonNumbers.h"
 #include "TestLists.h"
 #include "SEA/ListDyn.h"
+#include "SEA/Compat/TypeCompat.h"
 
 #if defined(_WIN32) || defined(_WIN64)
     #include <windows.h>
@@ -18,9 +19,9 @@ int main() {
     SetConsoleCP(CP_UTF8);
 #endif
 
-    ListDyn *list = &ListDyn(int, Allocator_Heap);
-    ListDyn_reserve(list, 512);
+    SEA_VAL list = &ListDyn(int, Allocator_Heap);
 
+    ListDyn_reserve(list, 512);
     for (int i = 0; i < 5; i++) {
         ListDyn_add(list, &(int){1});
         (*(int*)ListDyn_alloc(list)) = 2;
