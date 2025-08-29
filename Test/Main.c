@@ -19,24 +19,24 @@ int main() {
     SetConsoleCP(CP_UTF8);
 #endif
 
-    SEA_VAL list = &ListDyn(int, Allocator_Heap);
+    SEA_VAL list = &SEA_ListDyn(int, NULL);
 
-    ListDyn_reserve(list, 512);
+    SEA_ListDyn_reserve(list, 512);
     for (int i = 0; i < 5; i++) {
-        ListDyn_add(list, &(int){1});
-        (*(int*)ListDyn_alloc(list)) = 2;
-        ListDyn_add(list, &(int){3});
-        ListDyn_add(list, &(int){4});
-        ListDyn_insert(list, 2, &(int){999});
-        ListDyn_remove(list, 0);
+        SEA_ListDyn_add(list, &(int){1});
+        *(int*)SEA_ListDyn_alloc(list) = 2;
+        SEA_ListDyn_add(list, &(int){3});
+        SEA_ListDyn_add(list, &(int){4});
+        SEA_ListDyn_insert(list, 2, &(int){999});
+        SEA_ListDyn_remove(list, 0);
     }
 
-    ListDyn_shrink(list);
+    SEA_ListDyn_shrink(list);
 
-    printf("List size: %zu\n", ListDyn_count(list));
-    printf("List capacity: %zu\n", ListDyn_capacity(list));
+    printf("List size: %zu\n", SEA_ListDyn_count(list));
+    printf("List capacity: %zu\n", SEA_ListDyn_capacity(list));
 
-    Iterator_foreach(int, ListDyn_iterator(list, NULL)) {
+    SEA_Iterator_foreach(int, SEA_ListDyn_iterator(list, NULL)) {
         printf("%d\n", *it.value);
     }
 

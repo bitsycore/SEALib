@@ -1,7 +1,9 @@
 #ifndef SEA_JSON_TYPE_H
 #define SEA_JSON_TYPE_H
 
-#include "Config/CompConfig.h"
+// =======================================
+// MARK: Types
+// =======================================
 
 typedef enum {
 	SEA_JSON_NULL,
@@ -11,13 +13,5 @@ typedef enum {
 	SEA_JSON_ARRAY,
 	SEA_JSON_OBJECT
 } SEA_JSONType;
-
-#if SEA_CONFIG_ENABLE_PREFIXLESS == 1
-
-// =========================
-// Types
-typedef SEA_JSONType JSONType;
-
-#endif
 
 #endif //SEA_JSON_TYPE_H

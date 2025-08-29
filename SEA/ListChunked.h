@@ -1,13 +1,19 @@
 #ifndef SEALIB_ARRAY_CHUNKED_H
 #define SEALIB_ARRAY_CHUNKED_H
 
-#include "Config/CompConfig.h"
-
 #include "Allocator.h"
 
 #include <stddef.h>
 
+// =======================================
+// MARK: Config
+// =======================================
+
 #define SEA_CHUNKED_ARRAY_CHUNK_SIZE 64
+
+// =======================================
+// MARK: Types
+// =======================================
 
 struct SEA_ListChunk {
     void* data;
@@ -24,27 +30,31 @@ struct SEA_ListChunked {
     size_t chunkCapacity;
 };
 
-#define SEA_ListChunked(type, _allocator) \
+// =======================================
+// MARK: Macro
+// =======================================
+
+#define SEA_ListChunked(_type_, _allocator_) \
     (struct SEA_ListChunked) { \
-        .allocator = (_allocator == NULL ? SEA_Allocator_Heap : _allocator), \
+        .allocator = (_allocator_ == NULL ? SEA_Allocator_Heap : _allocator_), \
         .head = NULL, \
         .tail = NULL, \
-        .elementSize = sizeof(type), \
+        .elementSize = sizeof(_type_), \
         .totalCount = 0, \
         .chunkCapacity = SEA_CHUNKED_ARRAY_CHUNK_SIZE, \
     }
 
-#define SEA_ListChunked_foreach(type, ca) \
+#define SEA_ListChunked_foreach(_type_, _list_) \
     for ( \
         struct { \
             size_t index; \
-            type* value; \
+            _type_* value; \
         } it = { \
             0, \
-            (SEA_ListChunked.count(ca) == 0) ? NULL : (type*)SEA_ListChunked.get(ca, 0) \
+            (SEA_ListChunked.count(_list_) == 0) ? NULL : (_type_*)SEA_ListChunked.get(_list_, 0) \
         }; \
-        it.value != NULL && it.index < SEA_ListChunked.count(ca); \
-        it.index++, it.value = (type*)SEA_ListChunked.get(ca, it.index) \
+        it.value != NULL && it.index < SEA_ListChunked.count(_list_); \
+        it.index++, it.value = (_type_*)SEA_ListChunked.get(_list_, it.index) \
     )
 
 extern const struct SEA_ListChunked_CLS {

@@ -1,12 +1,18 @@
 #ifndef SEALIB_ARRAY_H
 #define SEALIB_ARRAY_H
 
-#include "Config/CompConfig.h"
-
 #include <stddef.h>
 #include <stdint.h>
 
+// =======================================
+// MARK: Config
+// =======================================
+
 #define SEA_SEGMENT_ARRAY_SEGMENTS_TO_SKIP 6
+
+// =======================================
+// MARK: Types
+// =======================================
 
 struct SEA_ListSegmented {
 	struct SEA_Allocator* allocator;
@@ -15,6 +21,10 @@ struct SEA_ListSegmented {
 	size_t usedSegments;
 	uint8_t* segments[26];
 };
+
+// =======================================
+// MARK: Macro
+// =======================================
 
 #define SEA_ListSegmented(type, _allocator) \
 	(struct SEA_ListSegmented) { \

@@ -36,10 +36,10 @@ void SEA_UUID_generateV7(SEA_UUID* self) {
 	self->bytes[8] = (self->bytes[8] & 0x3F) | 0x80;
 }
 
-bool SEA_UUID_equals(const SEA_UUID* a, const SEA_UUID* b) {
-	if (a == b) return true;
-	if (a == NULL || b == NULL) return false;
-	return memcmp(a->bytes, b->bytes, sizeof(a->bytes)) == 0;
+bool SEA_UUID_equals(const SEA_UUID* self, const SEA_UUID* other) {
+	if (self == other) return true;
+	if (self == NULL || other == NULL) return false;
+	return memcmp(self->bytes, other->bytes, sizeof(self->bytes)) == 0;
 }
 
 void SEA_UUID_toString(const SEA_UUID* self, char out[37]) {

@@ -1,14 +1,20 @@
 #ifndef SEA_STRING_H
 #define SEA_STRING_H
 
-#include "Config/CompConfig.h"
-
 #include "Allocator.h"
 
 #include <stddef.h>
 
+// =======================================
+// MARK: Config
+// =======================================
+
 #define SEA_STRING_BUFFER_INITIAL_CAPACITY 64
 #define SEA_STRING_BUFFER_INCREASE_FACTOR 4/2 // integer math
+
+// =======================================
+// MARK: Types
+// =======================================
 
 struct SeaStringBuffer {
 	char* data;
