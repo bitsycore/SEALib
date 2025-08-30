@@ -2,22 +2,14 @@ const std = @import("std");
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
-    //const optimize = b.standardOptimizeOption(.{});
+    const optimize = b.standardOptimizeOption(.{});
 
     const exe = b.addExecutable(.{
         .name = "ZigBinding",
         .root_module = b.createModule(.{
             .root_source_file = b.path("TestZig//main.zig"),
             .target = target,
-            .optimize = .ReleaseSmall,
-            .link_libc = false,
-            .strip = false,
-            .sanitize_c = .off,
-            .error_tracing = false,
-            .no_builtin = true,
-            .stack_check = false,
-            .stack_protector = false,
-            .omit_frame_pointer = true,
+            .optimize = optimize,
         }),
     });
 

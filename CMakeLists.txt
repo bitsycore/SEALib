@@ -47,7 +47,6 @@ add_library(
         SEA/UUID.h
         SEA/Iterator.c
         SEA/Iterator.h
-        SEA/Config/CompConfig.h
 )
 
 add_executable(

@@ -1,6 +1,8 @@
 #ifndef SEALIB_ITERATOR_H
 #define SEALIB_ITERATOR_H
 
+#include <stdbool.h>
+
 // =======================================
 // MARK: Types
 // =======================================
@@ -19,7 +21,7 @@ typedef struct SEA_Iterator {
 #define SEA_Iterator_foreach(_item_type_, _iterator_) \
     for(\
         struct {\
-            _item_type_* value;\
+            typeof(_item_type_)* value;\
             struct SEA_Iterator* iterator;\
             bool should_destroy;\
         } it = { \
@@ -27,10 +29,8 @@ typedef struct SEA_Iterator {
             .value = NULL, \
             .should_destroy = false \
         };\
-        !it.should_destroy && \
-        (it.value = (_item_type_*)(it.iterator)->next(it.iterator)) != NULL; \
-        it.should_destroy = !it.iterator->hasNext(it.iterator), \
-        it.should_destroy ? (it.iterator->destroy(it.iterator), it.value) : it.value \
+        !it.should_destroy && (it.value = (typeof(it.value))(it.iterator)->next(it.iterator)) != NULL; \
+        it.should_destroy = !it.iterator->hasNext(it.iterator), (it.should_destroy ? (it.iterator->destroy(it.iterator), NULL) : NULL) \
     )
 
 #endif //SEALIB_ITERATOR_H
